@@ -1,0 +1,25 @@
+primary	--color-primary	Primary brand color, The main color of your brand
+primary-content	--color-primary-content	Foreground content color to use onprimarycolor
+
+secondary	--color-secondary	Secondary brand color, The optional, secondary color of your brand
+secondary-content	--color-secondary-content	Foreground content color to use onsecondarycolor
+
+accent	--color-accent	Accent brand color, The optional, accent color of your brand
+accent-content	--color-accent-content	Foreground content color to use onaccentcolor
+
+neutral	--color-neutral	Neutral dark color, For not-saturated parts of UI
+neutral-content	--color-neutral-content	Foreground content color to use on neutral color
+
+base-100	--color-base-100	Base surface color of page, used for blank backgrounds
+base-200	--color-base-200	Base color, darker shade, to create elevations
+base-300	--color-base-300	Base color, even more darker shade, to create elevations
+base-content	--color-base-content	Foreground content color to use onbasecolor
+
+info	--color-info	Info color, For informative/helpful messages
+info-content	--color-info-content	Foreground content color to use oninfocolor
+success	--color-success	Success color, For success/safe messages
+success-content	--color-success-content	Foreground content color to use onsuccesscolor
+warning	--color-warning	Warning color, For warning/caution messages
+warning-content	--color-warning-content	Foreground content color to use onwarningcolor
+error	--color-error	Error color, For error/danger/destructive messages
+error-content	--color-error-content	Foreground content color to use onerrorcolor
