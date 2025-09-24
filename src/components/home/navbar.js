@@ -56,7 +56,7 @@ export default function Navbar() {
 			localStorage.setItem("locale", l);
 			window.location.reload();
 		}
-	};
+	}; 
 
 	return (
 		<nav className={`fixed top-0 z-50 w-full transition-all duration-300 ${
@@ -68,7 +68,7 @@ export default function Navbar() {
 				{/* Logo */}
 				<Link href="/" className="flex items-center gap-2">
 					<Image 
-						src="/logos/ArtwareLogo.png" 
+						src={theme === "synthwave" ? "/logos/ArtwareLogo-darkMode.png" : "/logos/ArtwareLogo.png"}
 						alt="Logo" 
 						width={160} 
 						height={160}  
@@ -90,7 +90,7 @@ export default function Navbar() {
 										: "text-white hover:text-primary"
 								}`}
 							>
-								{link.label}
+								{link.label} 
 							</Link>
 						</li>
 					))}
