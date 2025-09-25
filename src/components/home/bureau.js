@@ -56,7 +56,7 @@ const bureauMembers = [
   },
 
   {
-    id: 5,
+    id: 8,
     name: "Omar El Fassi",
     position: "Trésorier",
     image: "/bureau/Yassine.png",
