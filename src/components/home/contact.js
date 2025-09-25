@@ -22,7 +22,7 @@ export default function Contact() {
       }
     );
 
-    const section = document.getElementById("contact-section");
+    const section = document.getElementById("contact");
     if (section) {
       observer.observe(section);
     }

@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 
 export default function RootLayout({ children }) {
 
-  const locale = cookies().get('locale')?.value || 'fr';
+  const locale =  'fr';
 
   return (
     <html lang={locale} suppressHydrationWarning>

@@ -69,7 +69,7 @@ export default function Cells() {
       }
     );
 
-    const section = document.getElementById("cells-section");
+    const section = document.getElementById("cells");
     if (section) {
       observer.observe(section);
     }

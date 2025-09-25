@@ -85,7 +85,7 @@ export default function Bureau() {
       }
     );
 
-    const section = document.getElementById("bureau-section");
+    const section = document.getElementById("bureau");
     if (section) {
       observer.observe(section);
     }

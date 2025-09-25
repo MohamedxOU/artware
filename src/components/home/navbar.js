@@ -109,7 +109,7 @@ export default function Navbar() {
       }`}>
         <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-4">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="#hero" className="flex items-center gap-2">
             <Image 
               src={getLogoSource()}
               alt="Logo" 

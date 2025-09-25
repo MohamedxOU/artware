@@ -21,7 +21,7 @@ export default function Hero() {
   }, []);
 
 		return (
-			<section
+			<section id="hero"
 				   className={
 					   `relative w-full  bg-cover bg-center before:absolute before:inset-0 before:bg-black/10  before:z-0`
 				   }
