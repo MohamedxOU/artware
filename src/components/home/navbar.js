@@ -110,7 +110,8 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-4">
           {/* Logo */}
           <Link href="#hero" className="flex items-center gap-2">
-            <Image 
+            <div>
+              <Image 
               src={getLogoSource()}
               alt="Logo" 
               width={160} 
@@ -120,6 +121,7 @@ export default function Navbar() {
               }`} 
               priority // Add priority for above-the-fold image
             />
+            </div>
           </Link>
 
           {/* Desktop Nav Links */}
@@ -129,7 +131,7 @@ export default function Navbar() {
                 <a
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className={`text-base font-medium transition-all duration-300 cursor-pointer ${
+                  className={`cursor-target text-base font-medium transition-all duration-300 cursor-pointer ${
                     isScrolled 
                       ? "text-base-content hover:text-primary" 
                       : "text-white hover:text-primary"
@@ -206,7 +208,7 @@ export default function Navbar() {
             {/* Login Button */}
             <Link 
               href="/login" 
-              className={`btn btn-sm ml-2 transition-all duration-300 ${
+              className={`cursor-target btn btn-sm ml-2 transition-all duration-300 ${
                 isScrolled ? "btn-primary" : "btn-outline text-white border-white hover:bg-white hover:text-primary"
               }`}
             >

@@ -36,18 +36,19 @@ export default function AboutUs() {
 			<div className="max-w-7xl w-full px-4 md:px-8">
 				{/* Section Logo */}
 				<div className="flex justify-center mb-10">
-					<Image
-						src={theme === "synthwave" ? "/logos/ArtwareLogo-darkMode.png" : "/logos/ArtwareLogo.png"}
-						alt="Club Artware Logo"
-						width={300}
-						height={300}
-						className="rounded-full"
-					/>
+					
 				</div>
 				<div className="grid md:grid-cols-2 gap-8 items-center">
 					{/* Left: Text Card */}
 					<div className="bg-base-100 rounded-2xl shadow p-8 flex flex-col gap-6">
-						<span className="text-warning font-semibold text-lg">Who are we?</span>
+						<Image
+						src={theme === "synthwave" ? "/logos/ArtwareLogo-darkMode.png" : "/logos/ArtwareLogo.png"}
+						alt="Club Artware Logo"
+						width={300}
+						height={300}
+						className="rounded-full cursor-target"
+					/>
+						
 						<h3 className="text-4xl md:text-5xl font-bold leading-tight text-base-content">
 							More than a club, a family.
 						</h3>

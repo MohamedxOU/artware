@@ -200,7 +200,7 @@ export default function Bureau() {
               return (
                 <div
                   key={member.id}
-                  className={`absolute group rounded-3xl overflow-hidden transition-all duration-700 ease-out cursor-pointer ${
+                  className={`cursor-target absolute group rounded-3xl overflow-hidden transition-all duration-700 ease-out cursor-pointer ${
                     isCenter ? 'shadow-2xl' : 'shadow-lg hover:shadow-xl'
                   }`}
                   style={{

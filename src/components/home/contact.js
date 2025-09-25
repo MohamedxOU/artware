@@ -70,7 +70,7 @@ export default function Contact() {
               <div className="flex space-x-4">
                 <a 
                   href="#" 
-                  className="text-base-content/60 w-10 h-10 bg-neutral-focus hover:bg-primary rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
+                  className="cursor-target text-base-content/60 w-10 h-10 bg-neutral-focus hover:bg-primary rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
                   aria-label="Facebook"
                 >
                   <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -79,7 +79,7 @@ export default function Contact() {
                 </a>
                 <a 
                   href="#" 
-                  className="text-base-content/60 w-10 h-10 bg-neutral-focus hover:bg-primary rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
+                  className="cursor-target text-base-content/60 w-10 h-10 bg-neutral-focus hover:bg-primary rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
                   aria-label="LinkedIn"
                 >
                   <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -88,7 +88,7 @@ export default function Contact() {
                 </a>
                 <a 
                   href="#" 
-                  className="text-base-content/60 w-10 h-10 bg-neutral-focus hover:bg-primary rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
+                  className="cursor-target text-base-content/60 w-10 h-10 bg-neutral-focus hover:bg-primary rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
                   aria-label="Instagram"
                 >
                   <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -97,7 +97,7 @@ export default function Contact() {
                 </a>
                 <a 
                   href="#" 
-                  className="text-base-content/60 w-10 h-10 bg-neutral-focus hover:bg-primary rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
+                  className="cursor-target text-base-content/60 w-10 h-10 bg-neutral-focus hover:bg-primary rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
                   aria-label="Twitter"
                 >
                   <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -106,7 +106,7 @@ export default function Contact() {
                 </a>
                 <a 
                   href="#" 
-                  className="text-base-content/60 w-10 h-10 bg-neutral-focus hover:bg-primary rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
+                  className="cursor-target text-base-content/60 w-10 h-10 bg-neutral-focus hover:bg-primary rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
                   aria-label="YouTube"
                 >
                   <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -158,7 +158,7 @@ export default function Contact() {
               <div className="flex justify-end">
                 <button
                   type="submit"
-                  className="px-8 py-3 bg-primary hover:bg-primary-focus text-primary-content font-semibold rounded-lg transition-all duration-300 hover:scale-105 flex items-center space-x-2"
+                  className="cursor-target px-8 py-3 bg-primary hover:bg-primary-focus text-primary-content font-semibold rounded-lg transition-all duration-300 hover:scale-105 flex items-center space-x-2"
                 >
                   <span>Submit</span>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

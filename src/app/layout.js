@@ -10,6 +10,7 @@ export default function RootLayout({ children }) {
     <html lang={locale} suppressHydrationWarning>
       
       <body>
+        	
         <NextIntlClientProvider>
           {children}
         </NextIntlClientProvider>

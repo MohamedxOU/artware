@@ -101,7 +101,7 @@ export default function Cells() {
             <button
               key={cell.id}
               onClick={() => setActiveTab(index)}
-              className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 border-2 ${
+              className={`cursor-target px-6 py-3 rounded-full font-semibold transition-all duration-300 border-2 ${
                 activeTab === index
                   ? 'bg-primary text-white border-primary shadow-lg scale-105'
                   : 'bg-transparent text-base-content border-base-content/20 hover:border-primary/50 hover:text-primary hover:scale-102'
