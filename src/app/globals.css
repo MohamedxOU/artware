@@ -2,7 +2,7 @@
 @plugin "daisyui";
 @plugin "daisyui/theme" {
   name: "acid";
-  default: true;
+  
   --color-primary: oklch(65% 0.241 354.308);
   --radius-selector: 0rem;
   --radius-field: 0.25rem;
@@ -16,7 +16,7 @@
 
 @plugin "daisyui/theme"{
   name: "synthwave";
-  default: false;
+ 
   --color-base-content: #f3f4f6;
   --radius-selector: 0rem;
   --radius-field: 0.25rem;

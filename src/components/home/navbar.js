@@ -64,11 +64,15 @@ export default function Navbar() {
 				? "bg-base-100 border-b border-base-300 shadow-sm" 
 				: "bg-transparent"
 		}`}>
-			<div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-2">
+			<div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-4">
 				{/* Logo */}
 				<Link href="/" className="flex items-center gap-2">
 					<Image 
-						src={theme === "synthwave" ? "/logos/ArtwareLogo-darkMode.png" : "/logos/ArtwareLogo.png"}
+						src={
+							theme === "synthwave" 
+								? "/logos/ArtwareLogo-darkMode.png" 
+								: (isScrolled ? "/logos/ArtwareLogo.png" : "/logos/ArtwareLogo-darkMode.png")
+						}
 						alt="Logo" 
 						width={160} 
 						height={160}  
@@ -79,7 +83,7 @@ export default function Navbar() {
 				</Link>
 
 				{/* Nav Links */}
-				<ul className="hidden md:flex gap-6 flex-1 justify-center">
+				<ul className="hidden md:flex gap-12 flex-1 justify-center">
 					{navLinks.map((link) => (
 						<li key={link.href}>
 							<Link

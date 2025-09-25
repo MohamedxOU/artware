@@ -4,27 +4,27 @@ import { useState } from "react";
 const activities = [
 	{
 		title: "Custom fence design",
-		image: "/activities/design.jpg",
+		image: "/activities/activity.jpg",
 		description: "We create unique fence designs tailored to your property and style preferences. Our experts ensure every detail is considered for both aesthetics and functionality.",
 	},
 	{
 		title: "Fence repair",
-		image: "/activities/repair.jpg",
+		image: "/activities/activity.jpg",
 		description: "Restore your fence to its original condition with our professional repair services. We handle all types of damage, from minor fixes to major restorations.",
 	},
 	{
 		title: "Fence installation",
-		image: "/activities/installation.jpg",
+		image: "/activities/activity.jpg",
 		description: "Our team provides fast and reliable fence installation, using quality materials and precise workmanship for lasting results.",
 	},
 	{
 		title: "Staining & sealing",
-		image: "/activities/staining.jpg",
+		image: "/activities/activity.jpg",
 		description: "Protect and enhance your fence with our staining and sealing services. We use premium products to ensure durability and a beautiful finish.",
 	},
 	{
 		title: "Maintenance services",
-		image: "/activities/maintenance.jpg",
+		image: "/activities/activity.jpg",
 		description: "Keep your fence in top shape year-round. Our maintenance plans include inspections, cleaning, and preventative care.",
 	},
 ];
@@ -39,18 +39,13 @@ export default function Activities() {
 					<div>
 						<span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-base-300 text-base-content/70 text-sm mb-4">
 							<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeWidth="1.5" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M6.05 17.95l-1.414 1.414M17.95 17.95l-1.414-1.414M6.05 6.05 4.636 7.464"/></svg>
-							Our services
+							Our Activities
 						</span>
 						<h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: 'serif' }}>
-							What we can do<br />for you
+							What we do, what we offer
 						</h2>
 					</div>
-					<div className="flex-1 flex flex-col gap-4 md:items-end">
-						<p className="text-base md:text-lg text-base-content/80 mb-4 md:mb-2 max-w-md">
-							From design to installation, we provide quality fence solutions tailored to your needs.
-						</p>
-						
-					</div>
+					
 				</div>
 				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mt-4">
 					{activities.map((activity, idx) => (

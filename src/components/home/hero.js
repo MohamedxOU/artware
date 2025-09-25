@@ -23,34 +23,22 @@ export default function Hero() {
 		return (
 			<section
 				   className={
-					   `relative w-full bg-fixed bg-cover bg-center before:absolute before:inset-0 before:bg-black/10  before:z-0`
+					   `relative w-full  bg-cover bg-center before:absolute before:inset-0 before:bg-black/10  before:z-0`
 				   }
 				style={{
 					minHeight: '100vh',
 					backgroundImage: `url(${hero.image})`,
 				}}
 			>
-				{/* Centered Animated Text and Button */}
+				{/* Centered CTA Button */}
 				   <div
-					   className="relative z-10 w-full h-full flex items-end justify-between pb-12 px-8"
+					   className="relative z-10 w-full h-full flex items-end justify-center pb-42 px-8"
 					   style={{ minHeight: 'inherit', height: 'inherit' }}
 				   >
-					   {/* Left: Text */}
-					   <div className="max-w-2xl flex flex-col items-start justify-end">
-						   <div className={`transition-all duration-700 ${showText ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-							   <h1 className="text-3xl md:text-5xl font-bold mb-4 drop-shadow-lg text-left"
-								   style={{ color: '#f1baff' }}>
-								   {hero.title}
-							   </h1>
-							   <p className="text-lg md:text-xl mb-8 text-left" style={{ color: '#ffeea3' }}>
-								   {hero.description}
-							   </p>
-						   </div>
-					   </div>
-					   {/* Right: CTA Buttons */}
-					   <div className={`flex flex-col items-end gap-4 transition-all duration-700 ${showText ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-						   <button className="btn btn-primary font-semibold px-8 py-3 text-lg shadow-lg w-40">Join us</button>
-						   <button className="btn btn-outline border-white text-white font-semibold px-8 py-3 text-lg shadow-lg w-40">Learn more</button>
+					   {/* Centered CTA Buttons */}
+					   <div className={`flex flex-row items-center gap-4 transition-all duration-700 ${showText ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+						   <button className="btn btn-xl btn-primary font-semibold px-10 py-3 text-lg shadow-lg w-40">Join us</button>
+						   <button className="btn btn-xl btn-outline border-white text-white font-semibold px-8 py-3 text-lg shadow-lg w-40 hover:bg-primary hover:border-primary">Learn more</button>
 					   </div>
 				   </div>
 			</section>
