@@ -12,36 +12,36 @@ const bureauMembers = [
   },
   {
     id: 2,
-    name: "Amine Bensalah",
+    name: "Mona Filali",
     position: "Vice-Président",
     image: "/bureau/Mona.png",
     description: "Expert en développement web et mobile, il supervise les projets techniques et assure la qualité de nos solutions innovantes."
   },
   {
     id: 3,
-    name: "Sarah El Amrani",
-    position: "Secrétaire Générale",
+    name: "Hamza Baadi",
+    position: "RH",
     image: "/bureau/Hamza.png",
     description: "Spécialiste en intelligence artificielle, elle coordonne les activités du club et gère les relations avec nos partenaires académiques."
   },
   {
     id: 4,
-    name: "Fatima Zahra Idrissi",
-    position: "Responsable Événements",
+    name: "Houda Jabal",
+    position: "Event Manager",
     image: "/bureau/Houda.png",
     description: "Organisatrice talentueuse qui crée des événements mémorables et développe notre communauté tech dynamique et inclusive."
   },
   {
     id: 5,
-    name: "Omar El Fassi",
-    position: "Trésorier",
+    name: "Assia Labane",
+    position: "Secrétaire Générale",
     image: "/bureau/Assia.png",
     description: "Gestionnaire financier rigoureux qui assure la pérennité économique du club et optimise nos ressources pour maximiser notre impact."
   },
 
   {
     id: 6,
-    name: "Omar El Fassi",
+    name: "Badreddyn Ballouk",
     position: "Trésorier",
     image: "/bureau/Badr.png",
     description: "Gestionnaire financier rigoureux qui assure la pérennité économique du club et optimise nos ressources pour maximiser notre impact."
@@ -49,16 +49,16 @@ const bureauMembers = [
 
   {
     id: 7,
-    name: "Omar El Fassi",
-    position: "Trésorier",
+    name: "Omaima Larhzal",
+    position: "Media Manager",
     image: "/bureau/Oumaima.png",
     description: "Gestionnaire financier rigoureux qui assure la pérennité économique du club et optimise nos ressources pour maximiser notre impact."
   },
 
   {
     id: 8,
-    name: "Omar El Fassi",
-    position: "Trésorier",
+    name: "Yassine El Aouni",
+    position: "Design Manager",
     image: "/bureau/Yassine.png",
     description: "Gestionnaire financier rigoureux qui assure la pérennité économique du club et optimise nos ressources pour maximiser notre impact."
   }
@@ -120,7 +120,7 @@ export default function Bureau() {
               }}
             >
               {/* Image Container */}
-              <div className="relative h-80 overflow-hidden">
+              <div className="relative h-100 overflow-hidden">
                 <Image
                   src={member.image}
                   alt={member.name}
@@ -147,12 +147,12 @@ export default function Bureau() {
 
               {/* Default state - Name and Position */}
               <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent group-hover:opacity-0 transition-opacity duration-300">
-                <h3 className="text-white font-bold text-lg mb-1">
+                {/* <h3 className="text-white font-bold text-lg mb-1">
                   {member.name}
-                </h3>
-                <p className="text-white/80 text-sm font-medium">
+                </h3> */}
+                {/* <p className="text-white/80 text-sm font-medium">
                   {member.position}
-                </p>
+                </p> */}
               </div>
 
               {/* Decorative elements */}
