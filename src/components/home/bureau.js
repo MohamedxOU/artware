@@ -176,7 +176,7 @@ export default function Bureau() {
   return (
     <>
       
-      <section id="bureau-section" className="w-full py-16 bg-gradient-to-br from-base-100 via-base-200 to-base-100">
+      <section id="bureau" className="w-full py-16 bg-gradient-to-br from-base-100 via-base-200 to-base-100">
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>

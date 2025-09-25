@@ -33,7 +33,7 @@ export default function Activities() {
 	const [selected, setSelected] = useState(null);
 
 	return (
-		<section className="w-full flex justify-center py-16 bg-base-200">
+		<section id="activities" className="w-full flex justify-center py-16 bg-base-200">
 			<div className="max-w-7xl w-full rounded-3xl bg-base-100/90 shadow-xl p-8 md:p-14 flex flex-col gap-8">
 				<div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
 					<div>

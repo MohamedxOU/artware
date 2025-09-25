@@ -5,10 +5,10 @@ import { useState, useEffect } from "react";
 
 const navLinks = [
   { href: "#about-us", label: "Présentation" },
-  { href: "/activities", label: "Activités" },
-  { href: "/cells", label: "Cellules" },
-  { href: "/team", label: "Bureau" },
-  { href: "/contact", label: "Contact" }
+  { href: "#activities", label: "Activités" },
+  { href: "#cells", label: "Cellules" },
+  { href: "#bureau", label: "Bureau" },
+  { href: "#contact", label: "Contact" }
 ];
 
 export default function Navbar() {
@@ -59,6 +59,33 @@ export default function Navbar() {
     window.location.reload();
   };
 
+  // Smooth scroll handler for navigation links
+  const handleNavClick = (e, href) => {
+    e.preventDefault();
+    
+    if (href.startsWith('#')) {
+      const targetId = href.substring(1);
+      const targetElement = document.getElementById(targetId);
+      
+      if (targetElement) {
+        const navbarHeight = 80; // Approximate navbar height
+        const elementPosition = targetElement.offsetTop;
+        const offsetPosition = elementPosition - navbarHeight;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    } else {
+      // For non-anchor links, navigate normally
+      window.location.href = href;
+    }
+    
+    // Close mobile menu if open
+    setIsMobileMenuOpen(false);
+  };
+
   // Determine logo source based on theme and scroll state
   const getLogoSource = () => {
     if (!isMounted) {
@@ -99,16 +126,17 @@ export default function Navbar() {
           <ul className="hidden md:flex gap-12 flex-1 justify-center">
             {navLinks.map((link) => (
               <li key={link.href}>
-                <Link
+                <a
                   href={link.href}
-                  className={`text-base font-medium transition-all duration-300 ${
+                  onClick={(e) => handleNavClick(e, link.href)}
+                  className={`text-base font-medium transition-all duration-300 cursor-pointer ${
                     isScrolled 
                       ? "text-base-content hover:text-primary" 
                       : "text-white hover:text-primary"
                   }`}
                 >
                   {link.label} 
-                </Link>
+                </a>
               </li>
             ))}
           </ul>
@@ -290,13 +318,13 @@ export default function Navbar() {
             <ul className="space-y-4 mb-8">
               {navLinks.map((link) => (
                 <li key={link.href}>
-                  <Link
+                  <a
                     href={link.href}
-                    className="block p-3 rounded-lg text-base-content hover:bg-base-200 transition-colors duration-200"
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={(e) => handleNavClick(e, link.href)}
+                    className="block p-3 rounded-lg text-base-content hover:bg-base-200 transition-colors duration-200 cursor-pointer"
                   >
                     {link.label}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>

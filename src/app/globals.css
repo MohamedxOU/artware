@@ -27,3 +27,13 @@
   --depth: 1;
   --noise: 1;
 }
+
+/* Smooth scrolling for the entire page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Additional smooth scrolling for better browser support */
+* {
+  scroll-behavior: smooth;
+}
