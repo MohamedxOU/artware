@@ -66,11 +66,8 @@ const bureauMembers = [
 
 export default function Bureau() {
   const [isVisible, setIsVisible] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const [currentTransform, setCurrentTransform] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragStart, setDragStart] = useState(0);
-  const [dragOffset, setDragOffset] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const totalSlides = bureauMembers.length;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -97,80 +94,65 @@ export default function Bureau() {
     };
   }, []);
 
-  // Auto-scroll animation
+  // Auto-advance carousel
   useEffect(() => {
-    let animationFrame;
-    const cardWidth = 320; // 300px width + 20px gap
-    const totalWidth = bureauMembers.length * cardWidth;
-    
-    const animate = () => {
-      if (!isPaused && !isDragging) {
-        setCurrentTransform(prev => {
-          const newTransform = prev - 0.5; // Scroll speed
-          // Reset to 0 when we've scrolled through all original items
-          return newTransform <= -totalWidth ? 0 : newTransform;
-        });
-      }
-      animationFrame = requestAnimationFrame(animate);
-    };
-    
-    animationFrame = requestAnimationFrame(animate);
-    
-    return () => cancelAnimationFrame(animationFrame);
-  }, [isPaused, isDragging]);
+    const interval = setInterval(() => {
+      setCurrentSlide(prev => (prev + 1) % totalSlides);
+    }, 4000); // Change slide every 4 seconds
 
-  const handleMouseDown = (e) => {
-    setIsDragging(true);
-    setDragStart(e.clientX);
-    setDragOffset(currentTransform);
-  };
+    return () => clearInterval(interval);
+  }, [totalSlides]);
 
-  const handleMouseMove = (e) => {
-    if (!isDragging) return;
-    const deltaX = e.clientX - dragStart;
-    setCurrentTransform(dragOffset + deltaX);
-  };
 
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  const handleMouseLeave = () => {
-    setIsDragging(false);
-    setIsPaused(false);
-  };
-
-  // Add global mouse event listeners for better drag support
-  useEffect(() => {
-    const handleGlobalMouseMove = (e) => {
-      if (!isDragging) return;
-      const deltaX = e.clientX - dragStart;
-      setCurrentTransform(dragOffset + deltaX);
-    };
-
-    const handleGlobalMouseUp = () => {
-      setIsDragging(false);
-    };
-
-    if (isDragging) {
-      document.addEventListener('mousemove', handleGlobalMouseMove);
-      document.addEventListener('mouseup', handleGlobalMouseUp);
-    }
-
-    return () => {
-      document.removeEventListener('mousemove', handleGlobalMouseMove);
-      document.removeEventListener('mouseup', handleGlobalMouseUp);
-    };
-  }, [isDragging, dragStart, dragOffset]);
 
   const slideLeft = () => {
-    setCurrentTransform(prev => Math.min(prev + 320, 0));
+    setCurrentSlide(prev => (prev - 1 + totalSlides) % totalSlides);
   };
 
   const slideRight = () => {
-    const cardWidth = 320;
-    const totalWidth = bureauMembers.length * cardWidth;
-    setCurrentTransform(prev => Math.max(prev - 320, -totalWidth));
+    setCurrentSlide(prev => (prev + 1) % totalSlides);
+  };
+
+  const getCardPosition = (index) => {
+    const diff = index - currentSlide;
+    const distance = Math.abs(diff);
+    
+    if (distance === 0) {
+      // Center card
+      return {
+        transform: 'translateX(0) scale(1)',
+        zIndex: 10,
+        opacity: 1,
+        filter: 'blur(0px)'
+      };
+    } else if (distance === 1) {
+      // Adjacent cards
+      const direction = diff > 0 ? 1 : -1;
+      return {
+        transform: `translateX(${direction * 280}px) scale(0.85)`,
+        zIndex: 5,
+        opacity: 0.8,
+        filter: 'blur(1px)'
+      };
+    } else if (distance === 2) {
+      // Second-level cards
+      const direction = diff > 0 ? 1 : -1;
+      return {
+        transform: `translateX(${direction * 480}px) scale(0.7)`,
+        zIndex: 2,
+        opacity: 0.5,
+        filter: 'blur(2px)'
+      };
+    } else {
+      // Hidden cards
+      const direction = diff > 0 ? 1 : -1;
+      return {
+        transform: `translateX(${direction * 600}px) scale(0.6)`,
+        zIndex: 1,
+        opacity: 0.2,
+        filter: 'blur(3px)'
+      };
+    }
   };
 
   return (
@@ -189,11 +171,11 @@ export default function Bureau() {
         </div>
 
         {/* Carousel Container */}
-        <div className="relative overflow-hidden">
+        <div className="relative h-[500px] flex items-center justify-center overflow-hidden">
           {/* Navigation Arrows */}
           <button
             onClick={slideLeft}
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full transition-all duration-300 hover:scale-110"
+            className="absolute left-8 top-1/2 -translate-y-1/2 z-20 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white p-4 rounded-full transition-all duration-300 hover:scale-110 border border-white/20"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -202,137 +184,126 @@ export default function Bureau() {
           
           <button
             onClick={slideRight}
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full transition-all duration-300 hover:scale-110"
+            className="absolute right-8 top-1/2 -translate-y-1/2 z-20 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white p-4 rounded-full transition-all duration-300 hover:scale-110 border border-white/20"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
             </svg>
           </button>
 
-          <div 
-            className="flex gap-6 transition-transform duration-300 cursor-grab select-none"
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseEnter={() => setIsPaused(true)}
-            onMouseLeave={handleMouseLeave}
-            style={{
-              width: `${bureauMembers.length * 2 * 320}px`, // Double width for seamless loop
-              transform: `translateX(${currentTransform}px)`
-            }}
-          >
-            {/* First set of cards */}
-            {bureauMembers.map((member, index) => (
-              <div
-                key={`first-${member.id}`}
-                className={`group relative rounded-2xl overflow-hidden bg-base-100 shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer flex-shrink-0 ${
-                  isVisible 
-                    ? 'opacity-100 translate-y-0' 
-                    : 'opacity-0 translate-y-12'
-                }`}
-                style={{
-                  width: '300px',
-                  height: '400px',
-                  transitionDelay: `${index * 150}ms`
-                }}
-              >
-              {/* Image Container */}
-              <div className="relative h-100 overflow-hidden">
-                <Image
-                  src={member.image}
-                  alt={member.name}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                
-                {/* Gradient overlay that appears on hover */}
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                
-                {/* Content overlay */}
-                <div className="absolute inset-0 flex flex-col justify-end p-6 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                  <h3 className="text-white font-bold text-xl mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-200">
-                    {member.name}
-                  </h3>
-                  <p className="text-primary-content/90 text-sm font-medium mb-3 opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-300">
-                    {member.position}
-                  </p>
-                  <p className="text-primary-content/80 text-sm leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-400">
-                    {member.description}
-                  </p>
+          {/* Cards Container */}
+          <div className="relative w-full h-full flex items-center justify-center">
+            {bureauMembers.map((member, index) => {
+              const position = getCardPosition(index);
+              const isCenter = index === currentSlide;
+              
+              return (
+                <div
+                  key={member.id}
+                  className={`absolute group rounded-3xl overflow-hidden transition-all duration-700 ease-out cursor-pointer ${
+                    isCenter ? 'shadow-2xl' : 'shadow-lg hover:shadow-xl'
+                  }`}
+                  style={{
+                    width: '320px',
+                    height: '420px',
+                    transform: position.transform,
+                    zIndex: position.zIndex,
+                    opacity: position.opacity,
+                    filter: position.filter,
+                    left: '50%',
+                    top: '50%',
+                    marginLeft: '-160px',
+                    marginTop: '-210px'
+                  }}
+                  onClick={() => setCurrentSlide(index)}
+                >
+                  {/* Background with gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-primary/40"></div>
+                  
+                  {/* Image Container */}
+                  <div className="relative h-full overflow-hidden">
+                    <Image
+                      src={member.image}
+                      alt={member.name}
+                      fill
+                      className={`object-cover transition-all duration-700 ${
+                        isCenter ? 'group-hover:scale-105' : 'group-hover:scale-110'
+                      }`}
+                    />
+                    
+                    {/* Gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+                    
+                    {/* Content overlay - show details only on hover */}
+                    <div className={`absolute inset-0 flex flex-col justify-end p-6 transition-all duration-500 ${
+                      isCenter 
+                        ? 'transform translate-y-full group-hover:translate-y-0' 
+                        : 'transform translate-y-full group-hover:translate-y-0'
+                    }`}>
+                      <div className="space-y-3">
+                        <h3 className="text-white font-bold text-xl transition-all duration-500 opacity-0 group-hover:opacity-100">
+                          {member.name}
+                        </h3>
+                        <p className="text-primary font-semibold text-sm transition-all duration-500 delay-100 opacity-0 group-hover:opacity-100">
+                          {member.position}
+                        </p>
+                        <p className="text-white/90 text-sm leading-relaxed transition-opacity duration-500 delay-200 opacity-0 group-hover:opacity-100">
+                          {member.description}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Floating name for non-center cards */}
+                    {!isCenter && (
+                      <div className="absolute bottom-4 left-4 right-4 text-center">
+                        <h3 className="text-white font-semibold text-sm mb-1 drop-shadow-lg">
+                          {member.name}
+                        </h3>
+                        <p className="text-white/80 text-xs font-medium drop-shadow-lg">
+                          {member.position}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Modern decorative elements */}
+                    <div className={`absolute top-6 right-6 w-3 h-3 rounded-full bg-primary transition-all duration-500 ${
+                      isCenter ? 'opacity-100 scale-100' : 'opacity-60 scale-75'
+                    }`}></div>
+                    <div className={`absolute top-6 left-6 w-1 h-8 bg-white/60 rounded-full transition-all duration-500 ${
+                      isCenter ? 'opacity-100' : 'opacity-40'
+                    }`}></div>
+                  </div>
                 </div>
-              </div>
-
-              {/* Default state - Name and Position */}
-              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent group-hover:opacity-0 transition-opacity duration-300">
-                {/* <h3 className="text-white font-bold text-lg mb-1">
-                  {member.name}
-                </h3> */}
-                {/* <p className="text-white/80 text-sm font-medium">
-                  {member.position}
-                </p> */}
-              </div>
-
-              {/* Decorative elements */}
-              <div className="absolute top-4 right-4 w-8 h-8 border-2 border-white/30 rounded-full opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500 delay-500"></div>
-              <div className="absolute top-4 left-4 w-2 h-12 bg-white/40 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 delay-600"></div>
-            </div>
-          ))}
-          
-          {/* Second set of cards for seamless loop */}
-          {bureauMembers.map((member, index) => (
-            <div
-              key={`second-${member.id}`}
-              className={`group relative rounded-2xl overflow-hidden bg-base-100 shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer flex-shrink-0 ${
-                isVisible 
-                  ? 'opacity-100 translate-y-0' 
-                  : 'opacity-0 translate-y-12'
-              }`}
-              style={{
-                width: '300px',
-                height: '400px',
-                transitionDelay: `${index * 150}ms`
-              }}
-            >
-              {/* Image Container */}
-              <div className="relative h-full overflow-hidden">
-                <Image
-                  src={member.image}
-                  alt={member.name}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                
-                {/* Gradient overlay that appears on hover */}
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                
-                {/* Content overlay */}
-                <div className="absolute inset-0 flex flex-col justify-end p-6 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                  <h3 className="text-white font-bold text-xl mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-200">
-                    {member.name}
-                  </h3>
-                  <p className="text-primary-content/90 text-sm font-medium mb-3 opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-300">
-                    {member.position}
-                  </p>
-                  <p className="text-primary-content/80 text-sm leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-400">
-                    {member.description}
-                  </p>
-                </div>
-              </div>
-
-              {/* Default state - Name and Position */}
-              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent group-hover:opacity-0 transition-opacity duration-300">
-              </div>
-
-              {/* Decorative elements */}
-              <div className="absolute top-4 right-4 w-8 h-8 border-2 border-white/30 rounded-full opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500 delay-500"></div>
-              <div className="absolute top-4 left-4 w-2 h-12 bg-white/40 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 delay-600"></div>
-            </div>
-          ))}
+              );
+            })}
           </div>
         </div>
 
+        {/* Modern Slide Indicators */}
+        <div className="flex justify-center mt-12 gap-3">
+          {bureauMembers.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentSlide(index)}
+              className={`transition-all duration-300 rounded-full ${
+                currentSlide === index 
+                  ? 'w-8 h-3 bg-primary' 
+                  : 'w-3 h-3 bg-base-content/20 hover:bg-base-content/40'
+              }`}
+              aria-label={`View ${bureauMembers[index].name}`}
+            />
+          ))}
+        </div>
+
+        {/* Card Counter */}
+        <div className="text-center mt-6">
+          <p className="text-base-content/50 text-sm font-medium">
+            {String(currentSlide + 1).padStart(2, '0')} / {String(totalSlides).padStart(2, '0')}
+          </p>
+        </div>
+
         {/* Additional Info */}
-        <div className={`text-center mt-12 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div className={`text-center mt-8 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <p className="text-base-content/60 text-sm">
             Une équipe unie par la passion de la technologie et l&apos;ambition de créer l&apos;avenir
           </p>

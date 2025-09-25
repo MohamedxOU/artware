@@ -55,6 +55,7 @@ const cells = [
 
 export default function Cells() {
   const [isVisible, setIsVisible] = useState(false);
+  const [activeTab, setActiveTab] = useState(0);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -94,55 +95,107 @@ export default function Cells() {
           </p>
         </div>
 
-        {/* Cards Grid */}
-        <div className="grid md:grid-cols-2 gap-4">
+        {/* Tabs Navigation */}
+        <div className={`flex flex-wrap justify-center gap-4 mb-12 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           {cells.map((cell, index) => (
-            <div 
-              key={cell.id} 
-              className={`border border-base-300/30 rounded-3xl p-8 text-base-content relative overflow-hidden min-h-[400px] flex flex-col justify-between shadow-xl hover:shadow-2xl transition-all duration-500 hover:bg-base-200/60 hover:scale-105 hover:-translate-y-2 group ${
-                isVisible 
-                  ? 'opacity-100 translate-x-0' 
-                  : `opacity-0 ${index % 2 === 0 ? '-translate-x-20' : 'translate-x-20'}`
+            <button
+              key={cell.id}
+              onClick={() => setActiveTab(index)}
+              className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 border-2 ${
+                activeTab === index
+                  ? 'bg-primary text-white border-primary shadow-lg scale-105'
+                  : 'bg-transparent text-base-content border-base-content/20 hover:border-primary/50 hover:text-primary hover:scale-102'
               }`}
-              style={{ 
-                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url(${cell.image})`, 
-                backgroundSize: 'cover', 
-                backgroundPosition: 'center',
-                transitionDelay: `${index * 300}ms`,
+            >
+              {cell.title}
+            </button>
+          ))}
+        </div>
 
-              }}>
-              
-             
+        {/* Tab Content */}
+        <div className={`transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          {cells.map((cell, index) => (
+            <div
+              key={cell.id}
+              className={`transition-all duration-500 ${
+                activeTab === index 
+                  ? 'opacity-100 translate-x-0' 
+                  : 'opacity-0 absolute translate-x-full pointer-events-none'
+              }`}
+            >
+              {activeTab === index && (
+                <div className="grid lg:grid-cols-2 gap-12 items-center">
+                  {/* Image Section */}
+                  <div className="relative group">
+                    <div className="relative overflow-hidden rounded-3xl shadow-2xl">
+                      <Image
+                        src={cell.image}
+                        alt={cell.title}
+                        width={600}
+                        height={400}
+                        className="w-full h-[400px] object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-tr from-black/50 via-transparent to-primary/30"></div>
+                      
+                      {/* Floating category badge */}
+                      <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full">
+                        <span className="text-sm font-semibold text-gray-800">{cell.category}</span>
+                      </div>
 
-              {/* Content */}
-              <div className="flex-1">
-                <h3 className="text-2xl md:text-3xl font-bold mb-3 leading-tight text-white group-hover:text-primary transition-colors duration-300">
-                  {cell.title}
-                </h3>
-                
-                <p className="text-white/80 text-base mb-6 leading-relaxed group-hover:text-white/80 transition-colors duration-300">
-                  {cell.description}
-                </p>
+                      {/* Decorative elements */}
+                      <div className="absolute bottom-6 right-6 w-16 h-16 border-2 border-white/50 rounded-full flex items-center justify-center backdrop-blur-sm">
+                        <div className="w-6 h-6 bg-primary rounded-full"></div>
+                      </div>
+                    </div>
+                  </div>
 
-                
-              </div>
+                  {/* Content Section */}
+                  <div className="space-y-6">
+                    <div>
+                      <h3 className="text-3xl md:text-4xl font-bold mb-4 text-base-content">
+                        {cell.title}
+                      </h3>
+                      <p className="text-lg text-base-content/70 leading-relaxed">
+                        {cell.description}
+                      </p>
+                    </div>
 
-              
+                    {/* Activities */}
+                    <div>
+                      <h4 className="text-lg font-semibold mb-3 text-base-content">Technologies & Compétences</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {cell.activities.map((activity, actIndex) => (
+                          <span
+                            key={actIndex}
+                            className="px-3 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium border border-primary/20"
+                          >
+                            {activity}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
 
-              {/* Stats */}
-              <div className=" flex items-center justify-between">
-                <div>
-                  <span className="text-sm text-white/70">Responsable</span>
-                  <p className="font-medium text-white/90">{cell.responsable}</p>
+                    {/* Stats & Responsable */}
+                    <div className="grid grid-cols-2 gap-6 pt-6 border-t border-base-content/10">
+                      <div>
+                        <span className="text-sm text-base-content/60 block">Responsable</span>
+                        <p className="font-semibold text-base-content text-lg">{cell.responsable}</p>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-sm text-base-content/60 block">Réalisations</span>
+                        <p className="font-bold text-primary text-2xl">{cell.subtitle}</p>
+                      </div>
+                    </div>
+
+                    {/* CTA Button */}
+                    <div className="pt-4">
+                      <button className="bg-primary text-white px-8 py-4 rounded-full font-semibold hover:bg-primary/90 transition-all duration-300 hover:scale-105 shadow-lg">
+                        {cell.buttonText}
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <span className="text-2xl font-bold text-primary">{cell.subtitle}</span>
-                </div>
-              </div>
-
-              {/* Background decoration */}
-              <div className="absolute top-4 right-4 w-20 h-20 rounded-full border-2 border-base-content/10 group-hover:border-primary/30 group-hover:scale-110 transition-all duration-500"></div>
-              <div className="absolute bottom-4 left-4 w-12 h-12 rounded-full border-2 border-base-content/10 group-hover:border-primary/30 group-hover:scale-110 transition-all duration-500 group-hover:rotate-45"></div>
+              )}
             </div>
           ))}
         </div>
