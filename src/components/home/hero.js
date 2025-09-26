@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 /* import LiquidEther from "@/components/LiquidEther.jsx"; */
 import Iridescence from "@/components/Iridescence.jsx";
 import TextType from "@/components/TextType.jsx";
@@ -113,10 +114,19 @@ export default function Hero() {
                     : "opacity-0 translate-y-8"
                 }`}
               >
-                <button className="cursor-target btn btn-lg sm:btn-xl btn-primary font-semibold px-8 sm:px-10 py-3 sm:py-4 text-base sm:text-lg shadow-xl hover:scale-105 transition-transform duration-300 w-44 sm:w-48">
-                  {hero.cta1}
-                </button>
-                <button className="cursor-target btn btn-lg sm:btn-xl btn-outline border-base-content text-base-content font-semibold px-8 sm:px-10 py-3 sm:py-4 text-base sm:text-lg shadow-xl w-44 sm:w-48 hover:bg-base-content hover:text-base-100 hover:scale-105 transition-all duration-300">
+                <Link href="/register">
+                  <button className="cursor-target btn btn-lg sm:btn-xl btn-primary font-semibold px-8 sm:px-10 py-3 sm:py-4 text-base sm:text-lg shadow-xl hover:scale-105 transition-transform duration-300 w-44 sm:w-48">
+                    {hero.cta1}
+                  </button>
+                </Link>
+                <button 
+                  onClick={() => {
+                    document.getElementById('about-us')?.scrollIntoView({ 
+                      behavior: 'smooth' 
+                    });
+                  }}
+                  className="cursor-target btn btn-lg sm:btn-xl btn-outline border-base-content text-base-content font-semibold px-8 sm:px-10 py-3 sm:py-4 text-base sm:text-lg shadow-xl w-44 sm:w-48 hover:bg-base-content hover:text-base-100 hover:scale-105 transition-all duration-300"
+                >
                   {hero.cta2}
                 </button>
               </div>

@@ -1,11 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Iridescence from "@/components/Iridescence.jsx";
+import AuthNavbar from "@/components/auth/auth-navbar";
+import ForgotPasswordModal from "@/components/modals/forgotPassword";
 
 export default function LoginPage() {
   const [showCard, setShowCard] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] = useState(false);
 
   useEffect(() => {
     setTimeout(() => setShowCard(true), 300);
@@ -32,43 +34,48 @@ export default function LoginPage() {
   }, []);
 
   return (
-    <div className={`relative ${isDarkTheme ? 'opacity-80' : 'opacity-100'}`}
-    style={{height : '100vh'}}>
-      {/* Animated Background */}
-      <Iridescence
-        color={[0.8, 0, 0.8]}
-        mouseReact={false}
-        amplitude={0.1}
-        speed={1.0}
-      />
-
-      {/* Header */}
-      <div className="absolute top-0 left-0 right-0 z-20 p-6">
-        <div className="flex justify-between items-center max-w-7xl mx-auto">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">A</span>
-            </div>
-            <span className="text-xl font-bold text-base-content">ARTWARE</span>
-          </Link>
-          
-          <div className="flex items-center gap-4">
-            <button className="text-base-content/70 hover:text-base-content text-sm">
-              🌐 EN
-            </button>
-            <Link href="/signup" className="text-base-content/70 hover:text-base-content text-sm">
-              Sign up
-            </Link>
-            <button className="bg-primary/20 text-primary px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary/30 transition-all">
-              Request Demo
-            </button>
-          </div>
-        </div>
+    <div className={`relative min-h-screen bg-base-300 overflow-hidden ${isDarkTheme ? 'opacity-80' : 'opacity-100'}`}>
+      {/* Background Textures - covering entire page */}
+      <div className="absolute inset-0">
+        {/* Large primary circles */}
+        <div className="absolute top-10 left-10 w-40 h-40 bg-primary/15 rounded-full blur-2xl"></div>
+        <div className="absolute bottom-20 right-20 w-48 h-48 bg-primary/12 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/3 right-10 w-36 h-36 bg-primary/10 rounded-full blur-2xl"></div>
+        
+        {/* Secondary color patterns */}
+        <div className="absolute top-1/2 left-1/4 w-32 h-32 bg-secondary/18 rounded-full blur-xl"></div>
+        <div className="absolute bottom-1/4 left-20 w-44 h-44 bg-secondary/12 rounded-full blur-3xl"></div>
+        <div className="absolute top-20 right-1/3 w-28 h-28 bg-secondary/15 rounded-full blur-xl"></div>
+        
+        {/* Accent patterns */}
+        <div className="absolute top-3/4 left-1/3 w-24 h-24 bg-accent/20 rounded-full blur-lg"></div>
+        <div className="absolute bottom-10 right-1/4 w-38 h-38 bg-accent/14 rounded-full blur-2xl"></div>
+        <div className="absolute top-1/4 left-1/2 w-30 h-30 bg-accent/12 rounded-full blur-xl"></div>
+        
+        {/* Additional geometric patterns */}
+        <div className="absolute top-40 left-1/3 w-20 h-60 bg-primary/8 rounded-full blur-2xl rotate-45"></div>
+        <div className="absolute bottom-40 right-1/3 w-16 h-50 bg-secondary/10 rounded-full blur-xl -rotate-45"></div>
+        <div className="absolute top-1/2 right-20 w-18 h-45 bg-accent/12 rounded-full blur-lg rotate-12"></div>
+        
+        {/* Small scattered dots */}
+        <div className="absolute top-16 left-1/2 w-12 h-12 bg-primary/25 rounded-full blur-sm"></div>
+        <div className="absolute top-1/3 left-20 w-8 h-8 bg-secondary/30 rounded-full blur-sm"></div>
+        <div className="absolute bottom-1/3 right-16 w-10 h-10 bg-accent/25 rounded-full blur-sm"></div>
+        <div className="absolute top-2/3 left-16 w-14 h-14 bg-primary/20 rounded-full blur-md"></div>
+        <div className="absolute bottom-16 left-1/2 w-16 h-16 bg-secondary/18 rounded-full blur-md"></div>
+        
+        {/* Overlapping larger shapes */}
+        <div className="absolute top-0 left-1/4 w-56 h-56 bg-primary/6 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-52 h-52 bg-secondary/8 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-0 w-48 h-48 bg-accent/7 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 right-0 w-50 h-50 bg-primary/5 rounded-full blur-3xl"></div>
       </div>
 
+      <AuthNavbar />
+
       {/* Centered Login Card */}
-      <div className="absolute inset-0 z-10 flex items-center justify-center p-6">
-        <div className={`w-full max-w-md bg-base-100/95 backdrop-blur-md rounded-3xl shadow-2xl border border-base-300/20 p-8 transition-all duration-1000 ${
+      <div className="relative z-10 flex items-center justify-center p-6 min-h-screen pt-24">
+        <div className={`w-full max-w-md bg-base-100/95 backdrop-blur-md rounded-3xl shadow-2xl border border-base-300/20 p-8 my-8 transition-all duration-1000 ${
           showCard ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
         }`}>
           
@@ -109,9 +116,13 @@ export default function LoginPage() {
 
             {/* Forgot Password */}
             <div className="text-center">
-              <Link href="/forgot-password" className="text-base-content/60 hover:text-primary text-sm">
+              <button
+                type="button"
+                onClick={() => setIsForgotPasswordModalOpen(true)}
+                className="text-base-content/60 hover:text-primary text-sm underline"
+              >
                 Having trouble in sign in?
-              </Link>
+              </button>
             </div>
 
             {/* Sign In Button */}
@@ -169,8 +180,8 @@ export default function LoginPage() {
             <div className="text-center mt-6">
               <span className="text-base-content/60 text-sm">
                 Don&apos;t have an account?{" "}
-                <Link href="/signup" className="text-primary hover:text-primary/80 font-semibold">
-                  Request Now
+                <Link href="/register" className="text-primary hover:text-primary/80 font-semibold">
+                  Register now
                 </Link>
               </span>
             </div>
@@ -179,11 +190,17 @@ export default function LoginPage() {
       </div>
 
       {/* Footer */}
-      <div className="absolute bottom-6 left-0 right-0 z-20 text-center">
+      <div className="relative z-20 text-center py-6">
         <p className="text-base-content/50 text-sm">
           Copyright @artware 2025 | Privacy Policy
         </p>
       </div>
+
+      {/* Forgot Password Modal */}
+      <ForgotPasswordModal 
+        isOpen={isForgotPasswordModalOpen} 
+        onClose={() => setIsForgotPasswordModalOpen(false)} 
+      />
     </div>
   );
 }

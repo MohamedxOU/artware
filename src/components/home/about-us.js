@@ -3,46 +3,45 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 
 export default function AboutUs() {
-	const [theme, setTheme] = useState(
-		typeof window !== "undefined"
-			? localStorage.getItem("theme") || "acid"
-			: "acid"
-	);
+	const [isDarkTheme, setIsDarkTheme] = useState(false);
 
-	// Theme listener
 	useEffect(() => {
-		const handleStorageChange = () => {
-			setTheme(localStorage.getItem("theme") || "acid");
+		// Check initial theme
+		const checkTheme = () => {
+			const htmlElement = document.documentElement;
+			const currentTheme = htmlElement.getAttribute('data-theme');
+			setIsDarkTheme(currentTheme === 'synthwave');
 		};
-		
-		// Listen for storage changes from other tabs
-		window.addEventListener("storage", handleStorageChange);
-		
-		// Also check for theme changes periodically (for same-tab changes)
-		const interval = setInterval(() => {
-			const currentTheme = localStorage.getItem("theme") || "acid";
-			if (currentTheme !== theme) {
-				setTheme(currentTheme);
-			}
-		}, 100);
-		
-		return () => {
-			window.removeEventListener("storage", handleStorageChange);
-			clearInterval(interval);
-		};
-	}, [theme]);
+
+		checkTheme();
+
+		// Watch for theme changes
+		const observer = new MutationObserver(checkTheme);
+		observer.observe(document.documentElement, {
+			attributes: true,
+			attributeFilter: ['data-theme']
+		});
+
+		return () => observer.disconnect();
+	}, []);
 	return (
 		<section id="about-us" className="w-full bg-base-100 py-16 flex justify-center">
 			<div className="max-w-7xl w-full px-4 md:px-8">
-				{/* Section Logo */}
-				<div className="flex justify-center mb-10">
-					
+				{/* Header */}
+				<div className="text-center mb-16">
+					<h2 className="text-4xl md:text-5xl font-bold mb-4">
+						À Propos de Nous, <span className="text-primary">Notre Histoire & Vision</span>
+					</h2>
+					<p className="text-lg text-base-content/70 max-w-2xl mx-auto">
+						Découvrez l&apos;histoire d&apos;ARTWARE, une communauté passionnée dédiée à l&apos;innovation technologique et à l&apos;excellence académique
+					</p>
 				</div>
+				
 				<div className="grid md:grid-cols-2 gap-8 items-center">
 					{/* Left: Text Card */}
 					<div className="bg-base-100 rounded-2xl shadow p-8 flex flex-col gap-6">
 						<Image
-						src={theme === "synthwave" ? "/logos/ArtwareLogo-darkMode.png" : "/logos/ArtwareLogo.png"}
+						src={isDarkTheme ? "/logos/ArtwareLogo-darkMode.png" : "/logos/ArtwareLogo.png"}
 						alt="Club Artware Logo"
 						width={300}
 						height={300}
