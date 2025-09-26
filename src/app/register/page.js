@@ -3,11 +3,16 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import AuthNavbar from "@/components/auth/auth-navbar";
 import TermsModal from "@/components/modals/termsModal";
+import { GuestRoute } from "@/components/auth/RouteGuards";
+import { useAuth } from "@/contexts/AuthContext";
 
-export default function RegisterPage() {
+function RegisterContent() {
   const [showCard, setShowCard] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
+  const [error, setError] = useState("");
+  
+  const { register, isLoading } = useAuth();
   const [formData, setFormData] = useState({
     nom: '',
     prenom: '',
@@ -50,12 +55,23 @@ export default function RegisterPage() {
       ...prev,
       [name]: value
     }));
+    if (error) setError(""); // Clear error when user starts typing
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle registration logic here
-    console.log('Registration data:', formData);
+    setError("");
+    
+    // Validate passwords match
+    if (formData.password !== formData.confirmPassword) {
+      setError("Les mots de passe ne correspondent pas");
+      return;
+    }
+    
+    const result = await register(formData);
+    if (!result.success) {
+      setError(result.error);
+    }
   };
 
   return (
@@ -115,6 +131,12 @@ export default function RegisterPage() {
 
           {/* Register Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Error Message */}
+            {error && (
+              <div className="bg-error/10 border border-error/20 text-error px-4 py-3 rounded-xl text-sm">
+                {error}
+              </div>
+            )}
             {/* Name Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -292,9 +314,17 @@ export default function RegisterPage() {
             {/* Register Button */}
             <button
               type="submit"
-              className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl"
+              disabled={isLoading}
+              className="w-full bg-primary hover:bg-primary/90 disabled:bg-primary/50 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
             >
-              Créer mon compte
+              {isLoading ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  Création...
+                </>
+              ) : (
+                "Créer mon compte"
+              )}
             </button>
 
             {/* Sign In Link */}
@@ -323,5 +353,13 @@ export default function RegisterPage() {
         onClose={() => setIsTermsModalOpen(false)} 
       />
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <GuestRoute>
+      <RegisterContent />
+    </GuestRoute>
   );
 }

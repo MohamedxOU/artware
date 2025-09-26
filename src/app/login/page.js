@@ -3,11 +3,17 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import AuthNavbar from "@/components/auth/auth-navbar";
 import ForgotPasswordModal from "@/components/modals/forgotPassword";
+import { GuestRoute } from "@/components/auth/RouteGuards";
+import { useAuth } from "@/contexts/AuthContext";
 
-export default function LoginPage() {
+function LoginContent() {
   const [showCard, setShowCard] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] = useState(false);
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
+  
+  const { login, isLoading } = useAuth();
 
   useEffect(() => {
     setTimeout(() => setShowCard(true), 300);
@@ -32,6 +38,22 @@ export default function LoginPage() {
 
     return () => observer.disconnect();
   }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (error) setError(""); // Clear error when user starts typing
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    
+    const result = await login(formData);
+    if (!result.success) {
+      setError(result.error);
+    }
+  };
 
   return (
     <div className={`relative min-h-screen bg-base-300 overflow-hidden ${isDarkTheme ? 'opacity-80' : 'opacity-100'}`}>
@@ -89,13 +111,25 @@ export default function LoginPage() {
           </div>
 
           {/* Login Form */}
-          <form className="space-y-6">
-            {/* Email/Phone Input */}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Error Message */}
+            {error && (
+              <div className="bg-error/10 border border-error/20 text-error px-4 py-3 rounded-xl text-sm">
+                {error}
+              </div>
+            )}
+
+            {/* Email Input */}
             <div>
               <input
-                type="text"
-                placeholder="Enter Email / Phone No"
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                placeholder="Enter Email"
                 className="w-full px-4 py-4 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
+                required
+                disabled={isLoading}
               />
             </div>
 
@@ -103,15 +137,14 @@ export default function LoginPage() {
             <div className="relative">
               <input
                 type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
                 placeholder="Passcode"
                 className="w-full px-4 py-4 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
+                required
+                disabled={isLoading}
               />
-              <button
-                type="button"
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-base-content/50 hover:text-base-content text-sm"
-              >
-                Hide
-              </button>
             </div>
 
             {/* Forgot Password */}
@@ -128,9 +161,17 @@ export default function LoginPage() {
             {/* Sign In Button */}
             <button
               type="submit"
-              className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl"
+              disabled={isLoading}
+              className="w-full bg-primary hover:bg-primary/90 disabled:bg-primary/50 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
             >
-              Sign in
+              {isLoading ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  Connexion...
+                </>
+              ) : (
+                "Sign in"
+              )}
             </button>
 
             {/* Divider */}
@@ -202,5 +243,13 @@ export default function LoginPage() {
         onClose={() => setIsForgotPasswordModalOpen(false)} 
       />
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <GuestRoute>
+      <LoginContent />
+    </GuestRoute>
   );
 }
