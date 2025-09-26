@@ -54,7 +54,53 @@ export default function Activities() {
 
 				{/* Main Content Layout */}
 				<div className="bg-base-100 border border-base-300/20 rounded-3xl shadow-2xl overflow-hidden">
-					<div className="grid lg:grid-cols-5 min-h-[600px]">
+					{/* Mobile Layout */}
+					<div className="block lg:hidden">
+						{/* Mobile Content Area */}
+						<div className="p-6">
+							<div className="mb-6">
+								<div className="w-full h-48 rounded-2xl overflow-hidden mb-6 bg-base-300/20 shadow-lg border border-base-300/10">
+									<Image
+										src={activities[selected].image}
+										alt={activities[selected].title}
+										width={600}
+										height={400}
+										className="w-full h-full object-cover"
+									/>
+								</div>
+								
+								<h3 className="text-2xl font-bold text-base-content mb-4">
+									{activities[selected].title}
+								</h3>
+								
+								<p className="text-base-content/80 text-base leading-relaxed mb-6">
+									{activities[selected].description}
+								</p>
+							</div>
+						</div>
+
+						{/* Mobile Navigation Tabs */}
+						<div className="bg-base-200/50 p-4">
+							<div className="flex overflow-x-auto gap-2 pb-2">
+								{activities.map((activity, idx) => (
+									<button
+										key={activity.title}
+										className={`flex-shrink-0 px-4 py-3 rounded-xl transition-all duration-300 text-sm font-semibold whitespace-nowrap ${
+											selected === idx
+												? 'bg-primary text-primary-content shadow-lg'
+												: 'text-base-content/70 hover:bg-base-300/50 hover:text-base-content bg-base-100'
+										}`}
+										onClick={() => setSelected(idx)}
+									>
+										{activity.title}
+									</button>
+								))}
+							</div>
+						</div>
+					</div>
+
+					{/* Desktop Layout */}
+					<div className="hidden lg:grid lg:grid-cols-5 min-h-[600px]">
 						{/* Sidebar Navigation */}
 						<div className="lg:col-span-2 bg-base-200/50 p-8">
 							<div className="space-y-1">
@@ -73,8 +119,6 @@ export default function Activities() {
 										</span>
 									</button>
 								))}
-								
-								
 							</div>
 						</div>
 
@@ -98,8 +142,6 @@ export default function Activities() {
 								<p className="text-base-content/80 text-lg leading-relaxed mb-8">
 									{activities[selected].description}
 								</p>
-								
-								
 							</div>
 						</div>
 					</div>
