@@ -2,29 +2,12 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useThemeStore } from "@/stores";
 
 export default function Footer() {
   const [isVisible, setIsVisible] = useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);
-  const [theme, setTheme] = useState(
-    typeof window !== "undefined"
-      ? localStorage.getItem("theme") || "acid"
-      : "acid"
-  );
-
-  // Theme checker with periodic updates
-  useEffect(() => {
-    const checkTheme = () => {
-      if (typeof window !== "undefined") {
-        const currentTheme = localStorage.getItem("theme") || document.documentElement.getAttribute("data-theme") || "acid";
-        setTheme(currentTheme);
-      }
-    };
-
-    checkTheme();
-    const interval = setInterval(checkTheme, 100);
-    return () => clearInterval(interval);
-  }, []);
+  const { theme, isDarkMode, isInitialized } = useThemeStore();
 
   // Scroll detection for scroll-to-top button
   useEffect(() => {
@@ -88,7 +71,7 @@ export default function Footer() {
             <div className="flex items-center space-x-3">
               <Image 
                 src={
-                  theme === "synthwave" 
+                  isDarkMode
                     ? "/logos/ArtwareLogo-darkMode.png" 
                     : "/logos/ArtwareLogo.png"
                 }
