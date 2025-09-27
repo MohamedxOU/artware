@@ -1,10 +1,26 @@
 "use client";
 import Home from '../components/home/home';
+import { useGuestRoute } from '@/hooks/useAuth';
 
 export default function Page() {
-  return (
-      <div>
-        <Home />
+  // Route protection - redirect authenticated users to dashboard
+  const { isLoading } = useGuestRoute();
+
+  // Show loading while checking auth
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-base-300 flex items-center justify-center">
+        <div className="text-center">
+          <div className="loading loading-spinner loading-lg text-primary"></div>
+          <p className="mt-4 text-base-content/70">Loading...</p>
+        </div>
       </div>
+    );
+  }
+
+  return (
+    <div>
+      <Home />
+    </div>
   );
 }

@@ -1,7 +1,9 @@
 
-const API_BASE = process.env.API_URL || 'http://localhost:3500';
-//login api
-export const login = async (email, password) => {
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3500';
+
+//login api with retry logic
+export const login = async (email, password, retryCount = 0) => {
+  try {
     const response = await fetch(`${API_BASE}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -27,7 +29,22 @@ export const login = async (email, password) => {
         throw new Error(errorText || 'Login failed');
       }
     }
-  };
+  } catch (error) {
+    // Retry once if it's a network error and we haven't already retried
+    if (error.message.includes('Failed to fetch') && retryCount < 1) {
+      console.log('Retrying login request...');
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second
+      return login(email, password, retryCount + 1);
+    }
+    
+    // If it's a network error, provide a more user-friendly message
+    if (error.message.includes('Failed to fetch')) {
+      throw new Error('Unable to connect to server. Please check your internet connection.');
+    }
+    
+    throw error;
+  }
+};
 
 
 //logout api

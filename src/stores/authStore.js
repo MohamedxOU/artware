@@ -59,10 +59,16 @@ const useAuthStore = create(
             return { success: false, error: 'Invalid credentials. Please try again.' };
           }
         } catch (error) {
-          console.error('Login failed:', error);
+          // Only log non-network errors to avoid spam in console
+          if (!error.message?.includes('Failed to fetch') && !error.message?.includes('Unable to connect to server')) {
+            console.error('Login failed:', error);
+          }
+          
           let errorMessage = 'Login failed. Please try again.';
           
-          if (error.message?.includes('Failed to fetch')) {
+          if (error.message?.includes('Unable to connect to server')) {
+            errorMessage = error.message; // Use the improved message from API
+          } else if (error.message?.includes('Failed to fetch')) {
             errorMessage = 'Unable to connect to server. Please check if the backend is running.';
           } else if (error.message) {
             errorMessage = error.message;
