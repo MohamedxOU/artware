@@ -1,7 +1,6 @@
 import './globals.css';
 import { NextIntlClientProvider } from 'next-intl';
 import { cookies } from 'next/headers';
-import { AuthProvider } from '@/contexts/AuthContext';
 
 export default function RootLayout({ children }) {
 
@@ -11,11 +10,9 @@ export default function RootLayout({ children }) {
     <html lang={locale} suppressHydrationWarning>
       
       <body>
-        <AuthProvider>
           <NextIntlClientProvider>
             {children}
           </NextIntlClientProvider>
-        </AuthProvider>
       </body>
     </html>
   );

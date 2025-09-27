@@ -3,23 +3,24 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import AuthNavbar from "@/components/auth/auth-navbar";
 import TermsModal from "@/components/modals/termsModal";
-import { GuestRoute } from "@/components/auth/RouteGuards";
-import { useAuth } from "@/contexts/AuthContext";
+import * as authAPI from "@/api/auth";
 
 function RegisterContent() {
   const [showCard, setShowCard] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [error, setError] = useState("");
   
-  const { register, isLoading } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    nom: '',
-    prenom: '',
-    cne: '',
-    parcours: '',
-    filiere: '',
-    sex: '',
+    first_name: '',
+    last_name: '',
+    phone_number: '',
+    birth_date: '',
+    level: '',
+    specialty: '',
+    gender: '',
     email: '',
     password: '',
     confirmPassword: ''
@@ -61,16 +62,46 @@ function RegisterContent() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true);
     
-    // Validate passwords match
-    if (formData.password !== formData.confirmPassword) {
-      setError("Les mots de passe ne correspondent pas");
-      return;
-    }
-    
-    const result = await register(formData);
-    if (!result.success) {
-      setError(result.error);
+    try {
+      // Validate passwords match
+      if (formData.password !== formData.confirmPassword) {
+        setError("Les mots de passe ne correspondent pas");
+        return;
+      }
+      
+      // Prepare data for API (exclude confirmPassword)
+      const { confirmPassword, ...apiData } = formData;
+      
+      // Create FormData for multipart/form-data
+      const formDataToSend = new FormData();
+      Object.keys(apiData).forEach(key => {
+        formDataToSend.append(key, apiData[key]);
+      });
+      
+      // Call register API directly
+      const result = await authAPI.register(formDataToSend);
+      
+      if (result && !result.error) {
+        // Show success dialog
+        setShowSuccessDialog(true);
+      } else {
+        setError(result.error || 'Registration failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Registration failed:', error);
+      let errorMessage = 'Registration failed. Please try again.';
+      
+      if (error.message?.includes('Failed to fetch')) {
+        errorMessage = 'Unable to connect to server. Please check if the backend is running.';
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      setError(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -145,8 +176,8 @@ function RegisterContent() {
                 </label>
                 <input
                   type="text"
-                  name="nom"
-                  value={formData.nom}
+                  name="last_name"
+                  value={formData.last_name}
                   onChange={handleInputChange}
                   placeholder="Votre nom"
                   className="w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
@@ -159,8 +190,8 @@ function RegisterContent() {
                 </label>
                 <input
                   type="text"
-                  name="prenom"
-                  value={formData.prenom}
+                  name="first_name"
+                  value={formData.first_name}
                   onChange={handleInputChange}
                   placeholder="Votre prénom"
                   className="w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
@@ -169,74 +200,89 @@ function RegisterContent() {
               </div>
             </div>
 
-            {/* CNE */}
+            {/* Phone Number */}
             <div>
               <label className="block text-sm font-medium text-base-content/70 mb-2">
-                CNE
+                Numéro de téléphone
               </label>
               <input
-                type="text"
-                name="cne"
-                value={formData.cne}
+                type="tel"
+                name="phone_number"
+                value={formData.phone_number}
                 onChange={handleInputChange}
-                placeholder="Code National Étudiant"
+                placeholder="Votre numéro de téléphone"
                 className="w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
                 required
               />
             </div>
 
-            {/* Parcours and Filiere Row */}
+            {/* Birth Date */}
+            <div>
+              <label className="block text-sm font-medium text-base-content/70 mb-2">
+                Date de naissance
+              </label>
+              <input
+                type="date"
+                name="birth_date"
+                value={formData.birth_date}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all text-base-content"
+                required
+              />
+            </div>
+
+            {/* Level and Specialty Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-base-content/70 mb-2">
-                  Parcours
+                  Niveau
                 </label>
                 <select
-                  name="parcours"
-                  value={formData.parcours}
+                  name="level"
+                  value={formData.level}
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all text-base-content"
                   required
                 >
-                  <option value="" disabled>Sélectionner parcours</option>
-                  <option value="licence">Licence</option>
-                  <option value="master">Master</option>
-                  <option value="ingenieur">Ingénieur</option>
-                  <option value="doctorat">Doctorat</option>
+                  <option value="" disabled>Sélectionner niveau</option>
+                  <option value="LST">Licence (LST)</option>
+                  <option value="MST">Master (MST)</option>
+                  <option value="CI">Cycle Ingénieur (CI)</option>
+                  <option value="DEUST">DEUST</option>
                 </select>
               </div>
               <div>
                 <label className="block text-sm font-medium text-base-content/70 mb-2">
-                  Filière
+                  Spécialité
                 </label>
                 <input
                   type="text"
-                  name="filiere"
-                  value={formData.filiere}
+                  name="specialty"
+                  value={formData.specialty}
                   onChange={handleInputChange}
-                  placeholder="Votre filière"
+                  placeholder="Votre spécialité"
                   className="w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
                   required
                 />
               </div>
             </div>
 
-            {/* Sex and Email Row */}
+            {/* Gender and Email Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-base-content/70 mb-2">
-                  Sexe
+                  Genre
                 </label>
                 <select
-                  name="sex"
-                  value={formData.sex}
+                  name="gender"
+                  value={formData.gender}
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all text-base-content"
                   required
                 >
-                  <option value="" disabled>Sélectionner sexe</option>
-                  <option value="homme">Homme</option>
-                  <option value="femme">Femme</option>
+                  <option value="" disabled>Sélectionner genre</option>
+                  <option value="male">Homme</option>
+                  <option value="female">Femme</option>
                 </select>
               </div>
               <div>
@@ -352,14 +398,59 @@ function RegisterContent() {
         isOpen={isTermsModalOpen} 
         onClose={() => setIsTermsModalOpen(false)} 
       />
+
+      {/* Success Dialog */}
+      {showSuccessDialog && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-base-100 rounded-2xl shadow-2xl max-w-md w-full p-8 text-center animate-in fade-in zoom-in duration-300">
+            {/* Success Icon */}
+            <div className="w-16 h-16 bg-success/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            
+            {/* Success Message */}
+            <h3 className="text-2xl font-bold text-base-content mb-3">Inscription réussie!</h3>
+            <div className="text-base-content/70 mb-6 space-y-2">
+              <p className="font-medium">Votre compte a été créé avec succès.</p>
+              <p className="text-sm">
+                Veuillez attendre l&apos;approbation de l&apos;administrateur pour pouvoir vous connecter.
+              </p>
+              <p className="text-sm font-medium text-primary">
+                📧 Vérifiez votre email pour plus d&apos;informations.
+              </p>
+            </div>
+            
+            {/* OK Button */}
+            <button
+              onClick={() => {
+                setShowSuccessDialog(false);
+                // Reset form after successful registration
+                setFormData({
+                  first_name: '',
+                  last_name: '',
+                  phone_number: '',
+                  birth_date: '',
+                  level: '',
+                  specialty: '',
+                  gender: '',
+                  email: '',
+                  password: '',
+                  confirmPassword: ''
+                });
+              }}
+              className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl"
+            >
+              Compris
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
 export default function RegisterPage() {
-  return (
-    <GuestRoute>
-      <RegisterContent />
-    </GuestRoute>
-  );
+  return <RegisterContent />;
 }

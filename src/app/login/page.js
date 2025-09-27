@@ -3,8 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import AuthNavbar from "@/components/auth/auth-navbar";
 import ForgotPasswordModal from "@/components/modals/forgotPassword";
-import { GuestRoute } from "@/components/auth/RouteGuards";
-import { useAuth } from "@/contexts/AuthContext";
+import * as authAPI from "@/api/auth";
 
 function LoginContent() {
   const [showCard, setShowCard] = useState(false);
@@ -13,7 +12,7 @@ function LoginContent() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   
-  const { login, isLoading } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setTimeout(() => setShowCard(true), 300);
@@ -48,10 +47,32 @@ function LoginContent() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true);
     
-    const result = await login(formData);
-    if (!result.success) {
-      setError(result.error);
+    try {
+      // Call login API directly
+      const result = await authAPI.login(formData.email, formData.password);
+      
+      if (result && !result.error) {
+        // Login successful - you can handle redirect here
+        console.log('Login successful:', result);
+        // Example: window.location.href = '/dashboard';
+      } else {
+        setError(result.error || 'Login failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Login failed:', error);
+      let errorMessage = 'Login failed. Please try again.';
+      
+      if (error.message?.includes('Failed to fetch')) {
+        errorMessage = 'Unable to connect to server. Please check if the backend is running.';
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      setError(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -247,9 +268,5 @@ function LoginContent() {
 }
 
 export default function LoginPage() {
-  return (
-    <GuestRoute>
-      <LoginContent />
-    </GuestRoute>
-  );
+  return <LoginContent />;
 }
