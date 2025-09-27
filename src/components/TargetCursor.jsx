@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, useMemo } from 'react';
+import { useEffect, useRef, useCallback, useMemo, useState } from 'react';
 import { gsap } from 'gsap';
 
 const TargetCursor = ({ targetSelector = '.cursor-target', spinDuration = 2, hideDefaultCursor = true }) => {
@@ -6,6 +6,7 @@ const TargetCursor = ({ targetSelector = '.cursor-target', spinDuration = 2, hid
   const cornersRef = useRef(null);
   const spinTl = useRef(null);
   const dotRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
   const constants = useMemo(() => ({
     borderWidth: 3,
     cornerSize: 12,
@@ -22,7 +23,26 @@ const TargetCursor = ({ targetSelector = '.cursor-target', spinDuration = 2, hid
     });
   }, []);
 
+  // Mobile detection effect
   useEffect(() => {
+    const checkMobile = () => {
+      const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+                           window.innerWidth <= 768 ||
+                           ('ontouchstart' in window);
+      setIsMobile(isMobileDevice);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
+
+  useEffect(() => {
+    // Don't render cursor on mobile devices
+    if (isMobile) return;
     if (!cursorRef.current) return;
 
     const originalCursor = document.body.style.cursor;
@@ -309,6 +329,11 @@ const TargetCursor = ({ targetSelector = '.cursor-target', spinDuration = 2, hid
       );
     }
   }, [spinDuration]);
+
+  // Don't render anything on mobile devices
+  if (isMobile) {
+    return null;
+  }
 
   return (
     <div
