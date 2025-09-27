@@ -6,6 +6,7 @@ import AuthNavbar from "@/components/auth/auth-navbar";
 import TermsModal from "@/components/modals/termsModal";
 import { useAuthStore, useThemeStore, useUIStore } from "@/stores";
 import { useGuestRoute } from "@/hooks/useAuth";
+import TargetCursor from "@/components/TargetCursor";
 
 function RegisterContent() {
   // Route protection - redirect authenticated users
@@ -135,6 +136,10 @@ function RegisterContent() {
 
   return (
     <div className={`relative min-h-screen bg-base-300 overflow-hidden ${isDarkMode ? 'opacity-80' : 'opacity-100'}`}>
+      <TargetCursor 
+              spinDuration={2}
+              hideDefaultCursor={true}
+            />
       {/* Background Textures - covering entire page */}
       <div className="absolute inset-0">
         {/* Large primary circles */}
@@ -202,7 +207,7 @@ function RegisterContent() {
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-base-content/50">
-                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className=" w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                   </div>
@@ -210,7 +215,7 @@ function RegisterContent() {
               </div>
               
               {/* Upload Button */}
-              <label className="absolute -bottom-2 -right-2 bg-primary hover:bg-primary/90 text-white rounded-full p-2 cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110">
+              <label className="cursor-target  absolute -bottom-2 -right-2 bg-primary hover:bg-primary/90 text-white rounded-full p-2 cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                 </svg>
@@ -254,7 +259,7 @@ function RegisterContent() {
                   value={formData.last_name}
                   onChange={handleInputChange}
                   placeholder="Votre nom"
-                  className="w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
+                  className="cursor-target w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
                   required
                 />
               </div>
@@ -268,7 +273,7 @@ function RegisterContent() {
                   value={formData.first_name}
                   onChange={handleInputChange}
                   placeholder="Votre prénom"
-                  className="w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
+                  className="cursor-target w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
                   required
                 />
               </div>
@@ -285,7 +290,7 @@ function RegisterContent() {
                 value={formData.phone_number}
                 onChange={handleInputChange}
                 placeholder="Votre numéro de téléphone"
-                className="w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
+                className="cursor-target w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
                 required
               />
             </div>
@@ -300,7 +305,7 @@ function RegisterContent() {
                 name="birth_date"
                 value={formData.birth_date}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all text-base-content"
+                className="cursor-target w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all text-base-content"
                 required
               />
             </div>
@@ -315,7 +320,7 @@ function RegisterContent() {
                   name="level"
                   value={formData.level}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all text-base-content"
+                  className="cursor-target w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all text-base-content"
                   required
                 >
                   <option value="" disabled>Sélectionner niveau</option>
@@ -335,7 +340,7 @@ function RegisterContent() {
                   value={formData.specialty}
                   onChange={handleInputChange}
                   placeholder="Votre spécialité"
-                  className="w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
+                  className="cursor-target w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
                   required
                 />
               </div>
@@ -351,7 +356,7 @@ function RegisterContent() {
                   name="gender"
                   value={formData.gender}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all text-base-content"
+                  className="cursor-target w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all text-base-content"
                   required
                 >
                   <option value="" disabled>Sélectionner genre</option>
@@ -369,7 +374,7 @@ function RegisterContent() {
                   value={formData.email}
                   onChange={handleInputChange}
                   placeholder="votre.email@example.com"
-                  className="w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
+                  className="cursor-target w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
                   required
                 />
               </div>
@@ -387,7 +392,7 @@ function RegisterContent() {
                   value={formData.password}
                   onChange={handleInputChange}
                   placeholder="Mot de passe"
-                  className="w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
+                  className="cursor-target w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
                   required
                 />
               </div>
@@ -401,7 +406,7 @@ function RegisterContent() {
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
                   placeholder="Confirmer mot de passe"
-                  className="w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
+                  className="cursor-target w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
                   required
                 />
               </div>
@@ -420,14 +425,11 @@ function RegisterContent() {
                 <button
                   type="button"
                   onClick={() => openModal('termsModal')}
-                  className="text-primary hover:text-primary/80 underline font-medium"
+                  className="cursor-target text-primary hover:text-primary/80 underline font-medium"
                 >
                   conditions d&apos;utilisation
                 </button>{" "}
-                et la{" "}
-                <Link href="/privacy" className="text-primary hover:text-primary/80">
-                  politique de confidentialité
-                </Link>
+                
               </label>
             </div>
 
@@ -435,7 +437,7 @@ function RegisterContent() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-primary hover:bg-primary/90 disabled:bg-primary/50 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+              className="cursor-target w-full bg-primary hover:bg-primary/90 disabled:bg-primary/50 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <>
@@ -451,7 +453,7 @@ function RegisterContent() {
             <div className="text-center mt-6">
               <span className="text-base-content/60 text-sm">
                 Vous avez déjà un compte?{" "}
-                <Link href="/login" className="text-primary hover:text-primary/80 font-semibold">
+                <Link href="/login" className="cursor-target text-primary hover:text-primary/80 font-semibold">
                   Se connecter
                 </Link>
               </span>
@@ -499,7 +501,7 @@ function RegisterContent() {
             {/* OK Button */}
             <button
               onClick={() => hideSuccessDialog()}
-              className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl"
+              className="cursor-target w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl"
             >
               Compris
             </button>

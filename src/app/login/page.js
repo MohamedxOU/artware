@@ -6,6 +6,7 @@ import AuthNavbar from "@/components/auth/auth-navbar";
 import ForgotPasswordModal from "@/components/modals/forgotPassword";
 import { useAuthStore, useThemeStore, useUIStore } from "@/stores";
 import { useGuestRoute } from "@/hooks/useAuth";
+import TargetCursor from "@/components/TargetCursor";
 
 function LoginContent() {
   const router = useRouter(); 
@@ -64,6 +65,10 @@ function LoginContent() {
 
   return (
     <div className={`relative min-h-screen bg-base-300 overflow-hidden ${isDarkMode ? 'opacity-80' : 'opacity-100'}`}>
+      <TargetCursor 
+              spinDuration={2}
+              hideDefaultCursor={true}
+            />
       {/* Background Textures - covering entire page */}
       <div className="absolute inset-0">
         {/* Large primary circles */}
@@ -134,7 +139,7 @@ function LoginContent() {
                 value={formData.email}
                 onChange={handleInputChange}
                 placeholder="Enter Email"
-                className="w-full px-4 py-4 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
+                className="cursor-target w-full px-4 py-4 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
                 required
                 disabled={isLoading}
               />
@@ -147,8 +152,8 @@ function LoginContent() {
                 name="password"
                 value={formData.password}
                 onChange={handleInputChange}
-                placeholder="Passcode"
-                className="w-full px-4 py-4 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
+                placeholder="Password"
+                className="cursor-target w-full px-4 py-4 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
                 required
                 disabled={isLoading}
               />
@@ -169,7 +174,7 @@ function LoginContent() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-primary hover:bg-primary/90 disabled:bg-primary/50 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+              className="cursor-target w-full bg-primary hover:bg-primary/90 disabled:bg-primary/50 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <>
@@ -228,7 +233,7 @@ function LoginContent() {
             <div className="text-center mt-6">
               <span className="text-base-content/60 text-sm">
                 Don&apos;t have an account?{" "}
-                <Link href="/register" className="text-primary hover:text-primary/80 font-semibold">
+                <Link href="/register" className="cursor-target text-primary hover:text-primary/80 font-semibold">
                   Register now
                 </Link>
               </span>
