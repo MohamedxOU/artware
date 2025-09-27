@@ -1,83 +1,69 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import AuthNavbar from "@/components/auth/auth-navbar";
 import ForgotPasswordModal from "@/components/modals/forgotPassword";
-import * as authAPI from "@/api/auth";
+import { useAuthStore, useThemeStore, useUIStore } from "@/stores";
+import { useGuestRoute } from "@/hooks/useAuth";
 
 function LoginContent() {
-  const [showCard, setShowCard] = useState(false);
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
-  const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] = useState(false);
-  const [formData, setFormData] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
+  const router = useRouter(); 
   
-  const [isLoading, setIsLoading] = useState(false);
+  // Route protection - redirect authenticated users
+  const { isLoading: authCheckLoading } = useGuestRoute();
+  
+  // Zustand stores
+  const { login, isLoading, error, clearError } = useAuthStore();
+  const { isDarkMode } = useThemeStore();
+  const { modals, forms, openModal, closeModal, setShowCard } = useUIStore();
+  
+  const [formData, setFormData] = useState({ email: "", password: "" });
 
   useEffect(() => {
     setTimeout(() => setShowCard(true), 300);
-  }, []);
+  }, [setShowCard]);
 
-  useEffect(() => {
-    // Check initial theme
-    const checkTheme = () => {
-      const htmlElement = document.documentElement;
-      const currentTheme = htmlElement.getAttribute('data-theme');
-      setIsDarkTheme(currentTheme !== 'acid');
-    };
-
-    checkTheme();
-
-    // Watch for theme changes
-    const observer = new MutationObserver(checkTheme);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-theme']
-    });
-
-    return () => observer.disconnect();
-  }, []);
+  // Show loading while checking authentication
+  if (authCheckLoading) {
+    return (
+      <div className="min-h-screen bg-base-300 flex items-center justify-center">
+        <div className="text-center">
+          <div className="loading loading-spinner loading-lg text-primary"></div>
+          <p className="mt-4 text-base-content/70">Vérification...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    if (error) setError(""); // Clear error when user starts typing
+    if (error) clearError(); // Clear error when user starts typing
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setIsLoading(true);
+    clearError();
     
-    try {
-      // Call login API directly
-      const result = await authAPI.login(formData.email, formData.password);
-      
-      if (result && !result.error) {
-        // Login successful - you can handle redirect here
-        console.log('Login successful:', result);
-        // Example: window.location.href = '/dashboard';
-      } else {
-        setError(result.error || 'Login failed. Please try again.');
-      }
-    } catch (error) {
-      console.error('Login failed:', error);
-      let errorMessage = 'Login failed. Please try again.';
-      
-      if (error.message?.includes('Failed to fetch')) {
-        errorMessage = 'Unable to connect to server. Please check if the backend is running.';
-      } else if (error.message) {
-        errorMessage = error.message;
+    const result = await login(formData.email, formData.password);
+    if (result.success) {
+      // Optional: Show success message with user's name
+      if (result.user) {
+        const userName = `${result.user.first_name} ${result.user.last_name}`;
+        console.log(`Welcome back, ${userName}!`);
       }
       
-      setError(errorMessage);
-    } finally {
-      setIsLoading(false);
+      // Redirect to dashboard or intended page
+      const intendedRoute = sessionStorage.getItem('intendedRoute') || '/dashboard';
+      sessionStorage.removeItem('intendedRoute');
+      router.push(intendedRoute);
     }
+    // Error handling is already done in the authStore
   };
 
   return (
-    <div className={`relative min-h-screen bg-base-300 overflow-hidden ${isDarkTheme ? 'opacity-80' : 'opacity-100'}`}>
+    <div className={`relative min-h-screen bg-base-300 overflow-hidden ${isDarkMode ? 'opacity-80' : 'opacity-100'}`}>
       {/* Background Textures - covering entire page */}
       <div className="absolute inset-0">
         {/* Large primary circles */}
@@ -119,7 +105,7 @@ function LoginContent() {
       {/* Centered Login Card */}
       <div className="relative z-10 flex items-center justify-center p-6 min-h-screen pt-24">
         <div className={`w-full max-w-md bg-base-100/95 backdrop-blur-md rounded-3xl shadow-2xl border border-base-300/20 p-8 my-8 transition-all duration-1000 ${
-          showCard ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
+          forms.showCard ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
         }`}>
           
           {/* Login Header */}
@@ -172,7 +158,7 @@ function LoginContent() {
             <div className="text-center">
               <button
                 type="button"
-                onClick={() => setIsForgotPasswordModalOpen(true)}
+                onClick={() => openModal('forgotPasswordModal')}
                 className="text-base-content/60 hover:text-primary text-sm underline"
               >
                 Having trouble in sign in?
@@ -260,8 +246,8 @@ function LoginContent() {
 
       {/* Forgot Password Modal */}
       <ForgotPasswordModal 
-        isOpen={isForgotPasswordModalOpen} 
-        onClose={() => setIsForgotPasswordModalOpen(false)} 
+        isOpen={modals.forgotPasswordModal} 
+        onClose={() => closeModal('forgotPasswordModal')} 
       />
     </div>
   );

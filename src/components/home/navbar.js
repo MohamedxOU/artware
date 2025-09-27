@@ -2,6 +2,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuthStore, useUIStore } from "@/stores";
 
 const navLinks = [
   { href: "#about-us", label: "Présentation" },
@@ -12,6 +14,10 @@ const navLinks = [
 ];
 
 export default function Navbar() {
+  const router = useRouter();
+  const { user, isAuthenticated, logout, isLoading: authLoading } = useAuthStore();
+  const { addNotification } = useUIStore();
+  
   const [theme, setTheme] = useState("acid"); // Default theme for SSR
   const [lang, setLang] = useState("fr"); // Default lang for SSR
   const [isScrolled, setIsScrolled] = useState(false);
@@ -57,6 +63,45 @@ export default function Navbar() {
     setLang(l);
     localStorage.setItem("locale", l);
     window.location.reload();
+  };
+
+  // Logout handler
+  const handleLogout = async () => {
+    const confirmed = window.confirm('Êtes-vous sûr de vouloir vous déconnecter ?');
+    if (!confirmed) return;
+
+    try {
+      const result = await logout();
+      
+      if (result.success) {
+        if (result.warning) {
+          addNotification({
+            type: 'warning',
+            message: result.warning,
+            duration: 5000
+          });
+        } else {
+          addNotification({
+            type: 'success',
+            message: 'Déconnexion réussie. À bientôt !',
+            duration: 3000
+          });
+        }
+      } else if (result.error) {
+        addNotification({
+          type: 'error',
+          message: result.error,
+          duration: 5000
+        });
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+      addNotification({
+        type: 'error',
+        message: 'Erreur lors de la déconnexion',
+        duration: 5000
+      });
+    }
   };
 
   // Smooth scroll handler for navigation links
@@ -205,15 +250,37 @@ export default function Navbar() {
               <option value="fr">FR</option>
             </select>
 
-            {/* Login Button */}
-            <Link 
-              href="/login" 
-              className={`cursor-target btn btn-sm ml-2 transition-all duration-300 ${
-                isScrolled ? "btn-primary" : "btn-outline text-white border-white hover:bg-white hover:text-primary"
-              }`}
-            >
-              Login
-            </Link>
+            {/* Auth Buttons */}
+            {isAuthenticated && user ? (
+              <div className="flex items-center space-x-2 ml-2">
+                <Link
+                  href="/dashboard"
+                  className={`cursor-target btn btn-sm transition-all duration-300 ${
+                    isScrolled ? "btn-secondary" : "btn-outline text-white border-white hover:bg-white hover:text-secondary"
+                  }`}
+                >
+                  Dashboard
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  disabled={authLoading}
+                  className={`cursor-target btn btn-sm transition-all duration-300 ${
+                    isScrolled ? "btn-error" : "btn-outline text-white border-white hover:bg-white hover:text-error"
+                  }`}
+                >
+                  {authLoading ? '...' : 'Logout'}
+                </button>
+              </div>
+            ) : (
+              <Link 
+                href="/login" 
+                className={`cursor-target btn btn-sm ml-2 transition-all duration-300 ${
+                  isScrolled ? "btn-primary" : "btn-outline text-white border-white hover:bg-white hover:text-primary"
+                }`}
+              >
+                Login
+              </Link>
+            )}
           </div>
 
           {/* Mobile Right Controls */}
@@ -346,14 +413,36 @@ export default function Navbar() {
                 </select>
               </div>
 
-              {/* Login Button */}
-              <Link 
-                href="/login" 
-                className="btn btn-primary w-full"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Login
-              </Link>
+              {/* Auth Buttons */}
+              {isAuthenticated && user ? (
+                <div className="space-y-2">
+                  <Link 
+                    href="/dashboard" 
+                    className="btn btn-secondary w-full"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      handleLogout();
+                    }}
+                    disabled={authLoading}
+                    className="btn btn-error w-full"
+                  >
+                    {authLoading ? 'Déconnexion...' : 'Logout'}
+                  </button>
+                </div>
+              ) : (
+                <Link 
+                  href="/login" 
+                  className="btn btn-primary w-full"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Login
+                </Link>
+              )}
             </div>
           </div>
         </div>

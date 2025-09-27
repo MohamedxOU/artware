@@ -1,6 +1,7 @@
 import './globals.css';
 import { NextIntlClientProvider } from 'next-intl';
 import { cookies } from 'next/headers';
+import StoreInitializer from '@/components/layout/StoreInitializer';
 
 export default function RootLayout({ children }) {
 
@@ -11,7 +12,9 @@ export default function RootLayout({ children }) {
       
       <body>
           <NextIntlClientProvider>
-            {children}
+            <StoreInitializer>
+              {children}
+            </StoreInitializer>
           </NextIntlClientProvider>
       </body>
     </html>

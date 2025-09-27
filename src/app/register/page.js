@@ -1,18 +1,29 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import AuthNavbar from "@/components/auth/auth-navbar";
 import TermsModal from "@/components/modals/termsModal";
-import * as authAPI from "@/api/auth";
+import { useAuthStore, useThemeStore, useUIStore } from "@/stores";
+import { useGuestRoute } from "@/hooks/useAuth";
 
 function RegisterContent() {
-  const [showCard, setShowCard] = useState(false);
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
-  const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
-  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
-  const [error, setError] = useState("");
+  // Route protection - redirect authenticated users
+  const { isLoading: authCheckLoading } = useGuestRoute();
   
-  const [isLoading, setIsLoading] = useState(false);
+  // Zustand stores
+  const { register, isLoading, error, clearError } = useAuthStore();
+  const { isDarkMode } = useThemeStore();
+  const { 
+    modals, 
+    forms, 
+    openModal, 
+    closeModal, 
+    setShowCard,
+    showSuccessDialog,
+    hideSuccessDialog 
+  } = useUIStore();
+  // Local form state
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -23,32 +34,27 @@ function RegisterContent() {
     gender: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    profile: null
   });
+  
+  const [profilePreview, setProfilePreview] = useState(null);
 
   useEffect(() => {
     setTimeout(() => setShowCard(true), 300);
-  }, []);
+  }, [setShowCard]);
 
-  useEffect(() => {
-    // Check initial theme
-    const checkTheme = () => {
-      const htmlElement = document.documentElement;
-      const currentTheme = htmlElement.getAttribute('data-theme');
-      setIsDarkTheme(currentTheme !== 'acid');
-    };
-
-    checkTheme();
-
-    // Watch for theme changes
-    const observer = new MutationObserver(checkTheme);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-theme']
-    });
-
-    return () => observer.disconnect();
-  }, []);
+  // Show loading while checking authentication
+  if (authCheckLoading) {
+    return (
+      <div className="min-h-screen bg-base-300 flex items-center justify-center">
+        <div className="text-center">
+          <div className="loading loading-spinner loading-lg text-primary"></div>
+          <p className="mt-4 text-base-content/70">Vérification...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -56,57 +62,79 @@ function RegisterContent() {
       ...prev,
       [name]: value
     }));
-    if (error) setError(""); // Clear error when user starts typing
+    if (error) clearError(); // Clear error when user starts typing
+  };
+
+  const handleProfileImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file type
+      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+      if (!validTypes.includes(file.type)) {
+        alert('Veuillez sélectionner une image valide (JPG, PNG, WEBP)');
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('La taille de l\'image ne doit pas dépasser 5MB');
+        return;
+      }
+
+      setFormData(prev => ({
+        ...prev,
+        profile: file
+      }));
+
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setProfilePreview(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setIsLoading(true);
+    clearError();
     
-    try {
-      // Validate passwords match
-      if (formData.password !== formData.confirmPassword) {
-        setError("Les mots de passe ne correspondent pas");
-        return;
-      }
+    // Validate passwords match
+    if (formData.password !== formData.confirmPassword) {
+      return; // Error will be shown by the auth store
+    }
+    
+    // Prepare data for API (exclude confirmPassword)
+    const { confirmPassword, ...apiData } = formData;
+    
+    const result = await register(apiData);
+    if (result.success) {
+      // Show success dialog
+      showSuccessDialog(
+        'Votre compte a été créé avec succès. Veuillez attendre l\'approbation de l\'administrateur pour pouvoir vous connecter. 📧 Vérifiez votre email pour plus d\'informations.',
+        'Inscription réussie!'
+      );
       
-      // Prepare data for API (exclude confirmPassword)
-      const { confirmPassword, ...apiData } = formData;
-      
-      // Create FormData for multipart/form-data
-      const formDataToSend = new FormData();
-      Object.keys(apiData).forEach(key => {
-        formDataToSend.append(key, apiData[key]);
+      // Reset form
+      setFormData({
+        first_name: '',
+        last_name: '',
+        phone_number: '',
+        birth_date: '',
+        level: '',
+        specialty: '',
+        gender: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        profile: null
       });
-      
-      // Call register API directly
-      const result = await authAPI.register(formDataToSend);
-      
-      if (result && !result.error) {
-        // Show success dialog
-        setShowSuccessDialog(true);
-      } else {
-        setError(result.error || 'Registration failed. Please try again.');
-      }
-    } catch (error) {
-      console.error('Registration failed:', error);
-      let errorMessage = 'Registration failed. Please try again.';
-      
-      if (error.message?.includes('Failed to fetch')) {
-        errorMessage = 'Unable to connect to server. Please check if the backend is running.';
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-      
-      setError(errorMessage);
-    } finally {
-      setIsLoading(false);
+      setProfilePreview(null);
     }
   };
 
   return (
-    <div className={`relative min-h-screen bg-base-300 overflow-hidden ${isDarkTheme ? 'opacity-80' : 'opacity-100'}`}>
+    <div className={`relative min-h-screen bg-base-300 overflow-hidden ${isDarkMode ? 'opacity-80' : 'opacity-100'}`}>
       {/* Background Textures - covering entire page */}
       <div className="absolute inset-0">
         {/* Large primary circles */}
@@ -148,7 +176,7 @@ function RegisterContent() {
       {/* Centered Register Card */}
       <div className="relative z-10 flex items-center justify-center p-6 min-h-screen pt-24">
         <div className={`w-full max-w-2xl bg-base-100/95 backdrop-blur-md rounded-3xl shadow-2xl border border-base-300/20 p-8 my-8 transition-all duration-1000 ${
-          showCard ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
+          forms.showCard ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
         }`}>
           
           {/* Register Header */}
@@ -157,6 +185,52 @@ function RegisterContent() {
             <p className="text-base-content/70">
               Join ARTWARE community<br />
               Fill in your details to create your account
+            </p>
+          </div>
+
+          {/* Profile Image Upload */}
+          <div className="flex justify-center mb-8">
+            <div className="relative">
+              <div className="w-24 h-24 rounded-full overflow-hidden bg-base-200 border-4 border-base-300 shadow-lg hover:shadow-xl transition-all duration-300">
+                {profilePreview ? (
+                  <Image 
+                    src={profilePreview} 
+                    alt="Profile preview" 
+                    width={96}
+                    height={96}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-base-content/50">
+                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+              
+              {/* Upload Button */}
+              <label className="absolute -bottom-2 -right-2 bg-primary hover:bg-primary/90 text-white rounded-full p-2 cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleProfileImageChange}
+                  className="hidden"
+                  id="profile-upload"
+                />
+              </label>
+            </div>
+          </div>
+          
+          {/* Profile Upload Instructions */}
+          <div className="text-center mb-6">
+            <p className="text-xs text-base-content/60">
+              Cliquez sur le + pour ajouter votre photo de profil
+              <br />
+              <span className="text-base-content/40">JPG, PNG ou WEBP • Max 5MB</span>
             </p>
           </div>
 
@@ -345,7 +419,7 @@ function RegisterContent() {
                 J&apos;accepte les{" "}
                 <button
                   type="button"
-                  onClick={() => setIsTermsModalOpen(true)}
+                  onClick={() => openModal('termsModal')}
                   className="text-primary hover:text-primary/80 underline font-medium"
                 >
                   conditions d&apos;utilisation
@@ -395,12 +469,12 @@ function RegisterContent() {
 
       {/* Terms Modal */}
       <TermsModal 
-        isOpen={isTermsModalOpen} 
-        onClose={() => setIsTermsModalOpen(false)} 
+        isOpen={modals.termsModal} 
+        onClose={() => closeModal('termsModal')} 
       />
 
       {/* Success Dialog */}
-      {showSuccessDialog && (
+      {modals.successDialog && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-base-100 rounded-2xl shadow-2xl max-w-md w-full p-8 text-center animate-in fade-in zoom-in duration-300">
             {/* Success Icon */}
@@ -424,22 +498,7 @@ function RegisterContent() {
             
             {/* OK Button */}
             <button
-              onClick={() => {
-                setShowSuccessDialog(false);
-                // Reset form after successful registration
-                setFormData({
-                  first_name: '',
-                  last_name: '',
-                  phone_number: '',
-                  birth_date: '',
-                  level: '',
-                  specialty: '',
-                  gender: '',
-                  email: '',
-                  password: '',
-                  confirmPassword: ''
-                });
-              }}
+              onClick={() => hideSuccessDialog()}
               className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl"
             >
               Compris
