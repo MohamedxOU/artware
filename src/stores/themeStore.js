@@ -1,25 +1,35 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+// Define dark themes for proper isDarkMode detection
+const DARK_THEMES = [
+  'synthwave', 'halloween', 'forest', 'black', 'luxury', 'dracula', 
+  'night', 'coffee', 'business'
+];
+
 const useThemeStore = create(
   persist(
     (set, get) => ({
       // State
       theme: 'acid', // default light theme
       isDarkMode: false,
+      isInitialized: false,
 
       // Actions
       setTheme: (newTheme) => {
-        const isDark = newTheme !== 'acid';
+        const isDark = DARK_THEMES.includes(newTheme);
         
-        // Update HTML data-theme attribute
+        // Update HTML data-theme attribute immediately
         if (typeof document !== 'undefined') {
           document.documentElement.setAttribute('data-theme', newTheme);
+          // Also update the class for additional styling if needed
+          document.documentElement.className = isDark ? 'dark' : 'light';
         }
         
         set({ 
           theme: newTheme,
-          isDarkMode: isDark
+          isDarkMode: isDark,
+          isInitialized: true
         });
       },
 
@@ -31,8 +41,18 @@ const useThemeStore = create(
 
       initializeTheme: () => {
         if (typeof document !== 'undefined') {
-          const storedTheme = get().theme;
-          document.documentElement.setAttribute('data-theme', storedTheme);
+          const { theme } = get();
+          const isDark = DARK_THEMES.includes(theme);
+          
+          // Set theme attributes
+          document.documentElement.setAttribute('data-theme', theme);
+          document.documentElement.className = isDark ? 'dark' : 'light';
+          
+          // Update state to reflect initialization
+          set({ 
+            isDarkMode: isDark,
+            isInitialized: true
+          });
         }
       },
 

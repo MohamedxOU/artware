@@ -9,7 +9,32 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  const stored = localStorage.getItem('theme-storage');
+                  if (stored) {
+                    const { state } = JSON.parse(stored);
+                    const theme = state.theme || 'acid';
+                    const darkThemes = ['synthwave', 'halloween', 'forest', 'black', 'luxury', 'dracula', 'night', 'coffee', 'business'];
+                    const isDark = darkThemes.includes(theme);
+                    
+                    document.documentElement.setAttribute('data-theme', theme);
+                    document.documentElement.className = isDark ? 'dark' : 'light';
+                  }
+                } catch (e) {
+                  // Fallback to default theme
+                  document.documentElement.setAttribute('data-theme', 'acid');
+                  document.documentElement.className = 'light';
+                }
+              })();
+            `,
+          }}
+        />
+      </head>
       <body>
           <NextIntlClientProvider>
             <StoreInitializer>

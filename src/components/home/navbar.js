@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuthStore, useUIStore } from "@/stores";
+import { useAuthStore, useUIStore, useThemeStore } from "@/stores";
 
 const navLinks = [
   { href: "#about-us", label: "Présentation" },
@@ -17,21 +17,16 @@ export default function Navbar() {
   const router = useRouter();
   const { user, isAuthenticated, logout, isLoading: authLoading } = useAuthStore();
   const { addNotification } = useUIStore();
+  const { theme, isDarkMode, setTheme: setGlobalTheme, isInitialized } = useThemeStore();
   
-  const [theme, setTheme] = useState("acid"); // Default theme for SSR
   const [lang, setLang] = useState("fr"); // Default lang for SSR
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false); // Track when component is mounted
 
-  // Set mounted state and initialize theme/lang from localStorage
+  // Set mounted state and initialize lang from localStorage
   useEffect(() => {
     setIsMounted(true);
-    
-    // Initialize theme
-    const savedTheme = localStorage.getItem("theme") || "acid";
-    setTheme(savedTheme);
-    document.documentElement.setAttribute("data-theme", savedTheme);
     
     // Initialize lang
     const savedLang = localStorage.getItem("locale") || "fr";
@@ -53,9 +48,7 @@ export default function Navbar() {
 
   // Theme switcher handler
   const handleTheme = (t) => {
-    setTheme(t);
-    localStorage.setItem("theme", t);
-    document.documentElement.setAttribute("data-theme", t);
+    setGlobalTheme(t);
   };
 
   // Language picker handler
@@ -133,15 +126,17 @@ export default function Navbar() {
 
   // Determine logo source based on theme and scroll state
   const getLogoSource = () => {
-    if (!isMounted) {
+    if (!isMounted || !isInitialized) {
       // Return a default logo during SSR to avoid hydration mismatch
       return "/logos/ArtwareLogo.png";
     }
     
-    if (theme === "synthwave") {
+    // Use dark logo for dark themes
+    if (isDarkMode) {
       return "/logos/ArtwareLogo-darkMode.png";
     }
     
+    // For light themes, use different logic based on scroll state
     return isScrolled ? "/logos/ArtwareLogo.png" : "/logos/ArtwareLogo-darkMode.png";
   };
 

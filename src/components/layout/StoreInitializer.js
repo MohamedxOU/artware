@@ -1,18 +1,35 @@
 "use client";
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useThemeStore, useAuthStore } from '@/stores';
 
 export default function StoreInitializer({ children }) {
-  const initializeTheme = useThemeStore((state) => state.initializeTheme);
+  const { initializeTheme, isInitialized } = useThemeStore();
   const checkAuth = useAuthStore((state) => state.checkAuth);
+  const [isClientReady, setIsClientReady] = useState(false);
 
   useEffect(() => {
-    // Initialize theme on app load
-    initializeTheme();
-    
-    // Check authentication status on app load
-    checkAuth();
+    // Small delay to ensure DOM is ready
+    const timer = setTimeout(() => {
+      setIsClientReady(true);
+      
+      // Initialize theme on app load
+      initializeTheme();
+      
+      // Check authentication status on app load
+      checkAuth();
+    }, 50);
+
+    return () => clearTimeout(timer);
   }, [initializeTheme, checkAuth]);
+
+  // Show minimal loading to prevent flash
+  if (!isClientReady || !isInitialized) {
+    return (
+      <div style={{ opacity: 0.7 }}>
+        {children}
+      </div>
+    );
+  }
 
   return <>{children}</>;
 }
