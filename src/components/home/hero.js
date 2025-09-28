@@ -6,6 +6,8 @@ import Link from "next/link";
 import Iridescence from "@/components/Iridescence.jsx";
 import TextType from "@/components/TextType.jsx";
 import Shuffle from "@/components/Shuffle.jsx";
+import { useTranslations } from 'next-intl';
+
 
 const hero = {
   title: "ARTWARE",
@@ -19,6 +21,9 @@ export default function Hero() {
   const [showImage, setShowImage] = useState(false);
   const [showText, setShowText] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
+
+  const t = useTranslations('HomePage');
+
 
   useEffect(() => {
     setTimeout(() => setShowImage(true), 100);
@@ -98,7 +103,7 @@ export default function Hero() {
                 }`}
               >
                 <TextType
-                  text={[hero.description]}
+                  text={[t("hero_sub")]}
                   typingSpeed={50}
                   pauseDuration={1500}
                   showCursor={true}

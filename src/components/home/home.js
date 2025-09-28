@@ -11,6 +11,7 @@ import Navbar from './navbar';
 import TargetCursor from '@/components/TargetCursor.jsx';
 
 export default function Home() {
+
 	return (
 		<div className="w-full min-w-0 overflow-x-hidden">
 			<TargetCursor 

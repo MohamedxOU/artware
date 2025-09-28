@@ -42,7 +42,11 @@ function DashboardContent() {
   const renderActiveSection = () => {
     switch (activeSection) {
       case 'dashboard':
-        return <DashboardHome user={user} />;
+        return <DashboardHome 
+          user={user} 
+          stats={{}} 
+          recentActivities={[]} 
+        />;
       case 'cells':
         return <CellsSection />;
       case 'events':
@@ -66,6 +70,7 @@ function DashboardContent() {
         isMobileOpen={isMobileSidebarOpen}
         onCloseMobile={() => setIsMobileSidebarOpen(false)}
         onCollapseChange={setIsSidebarCollapsed}
+        notifications={[]} // Replace with real notifications from your API
       />
       
       {/* Mobile Menu Button */}

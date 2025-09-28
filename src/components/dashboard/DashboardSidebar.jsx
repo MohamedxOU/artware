@@ -84,7 +84,7 @@ const additionalItems = [
   }
 ];
 
-export default function DashboardSidebar({ user, activeSection, setActiveSection, onLogout, isLoading, isMobileOpen, onCloseMobile, onCollapseChange }) {
+export default function DashboardSidebar({ user, activeSection, setActiveSection, onLogout, isLoading, isMobileOpen, onCloseMobile, onCollapseChange, notifications = [] }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const { isDarkMode, toggleTheme } = useThemeStore();
@@ -109,32 +109,7 @@ export default function DashboardSidebar({ user, activeSection, setActiveSection
     }
   };
 
-  const mockNotifications = [
-    {
-      id: 1,
-      title: "Nouveau membre",
-      message: "Marie Martin a rejoint le club",
-      time: "Il y a 2h",
-      read: false,
-      type: "user"
-    },
-    {
-      id: 2,
-      title: "Événement à venir",
-      message: "Workshop React dans 3 jours",
-      time: "Il y a 4h",
-      read: false,
-      type: "event"
-    },
-    {
-      id: 3,
-      title: "Document partagé",
-      message: "Guide JavaScript mis à jour",
-      time: "Hier",
-      read: true,
-      type: "document"
-    }
-  ];
+
 
   return (
     <>
@@ -224,7 +199,7 @@ export default function DashboardSidebar({ user, activeSection, setActiveSection
                   >
                     <div className="flex-shrink-0 relative">
                       {item.icon}
-                      {item.id === 'notifications' && (
+                      {item.id === 'notifications' && notifications.some(n => !n.read) && (
                         <div className="absolute -top-1 -right-1 w-3 h-3 bg-error rounded-full"></div>
                       )}
                     </div>
@@ -240,31 +215,37 @@ export default function DashboardSidebar({ user, activeSection, setActiveSection
                         <h3 className="text-lg font-semibold text-base-content">Notifications</h3>
                       </div>
                       <div className="max-h-96 overflow-y-auto">
-                        {mockNotifications.map((notification) => (
-                          <div
-                            key={notification.id}
-                            className={`p-4 border-b border-base-300 hover:bg-base-200 cursor-pointer ${
-                              !notification.read ? 'bg-primary/5' : ''
-                            }`}
-                          >
-                            <div className="flex items-start space-x-3">
-                              <div className={`w-2 h-2 rounded-full mt-2 ${
-                                !notification.read ? 'bg-primary' : 'bg-base-300'
-                              }`}></div>
-                              <div className="flex-1">
-                                <h4 className="text-sm font-medium text-base-content">
-                                  {notification.title}
-                                </h4>
-                                <p className="text-sm text-base-content/70 mt-1">
-                                  {notification.message}
-                                </p>
-                                <p className="text-xs text-base-content/50 mt-2">
-                                  {notification.time}
-                                </p>
+                        {notifications.length > 0 ? (
+                          notifications.map((notification) => (
+                            <div
+                              key={notification.id}
+                              className={`p-4 border-b border-base-300 hover:bg-base-200 cursor-pointer ${
+                                !notification.read ? 'bg-primary/5' : ''
+                              }`}
+                            >
+                              <div className="flex items-start space-x-3">
+                                <div className={`w-2 h-2 rounded-full mt-2 ${
+                                  !notification.read ? 'bg-primary' : 'bg-base-300'
+                                }`}></div>
+                                <div className="flex-1">
+                                  <h4 className="text-sm font-medium text-base-content">
+                                    {notification.title}
+                                  </h4>
+                                  <p className="text-sm text-base-content/70 mt-1">
+                                    {notification.message}
+                                  </p>
+                                  <p className="text-xs text-base-content/50 mt-2">
+                                    {notification.time}
+                                  </p>
+                                </div>
                               </div>
                             </div>
+                          ))
+                        ) : (
+                          <div className="p-4 text-center text-base-content/60">
+                            <p className="text-sm">Aucune notification</p>
                           </div>
-                        ))}
+                        )}
                       </div>
                       <div className="p-3 text-center border-t border-base-300">
                         <a href="#" className="text-sm text-primary hover:text-primary/80">

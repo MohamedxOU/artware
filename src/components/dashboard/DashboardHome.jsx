@@ -1,27 +1,36 @@
 "use client";
 import Image from 'next/image';
 
-export default function DashboardHome({ user }) {
+export default function DashboardHome({ user, stats = {}, recentActivities = [] }) {
   return (
-    <div className="w-full">
+    <div className="w-full relative">
+      {/* Background Texture */}
+      <div className="absolute inset-0 opacity-5 pointer-events-none">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,_rgba(59,130,246,0.4)_0%,_transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_70%,_rgba(168,85,247,0.4)_0%,_transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,transparent_49%,rgba(255,255,255,0.02)_50%,transparent_51%)] bg-[length:30px_30px]"></div>
+      </div>
+
       {/* Welcome Header */}
-      <div className="mb-8">
-        <div className="flex items-center space-x-4 mb-4">
-          <div className="text-2xl">👋</div>
-          <div>
-            <h1 className="text-3xl font-bold text-base-content">
-              Bienvenue, {user?.first_name} !
-            </h1>
-            <p className="text-base-content/60 text-lg">
-              Ravi de vous revoir aujourd&apos;hui
-            </p>
+      <div className="mb-8 relative z-10">
+        <div className="backdrop-blur-sm bg-base-100/80 rounded-2xl p-6 border border-base-300/20 shadow-sm">
+          <div className="flex items-center space-x-4">
+            <div className="text-2xl">👋</div>
+            <div>
+              <h1 className="text-3xl font-bold text-base-content">
+                Bienvenue, {user?.first_name} !
+              </h1>
+              <p className="text-base-content/60 text-lg">
+                Ravi de vous revoir aujourd&apos;hui
+              </p>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-2xl p-6 border border-blue-200 dark:border-blue-700/50">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 relative z-10">
+        <div className="backdrop-blur-sm bg-blue-500/5 rounded-2xl p-6 border border-blue-500/10 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -30,12 +39,12 @@ export default function DashboardHome({ user }) {
             </div>
           </div>
           <div>
-            <h3 className="text-2xl font-bold text-blue-700 dark:text-blue-300">24</h3>
+            <h3 className="text-2xl font-bold text-blue-700 dark:text-blue-300">{stats.activeProjects || 0}</h3>
             <p className="text-blue-600 dark:text-blue-400 text-sm font-medium">Projets actifs</p>
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-2xl p-6 border border-green-200 dark:border-green-700/50">
+        <div className="backdrop-blur-sm bg-green-500/5 rounded-2xl p-6 border border-green-500/10 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -44,12 +53,12 @@ export default function DashboardHome({ user }) {
             </div>
           </div>
           <div>
-            <h3 className="text-2xl font-bold text-green-700 dark:text-green-300">156</h3>
+            <h3 className="text-2xl font-bold text-green-700 dark:text-green-300">{stats.activeMembers || 0}</h3>
             <p className="text-green-600 dark:text-green-400 text-sm font-medium">Membres actifs</p>
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-2xl p-6 border border-purple-200 dark:border-purple-700/50">
+        <div className="backdrop-blur-sm bg-purple-500/5 rounded-2xl p-6 border border-purple-500/10 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <div className="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center">
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -58,12 +67,12 @@ export default function DashboardHome({ user }) {
             </div>
           </div>
           <div>
-            <h3 className="text-2xl font-bold text-purple-700 dark:text-purple-300">12</h3>
+            <h3 className="text-2xl font-bold text-purple-700 dark:text-purple-300">{stats.upcomingEvents || 0}</h3>
             <p className="text-purple-600 dark:text-purple-400 text-sm font-medium">Événements à venir</p>
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-2xl p-6 border border-orange-200 dark:border-orange-700/50">
+        <div className="backdrop-blur-sm bg-orange-500/5 rounded-2xl p-6 border border-orange-500/10 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center">
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -72,23 +81,23 @@ export default function DashboardHome({ user }) {
             </div>
           </div>
           <div>
-            <h3 className="text-2xl font-bold text-orange-700 dark:text-orange-300">89</h3>
+            <h3 className="text-2xl font-bold text-orange-700 dark:text-orange-300">{stats.totalDocuments || 0}</h3>
             <p className="text-orange-600 dark:text-orange-400 text-sm font-medium">Documents</p>
           </div>
         </div>
       </div>
 
       {/* Recent Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-base-200 rounded-2xl p-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 relative z-10">
+        <div className="backdrop-blur-sm bg-base-100/80 rounded-2xl p-6 border border-base-300/20 shadow-sm">
           <h2 className="text-xl font-semibold text-base-content mb-6">Activité récente</h2>
           <div className="space-y-4">
-            {[
-              { action: "Nouveau membre rejoint la cellule Web", time: "Il y a 2h", type: "user" },
-              { action: "Événement 'Hackathon 2024' créé", time: "Il y a 4h", type: "event" },
-              { action: "Document 'Guide React' publié", time: "Il y a 1j", type: "document" },
-              { action: "Réunion cellule IA programmée", time: "Il y a 2j", type: "meeting" }
-            ].map((item, index) => (
+            {recentActivities.length === 0 ? (
+              <div className="text-center text-base-content/60 py-8">
+                <p>Aucune activité récente</p>
+              </div>
+            ) : (
+              recentActivities.map((item, index) => (
               <div key={index} className="flex items-center space-x-4 p-3 bg-base-100 rounded-xl">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                   item.type === 'user' ? 'bg-green-100 text-green-600' :
@@ -106,11 +115,11 @@ export default function DashboardHome({ user }) {
                   <p className="text-xs text-base-content/60">{item.time}</p>
                 </div>
               </div>
-            ))}
+            )))}
           </div>
         </div>
 
-        <div className="bg-base-200 rounded-2xl p-6">
+        <div className="backdrop-blur-sm bg-base-100/80 rounded-2xl p-6 border border-base-300/20 shadow-sm">
           <h2 className="text-xl font-semibold text-base-content mb-6">Votre profil</h2>
           <div className="text-center mb-6">
             {user?.profile_image_url ? (
@@ -136,19 +145,19 @@ export default function DashboardHome({ user }) {
           </div>
 
           <div className="space-y-3">
-            <div className="flex justify-between items-center p-3 bg-base-100 rounded-xl">
+            <div className="flex justify-between items-center p-3 backdrop-blur-sm bg-base-100/70 rounded-xl border border-base-300/10">
               <span className="text-sm font-medium text-base-content">Spécialité</span>
               <span className="text-sm text-base-content/70 capitalize">
                 {user?.specialty?.replace('-', ' ')}
               </span>
             </div>
-            <div className="flex justify-between items-center p-3 bg-base-100 rounded-xl">
+            <div className="flex justify-between items-center p-3 backdrop-blur-sm bg-base-100/70 rounded-xl border border-base-300/10">
               <span className="text-sm font-medium text-base-content">Niveau</span>
               <span className="text-sm text-base-content/70 uppercase">
                 {user?.level}
               </span>
             </div>
-            <div className="flex justify-between items-center p-3 bg-base-100 rounded-xl">
+            <div className="flex justify-between items-center p-3 backdrop-blur-sm bg-base-100/70 rounded-xl border border-base-300/10">
               <span className="text-sm font-medium text-base-content">Statut</span>
               <span className={`text-sm px-2 py-1 rounded-full ${
                 user?.status === 'allowed' ? 'bg-green-100 text-green-700' : 

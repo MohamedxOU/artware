@@ -19,18 +19,13 @@ export default function Navbar() {
   const { addNotification } = useUIStore();
   const { theme, isDarkMode, setTheme: setGlobalTheme, isInitialized } = useThemeStore();
   
-  const [lang, setLang] = useState("fr"); // Default lang for SSR
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false); // Track when component is mounted
 
-  // Set mounted state and initialize lang from localStorage
+  // Set mounted state
   useEffect(() => {
     setIsMounted(true);
-    
-    // Initialize lang
-    const savedLang = localStorage.getItem("locale") || "fr";
-    setLang(savedLang);
   }, []);
 
   // Scroll effect handler
@@ -49,13 +44,6 @@ export default function Navbar() {
   // Theme switcher handler
   const handleTheme = (t) => {
     setGlobalTheme(t);
-  };
-
-  // Language picker handler
-  const handleLang = (l) => {
-    setLang(l);
-    localStorage.setItem("locale", l);
-    window.location.reload();
   };
 
   // Logout handler
@@ -233,18 +221,6 @@ export default function Navbar() {
               </ul>
             </div>
 
-            {/* Language Picker */}
-            <select
-              className={`select select-sm mx-2 transition-all duration-300 ${
-                isScrolled ? "select-bordered" : "border-white/30 text-white bg-transparent"
-              }`}
-              value={lang}
-              onChange={(e) => handleLang(e.target.value)}
-            >
-              <option value="en">EN</option>
-              <option value="fr">FR</option>
-            </select>
-
             {/* Auth Buttons */}
             {isAuthenticated && user ? (
               <div className="flex items-center space-x-2 ml-2">
@@ -395,19 +371,6 @@ export default function Navbar() {
 
             {/* Mobile Controls */}
             <div className="space-y-4 border-t border-base-300 pt-6">
-              {/* Language Picker */}
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-base-content/70">Langue:</span>
-                <select
-                  className="select select-sm select-bordered"
-                  value={lang}
-                  onChange={(e) => handleLang(e.target.value)}
-                >
-                  <option value="en">EN</option>
-                  <option value="fr">FR</option>
-                </select>
-              </div>
-
               {/* Auth Buttons */}
               {isAuthenticated && user ? (
                 <div className="space-y-2">
