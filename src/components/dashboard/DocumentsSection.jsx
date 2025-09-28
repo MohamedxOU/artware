@@ -2,7 +2,7 @@
 
 export default function DocumentsSection() {
   return (
-    <div className="max-w-7xl mx-auto p-6">
+    <div className="w-full">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-base-content mb-2">Documents</h1>
         <p className="text-base-content/60">Partagez et organisez les ressources du club</p>

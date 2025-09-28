@@ -2,7 +2,7 @@
 
 export default function EventsSection() {
   return (
-    <div className="max-w-7xl mx-auto p-6">
+    <div className="w-full">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-base-content mb-2">Événements</h1>
         <p className="text-base-content/60">Organisez et gérez les événements du club</p>
