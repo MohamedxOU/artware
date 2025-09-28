@@ -5,6 +5,7 @@ import Bureau from './bureau';
 import Cells from './cells';
 import Contact from './contact';
 import Footer from './footer';
+import Gallery from './gallery';
 import Hero from './hero';
 import Navbar from './navbar';
 import TargetCursor from '@/components/TargetCursor.jsx';
@@ -21,7 +22,9 @@ export default function Home() {
 			<AboutUs />
 			<Activities />
 			<Cells />
+			<Gallery />
 			<Bureau />
+			
 			<Contact />
 			<Footer />
 			{/* Add your home page content here */}
