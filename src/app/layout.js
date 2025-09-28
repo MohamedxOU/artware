@@ -35,10 +35,12 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body>
+      <body className="w-full min-w-0 overflow-x-hidden">
           <NextIntlClientProvider>
             <StoreInitializer>
-              {children}
+              <div className="w-full min-w-0 overflow-x-hidden">
+                {children}
+              </div>
             </StoreInitializer>
           </NextIntlClientProvider>
       </body>

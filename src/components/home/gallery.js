@@ -126,7 +126,7 @@ export default function Gallery() {
   }, []);
 
   return (
-    <section id="gallery" className="relative bg-gradient-to-br from-base-100 via-base-200 to-base-100" >
+    <section id="gallery" className="relative bg-gradient-to-br from-base-100 via-base-200 to-base-100 allow-horizontal-scroll" >
       {/* Section Title */}
       <div className={`text-center pt-20 pb-8 px-4 transition-all duration-1000 ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
@@ -191,7 +191,7 @@ export default function Gallery() {
           </div>
 
           {/* Thumbnail Sidebar */}
-          <div className="w-full lg:w-48 flex lg:flex-col gap-3 overflow-x-auto lg:overflow-y-auto lg:overflow-x-visible pb-2 lg:pb-0">
+          <div className="w-full lg:w-48 flex lg:flex-col gap-3 overflow-x-auto lg:overflow-y-auto lg:overflow-x-visible pb-2 lg:pb-0 horizontal-scroll-container">
             {items.map((item, index) => (
               <button
                 key={item.id}

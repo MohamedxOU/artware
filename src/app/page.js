@@ -19,7 +19,7 @@ export default function Page() {
   }
 
   return (
-    <div>
+    <div className="w-full min-w-0 overflow-x-hidden">
       <Home />
     </div>
   );

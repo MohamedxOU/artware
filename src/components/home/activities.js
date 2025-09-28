@@ -34,7 +34,7 @@ export default function Activities() {
 	const [selected, setSelected] = useState(0);
 
 	return (
-		<section id="activities" className="w-full py-16 bg-base-200">
+		<section id="activities" className="w-full py-16 bg-base-200 allow-horizontal-scroll">
 			<div className="max-w-7xl mx-auto px-6">
 				{/* Header */}
 				<div className="text-left mb-12">
@@ -81,7 +81,7 @@ export default function Activities() {
 
 						{/* Mobile Navigation Tabs */}
 						<div className="bg-base-200/50 p-4">
-							<div className="flex overflow-x-auto gap-2 pb-2">
+							<div className="flex overflow-x-auto gap-2 pb-2 horizontal-scroll-container">
 								{activities.map((activity, idx) => (
 									<button
 										key={activity.title}

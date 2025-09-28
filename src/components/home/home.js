@@ -12,7 +12,7 @@ import TargetCursor from '@/components/TargetCursor.jsx';
 
 export default function Home() {
 	return (
-		<>
+		<div className="w-full min-w-0 overflow-x-hidden">
 			<TargetCursor 
         spinDuration={2}
         hideDefaultCursor={true}
@@ -28,6 +28,6 @@ export default function Home() {
 			<Contact />
 			<Footer />
 			{/* Add your home page content here */}
-		</>
+		</div>
 	);
 }
