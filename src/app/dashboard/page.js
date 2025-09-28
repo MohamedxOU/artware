@@ -10,6 +10,8 @@ import DashboardHome from '@/components/dashboard/DashboardHome';
 import CellsSection from '@/components/dashboard/CellsSection';
 import EventsSection from '@/components/dashboard/EventsSection';
 import DocumentsSection from '@/components/dashboard/DocumentsSection';
+import NotificationsSection from '@/components/dashboard/NotificationsSection';
+import TargetCursor from '@/components/TargetCursor.jsx';
 
 function DashboardContent() {
   const router = useRouter();
@@ -53,6 +55,8 @@ function DashboardContent() {
         return <EventsSection />;
       case 'documents':
         return <DocumentsSection />;
+      case 'notifications':
+        return <NotificationsSection />;
       default:
         return <DashboardHome user={user} />;
     }
@@ -60,6 +64,10 @@ function DashboardContent() {
 
   return (
     <div className="min-h-screen bg-base-100">
+      <TargetCursor 
+        spinDuration={2}
+        hideDefaultCursor={true}
+      />
       {/* Sidebar Navigation */}
       <DashboardSidebar 
         user={user}

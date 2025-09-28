@@ -122,7 +122,7 @@ export default function DashboardSidebar({ user, activeSection, setActiveSection
       )}
       
       {/* Sidebar */}
-      <div className={`fixed left-0 top-0 h-full bg-base-100 border-r border-base-300 shadow-lg transition-all duration-300 z-50 ${
+      <div className={`fixed left-0 top-0 h-full bg-base-100 border-r border-base-100 shadow-lg transition-all duration-300 z-50 ${
         isCollapsed ? 'w-20' : 'w-64'
       } ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:block`}>
       <div className="flex flex-col h-full">
@@ -158,7 +158,7 @@ export default function DashboardSidebar({ user, activeSection, setActiveSection
                 <button
                   key={item.id}
                   onClick={() => setActiveSection(item.id)}
-                  className={`w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition-all duration-200 group ${
+                  className={`cursor-target w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition-all duration-200 group ${
                     activeSection === item.id
                       ? 'bg-primary text-primary-content shadow-lg'
                       : 'text-base-content/70 hover:text-base-content hover:bg-base-200'
@@ -185,13 +185,17 @@ export default function DashboardSidebar({ user, activeSection, setActiveSection
                   <button
                     onClick={() => {
                       if (item.id === 'notifications') {
-                        setShowNotifications(!showNotifications);
+                        setActiveSection('notifications');
+                        setShowNotifications(false);
+                        if (onCloseMobile) onCloseMobile();
                       } else {
                         setActiveSection(item.id);
+                        setShowNotifications(false);
+                        if (onCloseMobile) onCloseMobile();
                       }
                     }}
-                    className={`w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition-all duration-200 group ${
-                      activeSection === item.id || (item.id === 'notifications' && showNotifications)
+                    className={` cursor-target w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition-all duration-200 group ${
+                      activeSection === item.id
                         ? 'bg-primary text-primary-content shadow-lg'
                         : 'text-base-content/70 hover:text-base-content hover:bg-base-200'
                     } ${isCollapsed ? 'justify-center' : ''}`}
@@ -248,9 +252,16 @@ export default function DashboardSidebar({ user, activeSection, setActiveSection
                         )}
                       </div>
                       <div className="p-3 text-center border-t border-base-300">
-                        <a href="#" className="text-sm text-primary hover:text-primary/80">
+                        <button 
+                          onClick={() => {
+                            setActiveSection('notifications');
+                            setShowNotifications(false);
+                            if (onCloseMobile) onCloseMobile();
+                          }}
+                          className="text-sm text-primary hover:text-primary/80 underline"
+                        >
                           Voir toutes les notifications
-                        </a>
+                        </button>
                       </div>
                     </div>
                   )}
@@ -299,7 +310,7 @@ export default function DashboardSidebar({ user, activeSection, setActiveSection
             <button
               onClick={handleLogout}
               disabled={isLoading}
-              className="w-full mt-3 flex items-center justify-center space-x-2 px-3 py-2 text-sm text-error hover:bg-error/10 rounded-lg transition-colors"
+              className=" cursor-target w-full mt-3 flex items-center justify-center space-x-2 px-3 py-2 text-sm text-error hover:bg-error/10 rounded-lg transition-colors"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />

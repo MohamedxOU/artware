@@ -79,7 +79,7 @@ export default function DashboardNavbar({ user, activeSection, setActiveSection,
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-base-100 border-b border-base-300 shadow-sm">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-base-300 border-b border-base-300 shadow-sm">
       <div className="max-w-full mx-auto px-6">
         <div className="flex justify-between items-center h-16">
           
