@@ -1,6 +1,10 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import * as authAPI from '@/api/auth';
+import { authenticateUser, getUserByToken } from '@/mock/users';
+
+// Enable mock mode for development
+const USE_MOCK_DATA = process.env.NODE_ENV === 'development' || true;
 
 const useAuthStore = create(
   persist(
@@ -16,26 +20,31 @@ const useAuthStore = create(
         set({ isLoading: true, error: null });
         
         try {
-          const result = await authAPI.login(email, password);
+          let result;
           
-          // Check if login was successful - API returns user object and accessToken
-          if (result && result.user && result.accessToken) {
-            // Check if user is allowed to login
-            if (result.user.status !== 'allowed') {
-              set({ 
-                isLoading: false, 
-                error: 'Your account is pending approval or has been suspended. Please contact admin.'
-              });
-              return { success: false, error: 'Your account is pending approval or has been suspended. Please contact admin.' };
-            }
-
-            // Check if user is active
+          if (USE_MOCK_DATA) {
+            // Use mock authentication
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API delay
+            result = authenticateUser(email, password);
+          } else {
+            // Use real API
+            result = await authAPI.login(email, password);
+          }
+          
+          // Check if login was successful
+          if (result && result.success && result.user) {
+            // For mock data, check if user is active
             if (!result.user.is_active) {
               set({ 
                 isLoading: false, 
                 error: 'Your account has been deactivated. Please contact admin.'
               });
               return { success: false, error: 'Your account has been deactivated. Please contact admin.' };
+            }
+
+            // Store token in localStorage for mock mode
+            if (USE_MOCK_DATA && result.token) {
+              localStorage.setItem('auth_token', result.token);
             }
 
             set({ 
@@ -45,32 +54,19 @@ const useAuthStore = create(
               error: null
             });
             return { success: true, user: result.user };
-          } else if (result && result.error) {
-            set({ 
-              isLoading: false, 
-              error: result.error
-            });
-            return { success: false, error: result.error };
           } else {
+            const errorMessage = result?.error || 'Invalid credentials. Please try again.';
             set({ 
               isLoading: false, 
-              error: 'Invalid credentials. Please try again.'
+              error: errorMessage
             });
-            return { success: false, error: 'Invalid credentials. Please try again.' };
+            return { success: false, error: errorMessage };
           }
         } catch (error) {
-          // Only log non-network errors to avoid spam in console
-          if (!error.message?.includes('Failed to fetch') && !error.message?.includes('Unable to connect to server')) {
-            console.error('Login failed:', error);
-          }
+          console.error('Login failed:', error);
           
           let errorMessage = 'Login failed. Please try again.';
-          
-          if (error.message?.includes('Unable to connect to server')) {
-            errorMessage = error.message; // Use the improved message from API
-          } else if (error.message?.includes('Failed to fetch')) {
-            errorMessage = 'Unable to connect to server. Please check if the backend is running.';
-          } else if (error.message) {
+          if (error.message) {
             errorMessage = error.message;
           }
           
@@ -120,27 +116,29 @@ const useAuthStore = create(
         set({ isLoading: true, error: null });
         
         try {
-          const result = await authAPI.logout();
-          
-          if (result.success) {
-            // Successful logout (might have warnings)
-            set({ 
-              user: null, 
-              isAuthenticated: false, 
-              isLoading: false, 
-              error: null 
-            });
-            
-            // Clear any additional session data
-            sessionStorage.removeItem('intendedRoute');
-            
-            return { 
-              success: true, 
-              warning: result.warning || null 
-            };
+          if (USE_MOCK_DATA) {
+            // Mock logout - just clear local data
+            await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API delay
+            localStorage.removeItem('auth_token');
           } else {
-            throw new Error('Logout failed');
+            // Real API logout
+            const result = await authAPI.logout();
+            if (!result.success) {
+              throw new Error('Logout failed');
+            }
           }
+          
+          set({ 
+            user: null, 
+            isAuthenticated: false, 
+            isLoading: false, 
+            error: null 
+          });
+          
+          // Clear any additional session data
+          sessionStorage.removeItem('intendedRoute');
+          
+          return { success: true };
         } catch (error) {
           console.error('Logout failed:', error);
           
@@ -149,11 +147,14 @@ const useAuthStore = create(
             user: null, 
             isAuthenticated: false, 
             isLoading: false, 
-            error: 'Logout completed locally, but server logout may have failed' 
+            error: null 
           });
           
           // Clear session data anyway
           sessionStorage.removeItem('intendedRoute');
+          if (USE_MOCK_DATA) {
+            localStorage.removeItem('auth_token');
+          }
           
           return { success: false, error: error.message };
         }
@@ -163,20 +164,52 @@ const useAuthStore = create(
         set({ isLoading: true });
         
         try {
-          const result = await authAPI.refreshToken();
-          
-          // Check if refresh was successful and user is still allowed/active
-          if (result && result.user && result.accessToken) {
-            // Verify user status
-            if (result.user.status === 'allowed' && result.user.is_active) {
-              set({ 
-                user: result.user,
-                isAuthenticated: true,
-                isLoading: false,
-                error: null
-              });
+          if (USE_MOCK_DATA) {
+            // Mock auth check using stored token
+            const token = localStorage.getItem('auth_token');
+            if (token) {
+              const user = getUserByToken(token);
+              if (user && user.is_active) {
+                set({ 
+                  user,
+                  isAuthenticated: true,
+                  isLoading: false,
+                  error: null
+                });
+                return;
+              }
+            }
+            // No valid token or inactive user
+            set({ 
+              user: null,
+              isAuthenticated: false,
+              isLoading: false,
+              error: null
+            });
+          } else {
+            // Real API auth check
+            const result = await authAPI.refreshToken();
+            
+            // Check if refresh was successful and user is still allowed/active
+            if (result && result.user && result.accessToken) {
+              // Verify user status
+              if (result.user.status === 'allowed' && result.user.is_active) {
+                set({ 
+                  user: result.user,
+                  isAuthenticated: true,
+                  isLoading: false,
+                  error: null
+                });
+              } else {
+                // User status changed, logout
+                set({ 
+                  user: null,
+                  isAuthenticated: false,
+                  isLoading: false,
+                  error: null
+                });
+              }
             } else {
-              // User status changed, logout
               set({ 
                 user: null,
                 isAuthenticated: false,
@@ -184,13 +217,6 @@ const useAuthStore = create(
                 error: null
               });
             }
-          } else {
-            set({ 
-              user: null,
-              isAuthenticated: false,
-              isLoading: false,
-              error: null
-            });
           }
         } catch (error) {
           // Silently handle auth check failures (like CORS issues)
