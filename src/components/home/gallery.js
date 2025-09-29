@@ -1,104 +1,72 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-
+import { useRouter } from "next/navigation";
 
 export default function Gallery() {
   const [isVisible, setIsVisible] = useState(false);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [hoveredCategory, setHoveredCategory] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState({});
+  const router = useRouter();
 
-  const items = [
+  const galleryCategories = [
     {
-      id: "1",
-      img: "https://picsum.photos/id/1015/600/900?grayscale",
-      url: "https://example.com/one",
-      height: 400,
+      id: "formations",
+      title: "Formations",
+      subtitle: "Sessions de formation technique",
+      images: [
+        "https://picsum.photos/id/1015/800/600?grayscale",
+        "https://picsum.photos/id/1011/800/600?grayscale",
+        "https://picsum.photos/id/1020/800/600?grayscale",
+        "https://picsum.photos/id/1021/800/600?grayscale"
+      ]
     },
     {
-      id: "2",
-      img: "https://picsum.photos/id/1011/600/750?grayscale",
-      url: "https://example.com/two",
-      height: 250,
+      id: "evenements-academiques",
+      title: "Événements académiques",
+      subtitle: "Conférences et workshops",
+      images: [
+        "https://picsum.photos/id/1022/800/600?grayscale",
+        "https://picsum.photos/id/1023/800/600?grayscale",
+        "https://picsum.photos/id/1024/800/600?grayscale",
+        "https://picsum.photos/id/1025/800/600?grayscale"
+      ]
     },
     {
-      id: "3",
-      img: "https://picsum.photos/id/1020/600/800?grayscale",
-      url: "https://example.com/three",
-      height: 600,
+      id: "evenements-solidaires",
+      title: "Événements solidaires",
+      subtitle: "Actions communautaires",
+      images: [
+        "https://picsum.photos/id/1026/800/600?grayscale",
+        "https://picsum.photos/id/1027/800/600?grayscale",
+        "https://picsum.photos/id/1028/800/600?grayscale",
+        "https://picsum.photos/id/1029/800/600?grayscale"
+      ]
     },
-
     {
-        id: "4",
-        img: "https://picsum.photos/id/1021/600/400?grayscale",
-        url: "https://example.com/four",
-        height: 400,
+      id: "activities",
+      title: "Activités fun",
+      subtitle: "Moments de détente et team building",
+      images: [
+        "https://picsum.photos/id/1030/800/600?grayscale",
+        "https://picsum.photos/id/1031/800/600?grayscale",
+        "https://picsum.photos/id/1032/800/600?grayscale",
+        "https://picsum.photos/id/1033/800/600?grayscale"
+      ]
     },
-
     {
-        id: "5",
-        img: "https://picsum.photos/id/1022/600/900?grayscale",
-        url: "https://example.com/five",
-        height: 300,
+      id: "hackathons",
+      title: "Hackathons",
+      subtitle: "Compétitions de programmation",
+      images: [
+        "https://picsum.photos/id/1034/800/600?grayscale",
+        "https://picsum.photos/id/1035/800/600?grayscale",
+        "https://picsum.photos/id/1036/800/600?grayscale",
+        "https://picsum.photos/id/1037/800/600?grayscale"
+      ]
     },
-
-    {
-        id: "6",
-        img: "https://picsum.photos/id/1023/600/700?grayscale",
-        url: "https://example.com/six",
-        height: 500,
-    },
-
-    {
-        id: "7",
-        img: "https://picsum.photos/id/1024/600/800?grayscale",
-        url: "https://example.com/seven",
-        height: 350,
-    },
-
-    {
-        id: "8",
-        img: "https://picsum.photos/id/1025/600/600?grayscale",
-        url: "https://example.com/eight",
-        height: 450,
-    },
-
-    {
-        id: "9",
-        img: "https://picsum.photos/id/1026/600/750?grayscale",
-        url: "https://example.com/nine",
-        height: 400,
-    },
-
-    {
-        id: "10",
-        img: "https://picsum.photos/id/1027/600/850?grayscale",
-        url: "https://example.com/ten",
-        height: 550,
-    },
-
-    {
-        id: "11",
-        img: "https://picsum.photos/id/1028/600/650?grayscale",
-        url: "https://example.com/eleven",
-        height: 300,
-    },
-
-    {
-        id: "12",
-        img: "https://picsum.photos/id/1029/600/750?grayscale",
-        url: "https://example.com/twelve",
-        height: 400,
-    },
-
-    {
-        id: "13",
-        img: "https://picsum.photos/id/1030/600/900?grayscale",
-        url: "https://example.com/thirteen",
-        height: 600,
-    },
-
-    // ... more items
-];
+   
+  ];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -125,114 +93,134 @@ export default function Gallery() {
     };
   }, []);
 
+  // Auto-rotate images for hovered category
+  useEffect(() => {
+    if (!hoveredCategory) return;
+
+    const interval = setInterval(() => {
+      setCurrentImageIndex(prev => ({
+        ...prev,
+        [hoveredCategory]: (prev[hoveredCategory] || 0) + 1
+      }));
+    }, 1500);
+
+    return () => clearInterval(interval);
+  }, [hoveredCategory]);
+
+  const handleCategoryHover = (categoryId) => {
+    setHoveredCategory(categoryId);
+    if (!currentImageIndex[categoryId]) {
+      setCurrentImageIndex(prev => ({ ...prev, [categoryId]: 0 }));
+    }
+  };
+
+  const getCurrentImage = (category) => {
+    const index = currentImageIndex[category.id] || 0;
+    return category.images[index % category.images.length];
+  };
+
   return (
-    <section id="gallery" className="relative bg-gradient-to-br from-base-100 via-base-200 to-base-100 allow-horizontal-scroll" >
+    <section id="gallery" className="relative bg-gradient-to-br from-base-100 via-base-200 to-base-100">
       {/* Section Title */}
-      <div className={`text-center pt-20 pb-8 px-4 transition-all duration-1000 ${
+      <div className={`text-center pt-20 pb-12 px-4 transition-all duration-1000 ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       }`}>
         <h2 className="text-4xl md:text-5xl font-bold mb-4">
-          Notre Galerie, <span className="text-primary">Nos Moments Inoubliables</span>
+          Notre <span className="text-primary">Galerie</span>
         </h2>
-        <p className="text-lg text-base-content/70 max-w-2xl mx-auto italic mb-4">
-          Découvrez nos événements marquants et l&apos;esprit créatif qui anime notre communauté technologique
-        </p>
-        <p className="text-sm text-base-content/50 max-w-xl mx-auto">
-          Cliquez sur les miniatures pour explorer nos moments marquants
+        <p className="text-lg text-base-content/70 max-w-2xl mx-auto mb-6">
+          Découvrez nos événements marquants et l&apos;esprit créatif qui anime notre communauté
         </p>
       </div>
 
-      {/* Gallery Layout */}
+      {/* Gallery Grid */}
       <div className={`max-w-7xl mx-auto px-4 pb-16 transition-all duration-1000 delay-300 ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       }`}>
-        <div className="flex flex-col lg:flex-row gap-6 h-[600px]">
-          
-          {/* Main Image Display */}
-          <div className="flex-1 relative bg-base-300 rounded-2xl overflow-hidden shadow-2xl">
-            <Image
-              src={items[selectedImageIndex].img}
-              alt={`Gallery image ${items[selectedImageIndex].id}`}
-              fill
-              className="object-cover transition-all duration-500 hover:scale-105"
-              priority
-            />
-            
-            {/* Image Info Overlay */}
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6">
-              <div className="text-white">
-                <h3 className="text-xl font-semibold mb-2">
-                  Image {items[selectedImageIndex].id}
-                </h3>
-                <p className="text-white/80 text-sm">
-                  {selectedImageIndex + 1} de {items.length}
-                </p>
-              </div>
-            </div>
-
-            {/* Navigation Arrows */}
-            <button
-              onClick={() => setSelectedImageIndex(prev => prev > 0 ? prev - 1 : items.length - 1)}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-3 rounded-full transition-all duration-300 hover:scale-110"
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          {galleryCategories.map((category, index) => (
+            <div
+              key={category.id}
+              className={`group relative bg-base-100 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer ${
+                index === 0 ? 'md:col-span-2 lg:col-span-1' : ''
+              } ${index === 1 ? 'lg:col-span-2' : ''}`}
+              style={{
+                height: index === 0 ? '400px' : index === 1 ? '400px' : '350px'
+              }}
+              onMouseEnter={() => handleCategoryHover(category.id)}
+              onMouseLeave={() => setHoveredCategory(null)}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-              </svg>
-            </button>
-            
-            <button
-              onClick={() => setSelectedImageIndex(prev => prev < items.length - 1 ? prev + 1 : 0)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-3 rounded-full transition-all duration-300 hover:scale-110"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-              </svg>
-            </button>
-          </div>
-
-          {/* Thumbnail Sidebar */}
-          <div className="w-full lg:w-48 flex lg:flex-col gap-3 overflow-x-auto lg:overflow-y-auto lg:overflow-x-visible pb-2 lg:pb-0 horizontal-scroll-container">
-            {items.map((item, index) => (
-              <button
-                key={item.id}
-                onClick={() => setSelectedImageIndex(index)}
-                className={`cursor-target relative flex-shrink-0 w-20 h-20 lg:w-full lg:h-24 rounded-xl overflow-hidden transition-all duration-300 ${
-                  selectedImageIndex === index 
-                    ? 'ring-4 ring-primary shadow-lg scale-105' 
-                    : 'hover:ring-2 hover:ring-primary/50 hover:scale-102 opacity-70 hover:opacity-100'
-                }`}
-              >
+              {/* Background Image */}
+              <div className="absolute inset-0">
                 <Image
-                  src={item.img}
-                  alt={`Thumbnail ${item.id}`}
+                  src={getCurrentImage(category)}
+                  alt={category.title}
                   fill
-                  className="object-cover"
+                  className="object-cover transition-all duration-700 group-hover:scale-110"
                 />
                 
-                {/* Active indicator */}
-                {selectedImageIndex === index && (
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-transparent">
-                    <div className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full"></div>
-                  </div>
-                )}
-              </button>
-            ))}
-          </div>
+                {/* Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500"></div>
+              </div>
+
+              {/* Content */}
+              <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                <div className="transform translate-y-0 group-hover:-translate-y-2 transition-transform duration-500">
+                  <h3 className="text-white text-xl md:text-2xl font-bold mb-2">
+                    {category.title}
+                  </h3>
+                  <p className="text-white/80 text-sm md:text-base mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200">
+                    {category.subtitle}
+                  </p>
+                  
+                  {/* Image counter for hovered category */}
+                  {hoveredCategory === category.id && (
+                    <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-300">
+                      {category.images.map((_, idx) => (
+                        <div
+                          key={idx}
+                          className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                            idx === (currentImageIndex[category.id] || 0) % category.images.length
+                              ? 'bg-white' 
+                              : 'bg-white/50'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Hover Effects */}
+              <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                <div className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* Image Counter and Info */}
-        <div className="flex justify-between items-center mt-6 text-sm text-base-content/60">
-          <div>
-            <span className="font-medium">
-              {String(selectedImageIndex + 1).padStart(2, '0')} / {String(items.length).padStart(2, '0')}
-            </span>
-          </div>
-          <div>
-            <span>Utilisez les flèches ou cliquez sur les miniatures</span>
-          </div>
+        {/* Visit Full Gallery Button */}
+        <div className="text-center">
+          <button
+            onClick={() => router.push('/gallery')}
+            className="cursor-target group inline-flex items-center px-8 py-4 bg-primary hover:bg-primary/90 text-primary-content font-semibold rounded-2xl transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+          >
+            <span className="mr-3">Voir toute la galerie</span>
+            <svg 
+              className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </button>
         </div>
       </div>
-     
     </section>
   );
 }
