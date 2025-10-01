@@ -141,7 +141,7 @@ export default function Gallery() {
           {galleryCategories.map((category, index) => (
             <div
               key={category.id}
-              className={`group relative bg-base-100 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer ${
+              className={`cursor-target group relative bg-base-100 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer ${
                 index === 0 ? 'md:col-span-2 lg:col-span-1' : ''
               } ${index === 1 ? 'lg:col-span-2' : ''}`}
               style={{
