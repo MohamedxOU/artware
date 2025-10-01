@@ -47,7 +47,7 @@ function LoginContent() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     clearError();
-    
+     
     const result = await login(formData.email, formData.password);
     if (result.success) {
       // Optional: Show success message with user's name

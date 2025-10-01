@@ -13,7 +13,7 @@ const useAuthStore = create(
       user: null,
       isAuthenticated: false,
       isLoading: false,
-      error: null,
+      error: null, 
 
       // Actions
       login: async (email, password) => {

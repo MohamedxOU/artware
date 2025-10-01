@@ -2,8 +2,24 @@
 import Image from 'next/image';
 
 export default function DashboardHome({ user, stats = {}, recentActivities = [] }) {
+  // Mock data for alerts - in real app these would come from props or API
+  const upcomingEvents = [
+    { id: 1, title: "Workshop AI & Machine Learning", date: "2024-11-15", time: "14:00" },
+    { id: 2, title: "Hackathon Spring 2024", date: "2024-11-20", time: "09:00" },
+  ];
+
+  const attendedEvents = [
+    { id: 1, title: "Conférence Cybersécurité", date: "2024-10-28", attended: true },
+    { id: 2, title: "Formation React Advanced", date: "2024-10-25", attended: true },
+  ];
+
+  const newDocuments = [
+    { id: 1, title: "Guide des bonnes pratiques 2024", type: "Document", date: "2024-11-01" },
+    { id: 2, title: "Nouvelle politique de sécurité", type: "Annonce", date: "2024-10-30" },
+  ];
+
   return (
-    <div className="w-full relative">
+    <div className="w-full max-w-6xl mx-auto space-y-8 relative">
       {/* Background Patterns - Similar to Login Screen */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Large primary circles */}
@@ -41,160 +57,184 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
       </div>
 
       {/* Welcome Header */}
-      <div className="mb-8 relative z-10">
-        <div className="backdrop-blur-sm  rounded-2xl p-6 border border-base-300/20 shadow-sm">
-          <div className="flex items-center space-x-4">
-            <div className="text-2xl">👋</div>
-            <div>
-              <h1 className="text-3xl font-bold text-base-content">
-                Bienvenue, {user?.first_name} !
-              </h1>
-              <p className="text-base-content/60 text-lg">
-                Ravi de vous revoir aujourd&apos;hui
+      <div className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-3xl p-8 border border-base-300/20 relative z-10">
+        <div className="flex items-center space-x-4">
+          <div className="text-4xl">👋</div>
+          <div>
+            <h1 className="text-3xl font-bold text-base-content">
+              Bienvenue, {user?.first_name} !
+            </h1>
+            <p className="text-base-content/70 text-lg mt-1">
+              Ravi de vous revoir aujourd&apos;hui
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10">
+        {/* Profile Card - Similar to the image */}
+        <div className="lg:col-span-1">
+          <div className="bg-base-100/90 backdrop-blur-md rounded-3xl p-6 shadow-lg border border-base-300/20 text-center">
+            {/* Profile Picture */}
+            <div className="mb-6 relative">
+              {user?.profile_image_url ? (
+                <Image 
+                  src={user.profile_image_url} 
+                  alt={`${user.first_name} ${user.last_name}`}
+                  width={120}
+                  height={120}
+                  className="w-30 h-30 rounded-full mx-auto object-cover shadow-lg"
+                  unoptimized={user.profile_image_url.includes('imagekit.io')}
+                />
+              ) : (
+                <div className="w-30 h-30 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto shadow-lg">
+                  <span className="text-white text-3xl font-bold">
+                    {user?.first_name?.[0]}{user?.last_name?.[0]}
+                  </span>
+                </div>
+              )}
+              
+              {/* Image Upload Button */}
+              <button 
+                className="absolute bottom-0 right-1/2 transform translate-x-1/2 translate-y-1/2 w-8 h-8 bg-primary hover:bg-primary/90 rounded-full flex items-center justify-center shadow-lg transition-colors"
+                onClick={() => document.getElementById('profile-image-input').click()}
+              >
+                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </button>
+              
+              {/* Hidden file input */}
+              <input 
+                id="profile-image-input"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    // Here you would handle the image upload
+                    console.log('Image selected:', file);
+                    // You can add your image upload logic here
+                  }
+                }}
+              />
+            </div>
+
+            {/* Name and Title */}
+            <div className="mb-6">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <h2 className="text-2xl font-bold text-base-content">
+                  {user?.first_name} {user?.last_name}
+                </h2>
+                <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                </div>
+              </div>
+              <p className="text-base-content/60 text-lg mb-2">
+                {user?.specialty?.replace('-', ' ') || 'Membre Artware'}
+              </p>
+              <p className="text-base-content/50 text-sm uppercase tracking-wide">
+                Niveau {user?.level || 'N/A'}
               </p>
             </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 relative z-10">
-        <div className="backdrop-blur-sm bg-blue-500/5 rounded-2xl p-6 border border-blue-500/10 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
-            </div>
-          </div>
-          <div>
-            <h3 className="text-2xl font-bold text-blue-700 dark:text-blue-300">{stats.activeProjects || 0}</h3>
-            <p className="text-blue-600 dark:text-blue-400 text-sm font-medium">Projets actifs</p>
+            {/* View Profile Button */}
+            <button className="w-full bg-base-content text-base-100 py-3 px-6 rounded-full font-semibold hover:bg-base-content/90 transition-colors">
+              View Profile
+            </button>
           </div>
         </div>
 
-        <div className="backdrop-blur-sm bg-green-500/5 rounded-2xl p-6 border border-green-500/10 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
-              </svg>
-            </div>
-          </div>
-          <div>
-            <h3 className="text-2xl font-bold text-green-700 dark:text-green-300">{stats.activeMembers || 0}</h3>
-            <p className="text-green-600 dark:text-green-400 text-sm font-medium">Membres actifs</p>
-          </div>
-        </div>
-
-        <div className="backdrop-blur-sm bg-purple-500/5 rounded-2xl p-6 border border-purple-500/10 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-            </div>
-          </div>
-          <div>
-            <h3 className="text-2xl font-bold text-purple-700 dark:text-purple-300">{stats.upcomingEvents || 0}</h3>
-            <p className="text-purple-600 dark:text-purple-400 text-sm font-medium">Événements à venir</p>
-          </div>
-        </div>
-
-        <div className="backdrop-blur-sm bg-orange-500/5 rounded-2xl p-6 border border-orange-500/10 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-            </div>
-          </div>
-          <div>
-            <h3 className="text-2xl font-bold text-orange-700 dark:text-orange-300">{stats.totalDocuments || 0}</h3>
-            <p className="text-orange-600 dark:text-orange-400 text-sm font-medium">Documents</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Recent Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 relative z-10">
-        <div className="backdrop-blur-sm bg-base-100/80 rounded-2xl p-6 border border-base-300/20 shadow-sm">
-          <h2 className="text-xl font-semibold text-base-content mb-6">Activité récente</h2>
-          <div className="space-y-4">
-            {recentActivities.length === 0 ? (
-              <div className="text-center text-base-content/60 py-8">
-                <p>Aucune activité récente</p>
+        {/* Alerts Section */}
+        <div className="lg:col-span-2 space-y-6 relative z-10">
+          {/* Upcoming Events Alert */}
+          <div className="bg-blue-50/80 backdrop-blur-md dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-2xl p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
               </div>
-            ) : (
-              recentActivities.map((item, index) => (
-              <div key={index} className="flex items-center space-x-4 p-3 bg-base-100 rounded-xl">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                  item.type === 'user' ? 'bg-green-100 text-green-600' :
-                  item.type === 'event' ? 'bg-purple-100 text-purple-600' :
-                  item.type === 'document' ? 'bg-orange-100 text-orange-600' :
-                  'bg-blue-100 text-blue-600'
-                }`}>
-                  {item.type === 'user' && <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" /></svg>}
-                  {item.type === 'event' && <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" /></svg>}
-                  {item.type === 'document' && <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" /></svg>}
-                  {item.type === 'meeting' && <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" /></svg>}
+              <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100">
+                Événements à venir
+              </h3>
+            </div>
+            <div className="space-y-3">
+              {upcomingEvents.map((event) => (
+                <div key={event.id} className="flex justify-between items-center p-3 bg-white/50 dark:bg-blue-800/30 rounded-xl">
+                  <div>
+                    <p className="font-medium text-blue-900 dark:text-blue-100">{event.title}</p>
+                    <p className="text-sm text-blue-700 dark:text-blue-300">{event.date} à {event.time}</p>
+                  </div>
+                  <button className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
                 </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-base-content">{item.action}</p>
-                  <p className="text-xs text-base-content/60">{item.time}</p>
+              ))}
+            </div>
+          </div>
+
+          {/* Attended Events Alert */}
+          <div className="bg-green-50/80 backdrop-blur-md dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-2xl p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-green-900 dark:text-green-100">
+                Événements récents
+              </h3>
+            </div>
+            <div className="space-y-3">
+              {attendedEvents.map((event) => (
+                <div key={event.id} className="flex justify-between items-center p-3 bg-white/50 dark:bg-green-800/30 rounded-xl">
+                  <div>
+                    <p className="font-medium text-green-900 dark:text-green-100">{event.title}</p>
+                    <p className="text-sm text-green-700 dark:text-green-300">Participé le {event.date}</p>
+                  </div>
+                  <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
                 </div>
-              </div>
-            )))}
-          </div>
-        </div>
-
-        <div className="backdrop-blur-sm bg-base-100/80 rounded-2xl p-6 border border-base-300/20 shadow-sm">
-          <h2 className="text-xl font-semibold text-base-content mb-6">Votre profil</h2>
-          <div className="text-center mb-6">
-            {user?.profile_image_url ? (
-              <Image 
-                src={user.profile_image_url} 
-                alt={`${user.first_name} ${user.last_name}`}
-                width={80}
-                height={80}
-                className="w-20 h-20 rounded-full mx-auto object-cover"
-                unoptimized={user.profile_image_url.includes('imagekit.io')}
-              />
-            ) : (
-              <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto">
-                <span className="text-primary-content text-2xl font-bold">
-                  {user?.first_name?.[0]}{user?.last_name?.[0]}
-                </span>
-              </div>
-            )}
-            <h3 className="text-lg font-semibold text-base-content mt-4">
-              {user?.first_name} {user?.last_name}
-            </h3>
-            <p className="text-base-content/60 text-sm">{user?.email}</p>
+              ))}
+            </div>
           </div>
 
-          <div className="space-y-3">
-            <div className="flex justify-between items-center p-3 backdrop-blur-sm bg-base-100/70 rounded-xl border border-base-300/10">
-              <span className="text-sm font-medium text-base-content">Spécialité</span>
-              <span className="text-sm text-base-content/70 capitalize">
-                {user?.specialty?.replace('-', ' ')}
-              </span>
+          {/* New Documents/Announcements Alert */}
+          <div className="bg-amber-50/80 backdrop-blur-md dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-2xl p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center">
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-amber-900 dark:text-amber-100">
+                Nouveaux documents & annonces
+              </h3>
             </div>
-            <div className="flex justify-between items-center p-3 backdrop-blur-sm bg-base-100/70 rounded-xl border border-base-300/10">
-              <span className="text-sm font-medium text-base-content">Niveau</span>
-              <span className="text-sm text-base-content/70 uppercase">
-                {user?.level}
-              </span>
-            </div>
-            <div className="flex justify-between items-center p-3 backdrop-blur-sm bg-base-100/70 rounded-xl border border-base-300/10">
-              <span className="text-sm font-medium text-base-content">Statut</span>
-              <span className={`text-sm px-2 py-1 rounded-full ${
-                user?.status === 'allowed' ? 'bg-green-100 text-green-700' : 
-                user?.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
-                'bg-red-100 text-red-700'
-              }`}>
-                {user?.status}
-              </span>
+            <div className="space-y-3">
+              {newDocuments.map((doc) => (
+                <div key={doc.id} className="flex justify-between items-center p-3 bg-white/50 dark:bg-amber-800/30 rounded-xl">
+                  <div>
+                    <p className="font-medium text-amber-900 dark:text-amber-100">{doc.title}</p>
+                    <p className="text-sm text-amber-700 dark:text-amber-300">{doc.type} • {doc.date}</p>
+                  </div>
+                  <button className="text-amber-600 hover:text-amber-800 dark:text-amber-400 dark:hover:text-amber-200">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                  </button>
+                </div>
+              ))}
             </div>
           </div>
         </div>

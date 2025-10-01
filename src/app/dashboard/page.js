@@ -39,7 +39,7 @@ function DashboardContent() {
   // Don't render if not authenticated (will be redirected)
   if (!isAuthenticated) {
     return null;
-  }
+  } 
 
   const renderActiveSection = () => {
     switch (activeSection) {

@@ -7,7 +7,7 @@ export const login = async (email, password, retryCount = 0) => {
     const response = await fetch(`${API_BASE}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      credentials: "include",
+      credentials: "include", 
       body: JSON.stringify({ email, password }),
     });
     
