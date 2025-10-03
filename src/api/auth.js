@@ -11,18 +11,27 @@ export const login = async (email, password, retryCount = 0) => {
       body: JSON.stringify({ email, password }),
     });
     
+    console.log('Login response status:', response.status);
+    console.log('Login response headers:', Object.fromEntries(response.headers.entries()));
+    
     // Handle different response types
     if (response.ok) {
-      return response.json();
+      const data = await response.json();
+      console.log('Login response data:', data);
+      return data;
     } else {
       // Handle error responses
       const contentType = response.headers.get('content-type');
+      console.log('Error response content-type:', contentType);
+      
       if (contentType && contentType.includes('application/json')) {
         const errorData = await response.json();
+        console.log('Error response data:', errorData);
         throw new Error(errorData.message || 'Login failed');
       } else {
         // Handle plain text responses like "Unauthorized"
         const errorText = await response.text();
+        console.log('Error response text:', errorText);
         if (response.status === 401) {
           throw new Error('Invalid email or password');
         }
@@ -30,6 +39,8 @@ export const login = async (email, password, retryCount = 0) => {
       }
     }
   } catch (error) {
+    console.error('Login error caught:', error);
+    
     // Retry once if it's a network error and we haven't already retried
     if (error.message.includes('Failed to fetch') && retryCount < 1) {
       console.log('Retrying login request...');
