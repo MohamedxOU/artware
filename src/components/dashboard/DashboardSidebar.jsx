@@ -122,28 +122,28 @@ export default function DashboardSidebar({ user, activeSection, setActiveSection
       )}
       
       {/* Sidebar */}
-      <div className={`fixed left-0 top-0 h-full bg-base-100 border-r border-base-100 shadow-lg transition-all duration-300 z-50 ${
-        isCollapsed ? 'w-20' : 'w-64'
+      <div className={`fixed left-4 top-4 bottom-4 bg-primary rounded-3xl shadow-2xl backdrop-blur-md transition-all duration-300 z-50 ${
+        isCollapsed ? 'w-16' : 'w-60'
       } ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:block`}>
-      <div className="flex flex-col h-full">
+      <div className="flex flex-col h-full text-white">
         
         {/* Header with Logo */}
-        <div className="flex items-center justify-between p-4 border-b border-base-300">
+        <div className="flex items-center justify-between p-4">
           <div className={`flex items-center space-x-3 ${isCollapsed ? 'justify-center' : ''}`}>
-            <Image 
-              src={isDarkMode ? "/logos/ArtwareLogo-darkMode.png" : "/logos/ArtwareLogo.png"}
-              alt="Artware Logo" 
-              width={isCollapsed ? 32 : 128} 
-              height={120}  
-              className="rounded-full flex-shrink-0" 
-            />
-            
+            <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+            </div>
+            {!isCollapsed && (
+              <span className="text-lg font-bold text-white">Dashboard</span>
+            )}
           </div>
           <button
             onClick={handleCollapseToggle}
-            className="p-2 hover:bg-base-200 rounded-lg transition-colors hidden lg:flex"
+            className="p-2 hover:bg-white/10 rounded-lg transition-colors hidden lg:flex"
           >
-            <svg className={`w-4 h-4 transition-transform ${isCollapsed ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className={`w-4 h-4 transition-transform text-white ${isCollapsed ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
@@ -151,7 +151,7 @@ export default function DashboardSidebar({ user, activeSection, setActiveSection
 
         {/* Navigation Items */}
         <div className="flex-1 py-4">
-          <nav className="space-y-1 px-3">
+          <nav className="space-y-2 px-4">
             {/* Main Navigation */}
             <div className="space-y-1">
               {sidebarItems.map((item) => (
@@ -160,8 +160,8 @@ export default function DashboardSidebar({ user, activeSection, setActiveSection
                   onClick={() => setActiveSection(item.id)}
                   className={`cursor-target w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition-all duration-200 group ${
                     activeSection === item.id
-                      ? 'bg-primary text-primary-content shadow-lg'
-                      : 'text-base-content/70 hover:text-base-content hover:bg-base-200'
+                      ? 'bg-white/20 text-white shadow-lg backdrop-blur-sm'
+                      : 'text-white/70 hover:text-white hover:bg-white/10'
                   } ${isCollapsed ? 'justify-center' : ''}`}
                   title={isCollapsed ? item.label : ''}
                 >
@@ -176,7 +176,7 @@ export default function DashboardSidebar({ user, activeSection, setActiveSection
             </div>
 
             {/* Separator */}
-            <div className="my-4 border-t border-base-300"></div>
+            <div className="my-4 border-t border-white/20"></div>
 
             {/* Additional Items */}
             <div className="space-y-1">
@@ -194,23 +194,24 @@ export default function DashboardSidebar({ user, activeSection, setActiveSection
                         if (onCloseMobile) onCloseMobile();
                       }
                     }}
-                    className={` cursor-target w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition-all duration-200 group ${
+                    className={`cursor-target w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition-all duration-200 group ${
                       activeSection === item.id
-                        ? 'bg-primary text-primary-content shadow-lg'
-                        : 'text-base-content/70 hover:text-base-content hover:bg-base-200'
+                        ? 'bg-white/20 text-white shadow-lg backdrop-blur-sm'
+                        : 'text-white/70 hover:text-white hover:bg-white/10'
                     } ${isCollapsed ? 'justify-center' : ''}`}
                     title={isCollapsed ? item.label : ''}
                   >
                     <div className="flex-shrink-0 relative">
                       {item.icon}
                       {item.id === 'notifications' && notifications.some(n => !n.read) && (
-                        <div className="absolute -top-1 -right-1 w-3 h-3 bg-error rounded-full"></div>
+                        <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-400 rounded-full"></div>
                       )}
                     </div>
                     {!isCollapsed && (
                       <span className="font-medium">{item.label}</span>
                     )}
                   </button>
+                  
                   
                   {/* Notifications Dropdown */}
                   {item.id === 'notifications' && showNotifications && !isCollapsed && (
@@ -251,18 +252,6 @@ export default function DashboardSidebar({ user, activeSection, setActiveSection
                           </div>
                         )}
                       </div>
-                      <div className="p-3 text-center border-t border-base-300">
-                        <button 
-                          onClick={() => {
-                            setActiveSection('notifications');
-                            setShowNotifications(false);
-                            if (onCloseMobile) onCloseMobile();
-                          }}
-                          className="text-sm text-primary hover:text-primary/80 underline"
-                        >
-                          Voir toutes les notifications
-                        </button>
-                      </div>
                     </div>
                   )}
                 </div>
@@ -272,8 +261,8 @@ export default function DashboardSidebar({ user, activeSection, setActiveSection
         </div>
 
         {/* User Profile Section */}
-        <div className="p-4 border-t border-base-300">
-          <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'space-x-3'} p-3 bg-base-200 rounded-xl`}>
+        <div className="p-4 border-t border-white/20">
+          <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'space-x-3'} p-3 bg-white/10 rounded-xl backdrop-blur-sm`}>
             {user?.avatar ? (
               <div className="avatar">
                 <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
@@ -288,18 +277,18 @@ export default function DashboardSidebar({ user, activeSection, setActiveSection
                 </div>
               </div>
             ) : (
-              <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-primary-content text-sm font-medium">
+              <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="text-white text-sm font-medium">
                   {user?.first_name?.[0]}{user?.last_name?.[0]}
                 </span>
               </div>
             )}
             {!isCollapsed && user && (
               <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium text-base-content truncate">
+                <div className="text-sm font-medium text-white truncate">
                   {user.first_name} {user.last_name}
                 </div>
-                <div className="text-xs text-base-content/60 truncate">
+                <div className="text-xs text-white/60 truncate">
                   {user.role === 'admin' ? 'Administrateur' : 'Membre'}
                 </div>
               </div>
@@ -310,7 +299,7 @@ export default function DashboardSidebar({ user, activeSection, setActiveSection
             <button
               onClick={handleLogout}
               disabled={isLoading}
-              className=" cursor-target w-full mt-3 flex items-center justify-center space-x-2 px-3 py-2 text-sm text-error hover:bg-error/10 rounded-lg transition-colors"
+              className="cursor-target w-full mt-3 flex items-center justify-center space-x-2 px-3 py-2 text-sm text-white/70 hover:bg-white/10 rounded-lg transition-colors"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
