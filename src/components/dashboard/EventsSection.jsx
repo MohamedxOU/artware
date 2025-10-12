@@ -74,78 +74,42 @@ export default function EventsSection({ events = mockEvents, stats = eventStats 
   const filteredEvents = events.filter(event => event.type === activeTab);
 
   return (
-    <div className="w-full relative">
-      {/* Background Patterns - Similar to Login Screen */}
-      <div className="absolute inset-0 pointer-events-none">
-        {/* Large primary circles */}
-        <div className="absolute top-10 left-10 w-40 h-40 bg-primary/15 rounded-full blur-2xl"></div>
-        <div className="absolute bottom-20 right-20 w-48 h-48 bg-primary/12 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/3 right-10 w-36 h-36 bg-primary/10 rounded-full blur-2xl"></div>
-        
-        {/* Secondary color patterns */}
-        <div className="absolute top-1/2 left-1/4 w-32 h-32 bg-secondary/18 rounded-full blur-xl"></div>
-        <div className="absolute bottom-1/4 left-20 w-44 h-44 bg-secondary/12 rounded-full blur-3xl"></div>
-        <div className="absolute top-20 right-1/3 w-28 h-28 bg-secondary/15 rounded-full blur-xl"></div>
-        
-        {/* Accent patterns */}
-        <div className="absolute top-3/4 left-1/3 w-24 h-24 bg-accent/20 rounded-full blur-lg"></div>
-        <div className="absolute bottom-10 right-1/4 w-38 h-38 bg-accent/14 rounded-full blur-2xl"></div>
-        <div className="absolute top-1/4 left-1/2 w-30 h-30 bg-accent/12 rounded-full blur-xl"></div>
-        
-        {/* Additional geometric patterns */}
-        <div className="absolute top-40 left-1/3 w-20 h-60 bg-primary/8 rounded-full blur-2xl rotate-45"></div>
-        <div className="absolute bottom-40 right-1/3 w-16 h-50 bg-secondary/10 rounded-full blur-xl -rotate-45"></div>
-        <div className="absolute top-1/2 right-20 w-18 h-45 bg-accent/12 rounded-full blur-lg rotate-12"></div>
-        
-        {/* Small scattered dots */}
-        <div className="absolute top-16 left-1/2 w-12 h-12 bg-primary/25 rounded-full blur-sm"></div>
-        <div className="absolute top-1/3 left-20 w-8 h-8 bg-secondary/30 rounded-full blur-sm"></div>
-        <div className="absolute bottom-1/3 right-16 w-10 h-10 bg-accent/25 rounded-full blur-sm"></div>
-        <div className="absolute top-2/3 left-16 w-14 h-14 bg-primary/20 rounded-full blur-md"></div>
-        <div className="absolute bottom-16 left-1/2 w-16 h-16 bg-secondary/18 rounded-full blur-md"></div>
-        
-        {/* Overlapping larger shapes */}
-        <div className="absolute top-0 left-1/4 w-56 h-56 bg-primary/6 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-1/4 w-52 h-52 bg-secondary/8 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-0 w-48 h-48 bg-accent/7 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 right-0 w-50 h-50 bg-primary/5 rounded-full blur-3xl"></div>
-      </div>
-
+    <div className="w-full max-w-7xl mx-auto relative min-h-full">
       {/* Header */}
-      <div className="mb-8 relative z-10">
-        <div className="backdrop-blur-sm bg-base-100/80 rounded-2xl p-6 border border-base-300/20 shadow-sm">
-          <h1 className="text-3xl font-bold text-base-content mb-2">Événements</h1>
+      <div className="mb-6 relative z-10">
+        <div className="backdrop-blur-sm bg-base-100/70 rounded-2xl p-4 lg:p-6 border border-base-300/30 shadow-sm">
+          <h1 className="text-2xl lg:text-3xl font-bold text-base-content mb-2">Événements</h1>
           <p className="text-base-content/60">Découvrez et participez aux événements du club</p>
         </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 relative z-10">
-        <div className="backdrop-blur-sm bg-gradient-to-br from-blue-50/80 to-blue-100/80 dark:from-blue-900/40 dark:to-blue-800/40 rounded-2xl p-6 border border-blue-200/30 dark:border-blue-700/30 shadow-lg">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6 relative z-10">
+        <div className="backdrop-blur-sm bg-gradient-to-br from-blue-50/60 to-blue-100/60 dark:from-blue-900/30 dark:to-blue-800/30 rounded-2xl p-4 lg:p-6 border border-blue-200/40 dark:border-blue-700/40 shadow-lg">
+          <div className="flex items-center justify-between mb-2 lg:mb-4">
+            <div className="w-10 h-10 lg:w-12 lg:h-12 bg-blue-500 rounded-xl flex items-center justify-center">
+              <svg className="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
             </div>
           </div>
           <div>
-            <h3 className="text-2xl font-bold text-blue-700 dark:text-blue-300">{stats.totalEvents}</h3>
-            <p className="text-blue-600 dark:text-blue-400 text-sm font-medium">Total des événements</p>
+            <h3 className="text-xl lg:text-2xl font-bold text-blue-700 dark:text-blue-300">{stats.totalEvents}</h3>
+            <p className="text-blue-600 dark:text-blue-400 text-xs lg:text-sm font-medium">Total des événements</p>
           </div>
         </div>
 
-        <div className="backdrop-blur-sm bg-gradient-to-br from-green-50/80 to-green-100/80 dark:from-green-900/40 dark:to-green-800/40 rounded-2xl p-6 border border-green-200/30 dark:border-green-700/30 shadow-lg">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="backdrop-blur-sm bg-gradient-to-br from-green-50/60 to-green-100/60 dark:from-green-900/30 dark:to-green-800/30 rounded-2xl p-4 lg:p-6 border border-green-200/40 dark:border-green-700/40 shadow-lg">
+          <div className="flex items-center justify-between mb-2 lg:mb-4">
+            <div className="w-10 h-10 lg:w-12 lg:h-12 bg-green-500 rounded-xl flex items-center justify-center">
+              <svg className="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
           </div>
           <div>
-            <h3 className="text-2xl font-bold text-green-700 dark:text-green-300">{stats.upcomingEvents}</h3>
-            <p className="text-green-600 dark:text-green-400 text-sm font-medium">Événements à venir</p>
+            <h3 className="text-xl lg:text-2xl font-bold text-green-700 dark:text-green-300">{stats.upcomingEvents}</h3>
+            <p className="text-green-600 dark:text-green-400 text-xs lg:text-sm font-medium">Événements à venir</p>
           </div>
         </div>
 

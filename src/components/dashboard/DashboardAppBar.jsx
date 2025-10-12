@@ -49,11 +49,13 @@ export default function DashboardAppBar({
   setActiveSection, 
   onLogout, 
   isLoading, 
-  notifications = [] 
+  notifications = [],
+  children
 }) {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const { isDarkMode, theme, isInitialized } = useThemeStore();
   const { addNotification } = useUIStore();
 
@@ -115,269 +117,267 @@ export default function DashboardAppBar({
 
   const unreadNotifications = mockNotifications.filter(n => !n.read);
 
-  // Handle navigation clicks
-  const handleNavClick = (itemId) => {
-    setActiveSection(itemId);
-  };
-
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-base-100 border-b border-base-300 shadow-sm backdrop-blur-md">
-      <div className="max-w-full mx-auto flex items-center justify-between px-6 py-3">
-        
-        {/* Left - Logo */}
-        <div className="flex items-center">
-          <Image 
-            src={getLogoSource()}
-            alt="Artware Logo" 
-            width={120} 
-            height={120}  
-            className="rounded-full" 
-            priority
-          />
-        </div>
-
-        {/* Middle - Animated Navigation */}
-        <div className="hidden md:flex items-center space-x-1  rounded-2xl p-2 backdrop-blur-sm">
-          {navItems.map((item) => (
+    <div className="flex h-screen bg-transparent">
+      {/* Sidebar */}
+      <div className={`fixed left-0 top-0 h-full bg-base-200/90 backdrop-blur-md border-r border-base-300/50 transition-all duration-300 z-40 ${
+        sidebarCollapsed ? 'w-16' : 'w-64'
+      }`}>
+        {/* Sidebar Header */}
+        <div className="p-4 border-b border-base-300">
+          <div className="flex items-center justify-between">
+            {!sidebarCollapsed && (
+              <h2 className="text-lg font-semibold text-base-content">Menu</h2>
+            )}
             <button
-              key={item.id}
-              onClick={() => handleNavClick(item.id)}
-              className={`
-                relative flex flex-col items-center px-4 py-3 rounded-xl transition-all duration-300 ease-out
-                hover:bg-base-300/50 hover:scale-105 hover:shadow-lg
-                ${activeSection === item.id 
-                  ? 'bg-primary text-primary-content shadow-lg scale-105 animate-pulse' 
-                  : 'text-base-content hover:text-primary'
-                }
-                group
-              `}
+              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+              className="btn btn-ghost btn-sm btn-circle"
             >
-              {/* Icon with animation */}
-              <div className={`
-                transition-all duration-300 ease-out
-                ${activeSection === item.id ? 'scale-110 animate-bounce' : 'group-hover:scale-110'}
-              `}>
-                {item.icon}
-              </div>
-              
-              {/* Label with animation */}
-              <span className={`
-                text-xs font-medium mt-1 transition-all duration-300 ease-out
-                ${activeSection === item.id ? 'font-bold' : 'group-hover:font-semibold'}
-              `}>
-                {item.label}
-              </span>
-              
-              {/* Active indicator dot */}
-              {activeSection === item.id && (
-                <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-primary-content rounded-full animate-ping" />
-              )}
-              
-              {/* Hover effect background */}
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/10 to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
-            </button>
-          ))}
-        </div>
-
-        {/* Mobile Navigation Dropdown */}
-        <div className="md:hidden relative">
-          <div className="dropdown dropdown-end">
-            <label tabIndex={0} className="btn btn-ghost btn-circle">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={sidebarCollapsed ? "M9 5l7 7-7 7" : "M15 19l-7-7 7-7"} />
               </svg>
-            </label>
-            <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 mt-2">
-              {navItems.map((item) => (
-                <li key={item.id}>
-                  <button
-                    onClick={() => setActiveSection(item.id)}
-                    className={`w-full text-left flex items-center space-x-3 ${
-                      activeSection === item.id ? 'active text-primary bg-primary/10' : ''
-                    }`}
-                  >
-                    <div className="flex-shrink-0">
-                      {item.icon}
-                    </div>
-                    <span>{item.label}</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
+            </button>
           </div>
         </div>
 
-        {/* Right - Notifications & Profile */}
-        <div className="flex items-center space-x-4">
-          
-          {/* Notifications */}
-          <div className="relative dropdown dropdown-end">
-            <label 
-              tabIndex={0} 
-              className="btn btn-ghost btn-circle relative"
-              onClick={() => {
-                setShowNotifications(!showNotifications);
-                setShowProfileMenu(false);
-              }}
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-3.5-3.5a.5.5 0 010-.707L20 9h-5M9 12a3 3 0 100-6 3 3 0 000 6z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              {unreadNotifications.length > 0 && (
-                <div className="absolute -top-1 -right-1 w-5 h-5 bg-error rounded-full flex items-center justify-center">
-                  <span className="text-xs text-white font-medium">
-                    {unreadNotifications.length > 9 ? '9+' : unreadNotifications.length}
-                  </span>
+        {/* Navigation Items */}
+        <div className="flex flex-col h-full">
+          {/* Main Navigation */}
+          <nav className="flex-1 mt-4 px-2 overflow-y-auto">
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setActiveSection(item.id)}
+                className={`w-full flex items-center px-3 py-3 mb-2 rounded-lg transition-all duration-200 group ${
+                  activeSection === item.id 
+                    ? 'bg-primary text-primary-content shadow-lg' 
+                    : 'text-base-content hover:bg-base-300'
+                }`}
+                title={sidebarCollapsed ? item.label : ''}
+              >
+                <div className="flex-shrink-0">
+                  {item.icon}
                 </div>
-              )}
-            </label>
-            
-            {showNotifications && (
-              <div className="dropdown-content mt-2 w-80 bg-base-100 border border-base-300 rounded-xl shadow-lg z-50">
-                <div className="p-4 border-b border-base-300">
-                  <h3 className="text-lg font-semibold text-base-content">Notifications</h3>
-                </div>
-                <div className="max-h-96 overflow-y-auto">
-                  {mockNotifications.length > 0 ? (
-                    mockNotifications.slice(0, 5).map((notification) => (
-                      <div
-                        key={notification.id}
-                        className={`p-4 border-b border-base-300 hover:bg-base-200 cursor-pointer ${
-                          !notification.read ? 'bg-primary/5' : ''
-                        }`}
-                      >
-                        <div className="flex items-start space-x-3">
-                          <div className={`w-2 h-2 rounded-full mt-2 ${
-                            !notification.read ? 'bg-primary' : 'bg-base-300'
-                          }`}></div>
-                          <div className="flex-1">
-                            <h4 className="text-sm font-medium text-base-content">
-                              {notification.title}
-                            </h4>
-                            <p className="text-sm text-base-content/70 mt-1">
-                              {notification.message}
-                            </p>
-                            <p className="text-xs text-base-content/50 mt-2">
-                              {notification.time}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="p-4 text-center text-base-content/60">
-                      <p className="text-sm">Aucune notification</p>
-                    </div>
-                  )}
-                </div>
-                {mockNotifications.length > 5 && (
-                  <div className="p-3 text-center border-t border-base-300">
-                    <button 
-                      onClick={() => {
-                        setActiveSection('notifications');
-                        setShowNotifications(false);
-                      }}
-                      className="text-sm text-primary hover:text-primary/80 underline"
-                    >
-                      Voir toutes les notifications
-                    </button>
+                {!sidebarCollapsed && (
+                  <span className="ml-3 font-medium">{item.label}</span>
+                )}
+                {activeSection === item.id && !sidebarCollapsed && (
+                  <div className="ml-auto">
+                    <div className="w-2 h-2 bg-primary-content rounded-full"></div>
                   </div>
                 )}
-              </div>
-            )}
-          </div>
+              </button>
+            ))}
+          </nav>
 
-          {/* Profile Avatar & Dropdown */}
-          <div className="relative dropdown dropdown-end">
-            <label 
-              tabIndex={0} 
-              className="btn btn-ghost btn-circle avatar"
-              onClick={() => {
-                setShowProfileMenu(!showProfileMenu);
-                setShowNotifications(false);
-              }}
+          {/* Logout Button at Bottom - Always Visible */}
+          <div className="px-2 py-4 border-t border-base-300/50 mt-auto">
+            <button
+              onClick={handleLogout}
+              disabled={isLoading}
+              className="w-full flex items-center px-3 py-3 rounded-lg text-error hover:bg-error/10 transition-all duration-200 group"
+              title={sidebarCollapsed ? 'Logout' : ''}
             >
-              {user?.profile_image_url ? (
-                <div className="w-8 h-8 rounded-full overflow-hidden">
-                  <Image 
-                    src={user.profile_image_url} 
-                    alt={`${user.first_name} ${user.last_name}`}
-                    width={32}
-                    height={32}
-                    className="w-full h-full object-cover"
-                    unoptimized={user.profile_image_url.includes('imagekit.io')}
-                  />
-                </div>
-              ) : (
-                <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-                  <span className="text-primary-content text-sm font-medium">
-                    {user?.first_name?.[0]}{user?.last_name?.[0]}
-                  </span>
-                </div>
+              <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              {!sidebarCollapsed && (
+                <span className="ml-3 font-medium">
+                  {isLoading ? 'Déconnexion...' : 'Logout'}
+                </span>
               )}
-            </label>
-            
-            {showProfileMenu && (
-              <ul className="dropdown-content mt-2 menu p-2 shadow bg-base-100 rounded-box w-52 z-50">
-                <li className="px-3 py-2 border-b border-base-300">
-                  <div className="text-sm">
-                    <div className="font-medium text-base-content">
-                      {user?.first_name} {user?.last_name}
-                    </div>
-                    <div className="text-base-content/60">
-                      {user?.email}
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <button 
-                    onClick={() => {
-                      setActiveSection('profile');
-                      setShowProfileMenu(false);
-                    }}
-                    className="flex items-center space-x-2"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                    <span>Profile</span>
-                  </button>
-                </li>
-                <li>
-                  <button 
-                    onClick={() => {
-                      setActiveSection('reclamation');
-                      setShowProfileMenu(false);
-                    }}
-                    className="flex items-center space-x-2"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-                    </svg>
-                    <span>Réclamation</span>
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => {
-                      setShowProfileMenu(false);
-                      handleLogout();
-                    }}
-                    disabled={isLoading}
-                    className="flex items-center space-x-2 text-error hover:bg-error/10"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                    </svg>
-                    <span>{isLoading ? 'Déconnexion...' : 'Logout'}</span>
-                  </button>
-                </li>
-              </ul>
-            )}
+            </button>
           </div>
         </div>
       </div>
-    </nav>
+
+      {/* Main Content Area */}
+      <div className={`flex-1 flex flex-col transition-all duration-300 ${
+        sidebarCollapsed ? 'ml-16' : 'ml-64'
+      }`}>
+        {/* App Bar */}
+        <header className="fixed top-0 right-0 left-0 bg-base-100/90 backdrop-blur-md border-b border-base-300/50 shadow-sm z-30" style={{
+          left: sidebarCollapsed ? '4rem' : '16rem'
+        }}>
+          <div className="flex items-center justify-between px-6 py-4">
+            {/* Left - Logo */}
+            <div className="flex items-center">
+              <Image 
+                src={getLogoSource()}
+                alt="Artware Logo" 
+                width={100} 
+                height={40}  
+                className="h-10 w-auto" 
+                priority
+              />
+            </div>
+
+            {/* Right - User Info, Notifications & Profile */}
+            <div className="flex items-center space-x-4">
+              {/* User Name (hidden on small screens) */}
+              <div className="hidden lg:block text-right">
+                <div className="text-sm font-medium text-base-content">
+                  {user?.first_name} {user?.last_name}
+                </div>
+                <div className="text-xs text-base-content/60">
+                  {user?.email}
+                </div>
+              </div>
+
+              {/* Notifications */}
+              <div className="relative dropdown dropdown-end">
+                <label 
+                  tabIndex={0} 
+                  className="btn btn-ghost btn-circle relative"
+                  onClick={() => {
+                    setShowNotifications(!showNotifications);
+                    setShowProfileMenu(false);
+                  }}
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-3-3.5a1 1 0 010-1.414L18 9h-3M6 9a6 6 0 1112 0c0 3.074-.833 5.973-2.29 8.456A1 1 0 0114.79 18H9.21a1 1 0 01-.92-.544A11.956 11.956 0 016 9z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.73 21a2 2 0 01-3.46 0" />
+                  </svg>
+                  {unreadNotifications.length > 0 && (
+                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-error rounded-full flex items-center justify-center">
+                      <span className="text-xs text-white font-medium">
+                        {unreadNotifications.length > 9 ? '9+' : unreadNotifications.length}
+                      </span>
+                    </div>
+                  )}
+                </label>
+                
+                {showNotifications && (
+                  <div className="dropdown-content mt-2 w-80 bg-base-100 border border-base-300 rounded-xl shadow-lg z-50">
+                    <div className="p-4 border-b border-base-300">
+                      <h3 className="text-lg font-semibold text-base-content">Notifications</h3>
+                    </div>
+                    <div className="max-h-96 overflow-y-auto">
+                      {mockNotifications.length > 0 ? (
+                        mockNotifications.slice(0, 5).map((notification) => (
+                          <div
+                            key={notification.id}
+                            className={`p-4 border-b border-base-300 hover:bg-base-200 cursor-pointer ${
+                              !notification.read ? 'bg-primary/5' : ''
+                            }`}
+                          >
+                            <div className="flex items-start space-x-3">
+                              <div className={`w-2 h-2 rounded-full mt-2 ${
+                                !notification.read ? 'bg-primary' : 'bg-base-300'
+                              }`}></div>
+                              <div className="flex-1">
+                                <h4 className="text-sm font-medium text-base-content">
+                                  {notification.title}
+                                </h4>
+                                <p className="text-sm text-base-content/70 mt-1">
+                                  {notification.message}
+                                </p>
+                                <p className="text-xs text-base-content/50 mt-2">
+                                  {notification.time}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="p-4 text-center text-base-content/60">
+                          <p className="text-sm">Aucune notification</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Profile Image */}
+              <div className="relative dropdown dropdown-end">
+                <label 
+                  tabIndex={0} 
+                  className="btn btn-ghost btn-circle avatar"
+                  onClick={() => {
+                    setShowProfileMenu(!showProfileMenu);
+                    setShowNotifications(false);
+                  }}
+                >
+                  {user?.profile_image_url ? (
+                    <div className="w-10 h-10 rounded-full overflow-hidden">
+                      <Image 
+                        src={user.profile_image_url} 
+                        alt={`${user.first_name} ${user.last_name}`}
+                        width={40}
+                        height={40}
+                        className="w-full h-full object-cover"
+                        unoptimized={user.profile_image_url.includes('imagekit.io')}
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                      <span className="text-primary-content text-sm font-medium">
+                        {user?.first_name?.[0]}{user?.last_name?.[0]}
+                      </span>
+                    </div>
+                  )}
+                </label>
+                
+                {showProfileMenu && (
+                  <ul className="dropdown-content mt-2 menu p-2 shadow bg-base-100 rounded-box w-52 z-50">
+                    <li className="px-3 py-2 border-b border-base-300">
+                      <div className="text-sm">
+                        <div className="font-medium text-base-content">
+                          {user?.first_name} {user?.last_name}
+                        </div>
+                        <div className="text-base-content/60">
+                          {user?.email}
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <button 
+                        onClick={() => {
+                          setActiveSection('profile');
+                          setShowProfileMenu(false);
+                        }}
+                        className="flex items-center space-x-2"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        <span>Profile</span>
+                      </button>
+                    </li>
+                    <li>
+                      <button 
+                        onClick={() => {
+                          setActiveSection('reclamation');
+                          setShowProfileMenu(false);
+                        }}
+                        className="flex items-center space-x-2"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                        </svg>
+                        <span>Réclamation</span>
+                      </button>
+                    </li>
+                  </ul>
+                )}
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Content Area */}
+        <main className="flex-1 pt-20 bg-transparent">
+          {children || (
+            <div className="p-6 h-full">
+              {/* Default content when no children provided */}
+              <div className="text-center py-20">
+                <p className="text-base-content/60">Select a section from the sidebar</p>
+              </div>
+            </div>
+          )}
+        </main>
+      </div>
+    </div>
   );
 }
