@@ -60,9 +60,13 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
                 />
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-primary via-primary/90 to-secondary flex items-center justify-center transition-all duration-700 group-hover:scale-105">
-                  <span className="text-white text-6xl font-bold tracking-wide">
-                    {user?.first_name?.[0]}{user?.last_name?.[0]}
-                  </span>
+                 <Image
+                  src={"/bureau/Assia.png"}
+                  alt={`${user.first_name} ${user.last_name}`}
+                  fill
+                  className="object-cover transition-all duration-700 group-hover:scale-105"
+                  
+                />
                 </div>
               )}
               
@@ -83,9 +87,7 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                     <span className="text-green-400 text-sm font-medium">Actif</span>
                   </div>
-                  <p className="text-white/90 text-sm leading-relaxed transition-opacity duration-500 delay-200 opacity-0 group-hover:opacity-100">
-                    Membre passionné du club Artware, contribuant activement aux projets innovants et à la communauté technologique.
-                  </p>
+                  
                   
                   {/* Action Buttons */}
                   <div className="flex space-x-3 mt-4 transition-all duration-500 delay-300 opacity-0 group-hover:opacity-100">

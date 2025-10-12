@@ -357,7 +357,7 @@ export default function DashboardAppBar({
                 </button>
                 
                 {showProfileMenu && (
-                  <div className="absolute right-0 mt-2 w-52 bg-base-100 border border-base-300 rounded-xl shadow-lg z-50">
+                  <div className="absolute right-0 mt-2  bg-base-100 border border-base-300 rounded-xl shadow-lg z-50">
                     <ul className="menu p-2">
                       <li className="px-3 py-2 border-b border-base-300">
                         <div className="text-sm">
