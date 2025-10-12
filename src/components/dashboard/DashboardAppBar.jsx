@@ -56,6 +56,7 @@ export default function DashboardAppBar({
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isDarkMode, theme, isInitialized } = useThemeStore();
   const { addNotification } = useUIStore();
 
@@ -67,15 +68,19 @@ export default function DashboardAppBar({
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (!event.target.closest('.dropdown')) {
+      // Close notifications dropdown
+      if (showNotifications && !event.target.closest('.notifications-dropdown')) {
         setShowNotifications(false);
+      }
+      // Close profile dropdown
+      if (showProfileMenu && !event.target.closest('.profile-dropdown')) {
         setShowProfileMenu(false);
       }
     };
 
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
-  }, []);
+  }, [showNotifications, showProfileMenu]);
 
   const handleLogout = async () => {
     const confirmed = window.confirm('Êtes-vous sûr de vouloir vous déconnecter ?');
@@ -122,7 +127,7 @@ export default function DashboardAppBar({
       {/* Sidebar */}
       <div className={`fixed left-0 top-0 h-full bg-base-200/90 backdrop-blur-md border-r border-base-300/50 transition-all duration-300 z-40 ${
         sidebarCollapsed ? 'w-16' : 'w-64'
-      }`}>
+      } ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
         {/* Sidebar Header */}
         <div className="p-4 border-b border-base-300">
           <div className="flex items-center justify-between">
@@ -131,10 +136,19 @@ export default function DashboardAppBar({
             )}
             <button
               onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-              className="btn btn-ghost btn-sm btn-circle"
+              className="btn btn-ghost btn-sm btn-circle hidden lg:flex"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={sidebarCollapsed ? "M9 5l7 7-7 7" : "M15 19l-7-7 7-7"} />
+              </svg>
+            </button>
+            {/* Close button for mobile */}
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              className="btn btn-ghost btn-sm btn-circle lg:hidden"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
@@ -147,7 +161,10 @@ export default function DashboardAppBar({
             {navItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => setActiveSection(item.id)}
+                onClick={() => {
+                  setActiveSection(item.id);
+                  setMobileMenuOpen(false);
+                }}
                 className={`w-full flex items-center px-3 py-3 mb-2 rounded-lg transition-all duration-200 group ${
                   activeSection === item.id 
                     ? 'bg-primary text-primary-content shadow-lg' 
@@ -183,7 +200,7 @@ export default function DashboardAppBar({
               </svg>
               {!sidebarCollapsed && (
                 <span className="ml-3 font-medium">
-                  {isLoading ? 'Déconnexion...' : 'Logout'}
+                  {isLoading ? 'Déconnexion...' : 'Déconnexion'}
                 </span>
               )}
             </button>
@@ -191,64 +208,74 @@ export default function DashboardAppBar({
         </div>
       </div>
 
+      {/* Mobile Overlay */}
+      {mobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
       {/* Main Content Area */}
       <div className={`flex-1 flex flex-col transition-all duration-300 ${
-        sidebarCollapsed ? 'ml-16' : 'ml-64'
+        sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'
       }`}>
         {/* App Bar */}
         <header className="fixed top-0 right-0 left-0 bg-base-100/90 backdrop-blur-md border-b border-base-300/50 shadow-sm z-30" style={{
           left: sidebarCollapsed ? '4rem' : '16rem'
         }}>
-          <div className="flex items-center justify-between px-6 py-4">
-            {/* Left - Logo */}
-            <div className="flex items-center">
-              <Image 
-                src={getLogoSource()}
-                alt="Artware Logo" 
-                width={100} 
-                height={40}  
-                className="h-10 w-auto" 
-                priority
-              />
+          <div className="flex items-center justify-between px-4 lg:px-6 py-4">
+            {/* Left - Mobile Menu Button and Logo */}
+            <div className="flex items-center space-x-4">
+              {/* Mobile Menu Button */}
+              <button
+                onClick={() => setMobileMenuOpen(true)}
+                className="btn btn-ghost btn-circle lg:hidden"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+
+              {/* Logo */}
+              <div className="flex items-center">
+                <Image 
+                  src={getLogoSource()}
+                  alt="Artware Logo" 
+                  width={100} 
+                  height={40}  
+                  className="h-8 lg:h-10 w-auto" 
+                  priority
+                />
+              </div>
             </div>
 
-            {/* Right - User Info, Notifications & Profile */}
-            <div className="flex items-center space-x-4">
-              {/* User Name (hidden on small screens) */}
-              <div className="hidden lg:block text-right">
-                <div className="text-sm font-medium text-base-content">
-                  {user?.first_name} {user?.last_name}
-                </div>
-                <div className="text-xs text-base-content/60">
-                  {user?.email}
-                </div>
-              </div>
-
+            {/* Right - Notifications, User Info & Profile */}
+            <div className="flex items-center space-x-2 lg:space-x-4">
               {/* Notifications */}
-              <div className="relative dropdown dropdown-end">
-                <label 
-                  tabIndex={0} 
+              <div className="relative notifications-dropdown">
+                <button 
                   className="btn btn-ghost btn-circle relative"
                   onClick={() => {
                     setShowNotifications(!showNotifications);
                     setShowProfileMenu(false);
                   }}
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-3-3.5a1 1 0 010-1.414L18 9h-3M6 9a6 6 0 1112 0c0 3.074-.833 5.973-2.29 8.456A1 1 0 0114.79 18H9.21a1 1 0 01-.92-.544A11.956 11.956 0 016 9z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.73 21a2 2 0 01-3.46 0" />
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5 lg:size-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
                   </svg>
+
                   {unreadNotifications.length > 0 && (
-                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-error rounded-full flex items-center justify-center">
+                    <div className="absolute -top-1 -right-1 w-4 h-4 lg:w-5 lg:h-5 bg-error rounded-full flex items-center justify-center">
                       <span className="text-xs text-white font-medium">
                         {unreadNotifications.length > 9 ? '9+' : unreadNotifications.length}
                       </span>
                     </div>
                   )}
-                </label>
+                </button>
                 
                 {showNotifications && (
-                  <div className="dropdown-content mt-2 w-80 bg-base-100 border border-base-300 rounded-xl shadow-lg z-50">
+                  <div className="absolute right-0 mt-2 w-80 bg-base-100 border border-base-300 rounded-xl shadow-lg z-50">
                     <div className="p-4 border-b border-base-300">
                       <h3 className="text-lg font-semibold text-base-content">Notifications</h3>
                     </div>
@@ -260,6 +287,7 @@ export default function DashboardAppBar({
                             className={`p-4 border-b border-base-300 hover:bg-base-200 cursor-pointer ${
                               !notification.read ? 'bg-primary/5' : ''
                             }`}
+                            onClick={() => setShowNotifications(false)}
                           >
                             <div className="flex items-start space-x-3">
                               <div className={`w-2 h-2 rounded-full mt-2 ${
@@ -289,10 +317,19 @@ export default function DashboardAppBar({
                 )}
               </div>
 
+              {/* User Name (hidden on small screens) */}
+              <div className="hidden lg:block text-right">
+                <div className="text-sm font-medium text-base-content">
+                  {user?.first_name} {user?.last_name}
+                </div>
+                <div className="text-xs text-base-content/60">
+                  {user?.email}
+                </div>
+              </div>
+
               {/* Profile Image */}
-              <div className="relative dropdown dropdown-end">
-                <label 
-                  tabIndex={0} 
+              <div className="relative profile-dropdown">
+                <button 
                   className="btn btn-ghost btn-circle avatar"
                   onClick={() => {
                     setShowProfileMenu(!showProfileMenu);
@@ -300,7 +337,7 @@ export default function DashboardAppBar({
                   }}
                 >
                   {user?.profile_image_url ? (
-                    <div className="w-10 h-10 rounded-full overflow-hidden">
+                    <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-full overflow-hidden">
                       <Image 
                         src={user.profile_image_url} 
                         alt={`${user.first_name} ${user.last_name}`}
@@ -311,55 +348,72 @@ export default function DashboardAppBar({
                       />
                     </div>
                   ) : (
-                    <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                    <div className="w-8 h-8 lg:w-10 lg:h-10 bg-primary rounded-full flex items-center justify-center">
                       <span className="text-primary-content text-sm font-medium">
                         {user?.first_name?.[0]}{user?.last_name?.[0]}
                       </span>
                     </div>
                   )}
-                </label>
+                </button>
                 
                 {showProfileMenu && (
-                  <ul className="dropdown-content mt-2 menu p-2 shadow bg-base-100 rounded-box w-52 z-50">
-                    <li className="px-3 py-2 border-b border-base-300">
-                      <div className="text-sm">
-                        <div className="font-medium text-base-content">
-                          {user?.first_name} {user?.last_name}
+                  <div className="absolute right-0 mt-2 w-52 bg-base-100 border border-base-300 rounded-xl shadow-lg z-50">
+                    <ul className="menu p-2">
+                      <li className="px-3 py-2 border-b border-base-300">
+                        <div className="text-sm">
+                          <div className="font-medium text-base-content">
+                            {user?.first_name} {user?.last_name}
+                          </div>
+                          <div className="text-base-content/60">
+                            {user?.email}
+                          </div>
                         </div>
-                        <div className="text-base-content/60">
-                          {user?.email}
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <button 
-                        onClick={() => {
-                          setActiveSection('profile');
-                          setShowProfileMenu(false);
-                        }}
-                        className="flex items-center space-x-2"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                        <span>Profile</span>
-                      </button>
-                    </li>
-                    <li>
-                      <button 
-                        onClick={() => {
-                          setActiveSection('reclamation');
-                          setShowProfileMenu(false);
-                        }}
-                        className="flex items-center space-x-2"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-                        </svg>
-                        <span>Réclamation</span>
-                      </button>
-                    </li>
-                  </ul>
+                      </li>
+                      <li>
+                        <button 
+                          onClick={() => {
+                            setActiveSection('profile');
+                            setShowProfileMenu(false);
+                          }}
+                          className="flex items-center space-x-2 w-full px-3 py-2 rounded-lg hover:bg-base-200"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                          </svg>
+                          <span>Profile</span>
+                        </button>
+                      </li>
+                      <li>
+                        <button 
+                          onClick={() => {
+                            setActiveSection('reclamation');
+                            setShowProfileMenu(false);
+                          }}
+                          className="flex items-center space-x-2 w-full px-3 py-2 rounded-lg hover:bg-base-200"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                          </svg>
+                          <span>Réclamation</span>
+                        </button>
+                      </li>
+                      <li className="border-t border-base-300 mt-2 pt-2">
+                        <button 
+                          onClick={() => {
+                            handleLogout();
+                            setShowProfileMenu(false);
+                          }}
+                          disabled={isLoading}
+                          className="flex items-center space-x-2 text-error hover:bg-error/10 w-full px-3 py-2 rounded-lg"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                          </svg>
+                          <span>{isLoading ? 'Déconnexion...' : 'Déconnexion'}</span>
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
                 )}
               </div>
             </div>
@@ -367,9 +421,9 @@ export default function DashboardAppBar({
         </header>
 
         {/* Content Area */}
-        <main className="flex-1 pt-20 bg-transparent">
+        <main className="flex-1 pt-16 lg:pt-20 bg-transparent">
           {children || (
-            <div className="p-6 h-full">
+            <div className="p-4 lg:p-6 h-full">
               {/* Default content when no children provided */}
               <div className="text-center py-20">
                 <p className="text-base-content/60">Select a section from the sidebar</p>

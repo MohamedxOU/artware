@@ -1,5 +1,6 @@
 "use client";
 import Image from 'next/image';
+import { useState } from 'react';
 
 export default function DashboardHome({ user, stats = {}, recentActivities = [] }) {
   // Mock data for alerts - in real app these would come from props or API
@@ -11,12 +12,17 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
   const attendedEvents = [
     { id: 1, title: "Conférence Cybersécurité", date: "2024-10-28", attended: true },
     { id: 2, title: "Formation React Advanced", date: "2024-10-25", attended: true },
+    { id: 3, title: "Meetup Design Thinking", date: "2024-10-20", attended: true },
+    { id: 4, title: "Workshop DevOps", date: "2024-10-15", attended: true },
+    { id: 5, title: "Séminaire Innovation", date: "2024-10-10", attended: true },
   ];
 
   const newDocuments = [
     { id: 1, title: "Guide des bonnes pratiques 2024", type: "Document", date: "2024-11-01" },
     { id: 2, title: "Nouvelle politique de sécurité", type: "Annonce", date: "2024-10-30" },
   ];
+
+  const [showAllEventsModal, setShowAllEventsModal] = useState(false);
 
   return (
     <div className="w-full max-w-7xl mx-auto space-y-6 relative min-h-full">
@@ -36,7 +42,7 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 relative z-10">
-        {/* Modern Profile Card - Bureau Style */}
+        {/* Left Column - Profile Card */}
         <div className="xl:col-span-1">
           <div className="relative group rounded-3xl overflow-hidden h-[420px] cursor-pointer shadow-2xl transition-all duration-700 ease-out hover:shadow-3xl">
             {/* Background with gradient overlay */}
@@ -136,19 +142,21 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
           </div>
         </div>
 
-        {/* Alerts Section */}
+        {/* Right Column - All Cards */}
         <div className="xl:col-span-2 space-y-6 relative z-10">
           {/* Upcoming Events Alert */}
           <div className="bg-blue-50/80 backdrop-blur-md dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-2xl p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100">
+                  Événements à venir
+                </h3>
               </div>
-              <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100">
-                Événements à venir
-              </h3>
             </div>
             <div className="space-y-3">
               {upcomingEvents.map((event) => (
@@ -167,20 +175,31 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
             </div>
           </div>
 
-          {/* Attended Events Alert */}
+          {/* Attended Events Alert - Moved to right side */}
           <div className="bg-green-50/80 backdrop-blur-md dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-2xl p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-green-900 dark:text-green-100">
+                  Événements récents
+                </h3>
               </div>
-              <h3 className="text-lg font-semibold text-green-900 dark:text-green-100">
-                Événements récents
-              </h3>
+              <button 
+                onClick={() => setShowAllEventsModal(true)}
+                className="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-200 text-sm font-medium flex items-center gap-1"
+              >
+                Voir tout
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
             </div>
             <div className="space-y-3">
-              {attendedEvents.map((event) => (
+              {attendedEvents.slice(0, 2).map((event) => (
                 <div key={event.id} className="flex justify-between items-center p-3 bg-white/50 dark:bg-green-800/30 rounded-xl">
                   <div>
                     <p className="font-medium text-green-900 dark:text-green-100">{event.title}</p>
@@ -226,6 +245,82 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
           </div>
         </div>
       </div>
+
+      {/* All Events Modal */}
+      {showAllEventsModal && (
+        <div className="fixed inset-0 bg-black/40 bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-base-100 rounded-2xl w-full max-w-2xl max-h-[80vh] overflow-hidden">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-6 border-b border-base-300">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-base-content">
+                    Tous les événements participés
+                  </h3>
+                  <p className="text-base-content/60 text-sm">
+                    {attendedEvents.length} événements au total
+                  </p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setShowAllEventsModal(false)}
+                className="btn btn-ghost btn-circle"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6 overflow-y-auto max-h-[60vh]">
+              <div className="space-y-4">
+                {attendedEvents.map((event, index) => (
+                  <div 
+                    key={event.id} 
+                    className="flex items-center justify-between p-4 bg-base-200 rounded-xl hover:bg-base-300 transition-colors"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
+                        <span className="text-green-600 dark:text-green-400 font-semibold text-sm">
+                          {index + 1}
+                        </span>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-base-content">{event.title}</h4>
+                        <p className="text-base-content/60 text-sm">Participé le {event.date}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                        <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <span className="text-green-600 dark:text-green-400 text-sm font-medium">Participé</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="flex justify-end p-6 border-t border-base-300">
+              <button 
+                onClick={() => setShowAllEventsModal(false)}
+                className="btn btn-primary"
+              >
+                Fermer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -145,13 +145,13 @@ export default function Hero() {
                   : "opacity-0 translate-x-8"
               }`}
             >
-              <div className="relative max-w-md mx-auto lg:max-w-none">
+              <div className="relative max-w-xs sm:max-w-sm md:max-w-md mx-auto lg:max-w-none">
                 <Image
                   src="/activities/activity.jpg"
                   alt="Artware Hero"
                   width={600}
                   height={400}
-                  className="w-full h-64 sm:h-80 lg:h-auto rounded-2xl lg:rounded-3xl shadow-xl lg:shadow-2xl object-cover"
+                  className="w-full h-48 sm:h-56 md:h-64 lg:h-auto rounded-2xl lg:rounded-3xl shadow-xl lg:shadow-2xl object-cover"
                   priority
                 />
                 {/* Decorative elements - hidden on mobile for cleaner look */}

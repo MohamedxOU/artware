@@ -116,13 +116,13 @@ export default function AuthNavbar() {
           </div>
 
           {/* Language Picker */}
-          <select
+          {/* <select
             className="select select-sm select-bordered transition-all duration-300"
             defaultValue="fr"
           >
             <option value="en">EN</option>
             <option value="fr">FR</option>
-          </select>
+          </select> */}
 
           
 
