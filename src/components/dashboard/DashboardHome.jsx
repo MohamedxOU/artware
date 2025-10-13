@@ -61,7 +61,7 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-primary via-primary/90 to-secondary flex items-center justify-center transition-all duration-700 group-hover:scale-105">
                  <Image
-                  src={"/bureau/Assia.png"}
+                  src={"/mock/student.jpg"}
                   alt={`${user.first_name} ${user.last_name}`}
                   fill
                   className="object-cover transition-all duration-700 group-hover:scale-105"

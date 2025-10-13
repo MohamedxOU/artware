@@ -1,6 +1,7 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { getAllEvents } from '@/api/events';
 
 // Mock data for demonstration
 const mockEvents = [
@@ -68,10 +69,119 @@ const eventStats = {
   totalParticipants: 234
 };
 
-export default function EventsSection({ events = mockEvents, stats = eventStats }) {
+export default function EventsSection() {
   const [activeTab, setActiveTab] = useState('upcoming');
+  const [events, setEvents] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [stats, setStats] = useState({
+    totalEvents: 0,
+    upcomingEvents: 0,
+    attendedEvents: 0,
+    totalParticipants: 0
+  });
+
+  // Fetch events from API
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const response = await getAllEvents();
+        
+        // Transform API response to match component format
+        const transformedEvents = response.event.map((event) => {
+          const eventDate = new Date(event.date);
+          const currentDate = new Date();
+          const isUpcoming = eventDate > currentDate;
+          
+          // Format date for display
+          const formattedDate = eventDate.toLocaleDateString('fr-FR', {
+            weekday: 'long',
+            day: '2-digit',
+            month: 'short'
+          });
+
+          return {
+            id: event.id,
+            title: event.title,
+            date: formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1),
+            location: event.location,
+            price: "Gratuit", // Default to free
+            image: event.image_url,
+            attendees: Math.floor(Math.random() * 50) + 15, // Mock attendees since not in API
+            category: event.cellule_name || event.type,
+            type: isUpcoming ? 'upcoming' : 'attended',
+            description: event.description,
+            responsable: event.responsable,
+            timeStart: event.time_start,
+            timeEnd: event.time_end,
+            celluleName: event.cellule_name,
+            eventType: event.type
+          };
+        });
+        
+        setEvents(transformedEvents);
+        
+        // Calculate stats
+        const upcomingCount = transformedEvents.filter(e => e.type === 'upcoming').length;
+        const attendedCount = transformedEvents.filter(e => e.type === 'attended').length;
+        const totalParticipants = transformedEvents.reduce((acc, e) => acc + e.attendees, 0);
+        
+        setStats({
+          totalEvents: transformedEvents.length,
+          upcomingEvents: upcomingCount,
+          attendedEvents: attendedCount,
+          totalParticipants: totalParticipants
+        });
+        
+      } catch (err) {
+        console.error('Failed to fetch events:', err);
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   const filteredEvents = events.filter(event => event.type === activeTab);
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="w-full max-w-7xl mx-auto relative min-h-full">
+        <div className="backdrop-blur-sm bg-base-100/80 rounded-2xl p-8 text-center border border-base-300/20 shadow-sm relative z-10">
+          <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p className="text-base-content/60">Chargement des événements...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="w-full max-w-7xl mx-auto relative min-h-full">
+        <div className="backdrop-blur-sm bg-base-100/80 rounded-2xl p-8 text-center border border-base-300/20 shadow-sm relative z-10">
+          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+          </div>
+          <h3 className="text-xl font-semibold text-base-content mb-2">Erreur de chargement</h3>
+          <p className="text-base-content/60 mb-4">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-content rounded-lg text-sm font-medium transition-colors"
+          >
+            Réessayer
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-7xl mx-auto relative min-h-full">
@@ -195,11 +305,25 @@ export default function EventsSection({ events = mockEvents, stats = eventStats 
                 <div key={event.id} className="group backdrop-blur-sm bg-base-100/90 rounded-3xl shadow-lg border border-base-300/30 overflow-hidden hover:shadow-2xl hover:bg-base-100/95 transition-all duration-300 hover:-translate-y-1">
                   {/* Event Image with Date Badge */}
                   <div className="relative h-48 bg-primary overflow-hidden">
-                    {/* Background Pattern */}
-                    <div className="absolute inset-0 opacity-20">
-                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,_rgba(255,255,255,0.3)_0%,_transparent_50%)]"></div>
-                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,_rgba(255,255,255,0.2)_0%,_transparent_50%)]"></div>
-                    </div>
+                    {/* Background Image */}
+                    {event.image && (
+                      <Image
+                        src={event.image}
+                        alt={event.title}
+                        fill
+                        className="object-cover"
+                      />
+                    )}
+                    {/* Overlay for better text readability */}
+                    <div className="absolute inset-0 bg-black/30"></div>
+                    
+                    {/* Background Pattern for fallback */}
+                    {!event.image && (
+                      <div className="absolute inset-0 opacity-20">
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,_rgba(255,255,255,0.3)_0%,_transparent_50%)]"></div>
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,_rgba(255,255,255,0.2)_0%,_transparent_50%)]"></div>
+                      </div>
+                    )}
                     
                     {/* Date Badge */}
                     <div className="absolute top-4 left-4 bg-white rounded-2xl p-3 shadow-lg min-w-[60px] text-center">
@@ -237,8 +361,8 @@ export default function EventsSection({ events = mockEvents, stats = eventStats 
                     </div>
 
                     {/* Tech/Category Badge */}
-                    <div className="absolute top-16 left-4 bg-black/20 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-medium">
-                      {event.category || 'Technologie & IA'}
+                    <div className="absolute top-16 left-4 bg-black/20 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-medium capitalize">
+                      {event.eventType} • {event.celluleName}
                     </div>
                   </div>
 
@@ -247,6 +371,11 @@ export default function EventsSection({ events = mockEvents, stats = eventStats 
                     <h3 className="text-xl font-bold text-base-content mb-3 group-hover:text-primary transition-colors duration-200 line-clamp-2">
                       {event.title}
                     </h3>
+                    
+                    {/* Description */}
+                    <p className="text-sm text-base-content/70 mb-4 line-clamp-2 leading-relaxed">
+                      {event.description}
+                    </p>
                     
                     <div className="space-y-3 mb-4">
                       <div className="flex items-center gap-2 text-base-content/70">
@@ -265,7 +394,7 @@ export default function EventsSection({ events = mockEvents, stats = eventStats 
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
                         </div>
-                        <span className="text-sm font-medium">{event.date}</span>
+                        <span className="text-sm font-medium">{event.date} • {event.timeStart} - {event.timeEnd}</span>
                       </div>
 
                       <div className="flex items-center gap-2 text-base-content/70">
@@ -281,9 +410,9 @@ export default function EventsSection({ events = mockEvents, stats = eventStats 
                     {/* Organizer */}
                     <div className="flex items-center gap-2 mb-4 text-sm text-base-content/60">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                       </svg>
-                      <span>Par Club ARTWARE</span>
+                      <span>Par {event.responsable} • {event.celluleName}</span>
                     </div>
 
                     {/* Action Buttons */}

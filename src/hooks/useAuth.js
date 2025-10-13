@@ -38,11 +38,12 @@ export function useAuthCheck() {
   const { isAuthenticated, isLoading, user, checkAuth } = useAuthStore();
 
   useEffect(() => {
-    // Check auth status on mount if not already checking
-    if (!isLoading && !user) {
+    // Check auth status on mount if we have a stored token but no user data
+    const token = localStorage.getItem('auth_token');
+    if (token && !isAuthenticated && !isLoading) {
       checkAuth();
     }
-  }, [checkAuth, isLoading, user]);
+  }, [checkAuth, isAuthenticated, isLoading]);
 
   return { 
     isAuthenticated, 

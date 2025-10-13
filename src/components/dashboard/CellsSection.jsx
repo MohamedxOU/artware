@@ -1,88 +1,90 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getAllCells } from '@/api/cells';
 
 export default function CellsSection({ user }) {
   const [filterJoined, setFilterJoined] = useState(false);
+  const [allCells, setAllCells] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Mock data for cells - in real app this would come from props or API
-  const allCells = [
-    {
-      id: 1,
-      title: "Développement Web",
-      description: "Création d'applications web modernes avec React, Next.js, et technologies full-stack",
-      chef: "Sarah Mohamed",
-      chefImage: "/bureau/Salim.png",
-      members: 24,
-      technologies: ["React", "Next.js", "Node.js", "MongoDB"],
-      isUserJoined: true,
-      level: "Intermédiaire",
-      color: "blue"
-    },
-    {
-      id: 2,
-      title: "Intelligence Artificielle",
-      description: "Développement de solutions IA, machine learning et deep learning pour résoudre des problèmes complexes",
-      chef: "Ahmed Alami",
-      chefImage: "/bureau/Hamza.png",
-      members: 18,
-      technologies: ["Python", "TensorFlow", "PyTorch", "Scikit-learn"],
-      isUserJoined: true,
-      level: "Avancé",
-      color: "purple"
-    },
-    {
-      id: 3,
-      title: "Développement Mobile",
-      description: "Applications mobiles natives et cross-platform pour iOS et Android",
-      chef: "Fatima Zahra",
-      chefImage: "/bureau/Mona.png",
-      members: 16,
-      technologies: ["React Native", "Flutter", "Swift", "Kotlin"],
-      isUserJoined: false,
-      level: "Intermédiaire",
-      color: "green"
-    },
-    {
-      id: 4,
-      title: "Cybersécurité",
-      description: "Sécurité informatique, tests de pénétration et protection des systèmes",
-      chef: "Youssef Bennani",
-      chefImage: "/bureau/Yassine.png",
-      members: 12,
-      technologies: ["Kali Linux", "Metasploit", "Wireshark", "OWASP"],
-      isUserJoined: false,
-      level: "Avancé",
-      color: "red"
-    },
-    {
-      id: 5,
-      title: "DevOps & Cloud",
-      description: "Automatisation, déploiement continu et infrastructure cloud",
-      chef: "Karim Idrissi",
-      chefImage: "/bureau/Badr.png",
-      members: 20,
-      technologies: ["Docker", "Kubernetes", "AWS", "Jenkins"],
-      isUserJoined: false,
-      level: "Avancé",
-      color: "orange"
-    },
-    {
-      id: 6,
-      title: "UI/UX Design",
-      description: "Design d'interfaces utilisateur et expérience utilisateur moderne",
-      chef: "Nadia Elkhalfi",
-      chefImage: "/bureau/Houda.png",
-      members: 14,
-      technologies: ["Figma", "Adobe XD", "Sketch", "Principle"],
-      isUserJoined: true,
-      level: "Débutant",
-      color: "pink"
-    }
-  ];
+  // Fetch cells from API
+  useEffect(() => {
+    const fetchCells = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const response = await getAllCells();
+        
+        // Transform API response to component format
+        const transformedCells = response.cells.map((cell, index) => ({
+          id: cell.id,
+          name: cell.name,
+          abbreviation: cell.abbreviation,
+          domain: cell.domain,
+          image_cell: cell.image_cell,
+          // Add some visual variety with colors
+          color: getColorByIndex(index),
+          // Mock data for fields not provided by API (you can remove these if not needed)
+          isUserJoined: false, // This should come from user's cell memberships
+        }));
+        
+        setAllCells(transformedCells);
+      } catch (err) {
+        console.error('Failed to fetch cells:', err);
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCells();
+  }, []);
+
+  // Helper function to assign colors cyclically
+  const getColorByIndex = (index) => {
+    const colors = ['blue', 'purple', 'green', 'red', 'orange', 'pink'];
+    return colors[index % colors.length];
+  };
 
   const displayedCells = filterJoined 
     ? allCells.filter(cell => cell.isUserJoined) 
     : allCells;
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="w-full max-w-7xl mx-auto relative min-h-full">
+        <div className="backdrop-blur-sm bg-base-100/70 rounded-2xl p-8 text-center border border-base-300/30 shadow-sm relative z-10">
+          <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p className="text-base-content/60">Chargement des cellules...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="w-full max-w-7xl mx-auto relative min-h-full">
+        <div className="backdrop-blur-sm bg-base-100/70 rounded-2xl p-8 text-center border border-base-300/30 shadow-sm relative z-10">
+          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+          </div>
+          <h3 className="text-xl font-semibold text-base-content mb-2">Erreur de chargement</h3>
+          <p className="text-base-content/60 mb-4">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-content rounded-lg text-sm font-medium transition-colors"
+          >
+            Réessayer
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const getColorClasses = (color, isJoined) => {
     const baseClasses = {
@@ -168,12 +170,6 @@ export default function CellsSection({ user }) {
               </div>
               <div className="text-xs text-base-content/60">Mes cellules</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600">
-                {allCells.reduce((acc, cell) => acc + cell.members, 0)}
-              </div>
-              <div className="text-xs text-base-content/60">Total membres</div>
-            </div>
           </div>
         </div>
       </div>
@@ -198,56 +194,34 @@ export default function CellsSection({ user }) {
             )}
 
             {/* Cell Header */}
-            <div className="flex items-start gap-4 mb-4">
-              <div className={`w-12 h-12 ${getBadgeColor(cell.color)} rounded-xl flex items-center justify-center`}>
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.78 0-2.678-2.153-1.415-3.414l5-5A2 2 0 009 9.172V5L8 4z" />
-                </svg>
+            <div className="flex items-start gap-4 mb-6">
+              <div className={`w-20 h-20 ${getBadgeColor(cell.color)} rounded-xl flex items-center justify-center overflow-hidden shadow-lg`}>
+                {cell.image_cell ? (
+                  <img 
+                    src={cell.image_cell} 
+                    alt={cell.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-white font-bold text-lg">{cell.abbreviation}</span>
+                )}
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-bold text-base-content mb-1">{cell.title}</h3>
+                <h3 className="text-xl font-bold text-base-content mb-2">{cell.name}</h3>
                 <div className="flex items-center gap-2 mb-2">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${cell.level === 'Débutant' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' : cell.level === 'Intermédiaire' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'}`}>
-                    {cell.level}
+                  <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                    {cell.abbreviation}
                   </span>
-                  <span className="text-xs text-base-content/60">{cell.members} membres</span>
                 </div>
               </div>
             </div>
 
-            {/* Description */}
-            <p className="text-sm text-base-content/70 mb-4 leading-relaxed">
-              {cell.description}
-            </p>
-
-            {/* Technologies */}
+            {/* Domain Description */}
             <div className="mb-4">
-              <h4 className="text-sm font-medium text-base-content mb-2">Technologies</h4>
-              <div className="flex flex-wrap gap-2">
-                {cell.technologies.map((tech, index) => (
-                  <span
-                    key={index}
-                    className="px-2 py-1 bg-base-content/10 text-base-content/80 rounded-md text-xs font-medium"
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* Chef Section */}
-            <div className="flex items-center gap-3 mb-4 p-3 bg-white/30 dark:bg-black/20 rounded-lg">
-              <div className="w-10 h-10 rounded-full overflow-hidden bg-base-300">
-                <img 
-                  src={cell.chefImage} 
-                  alt={cell.chef}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div>
-                <div className="text-sm font-medium text-base-content">Chef de cellule</div>
-                <div className="text-sm text-base-content/70">{cell.chef}</div>
-              </div>
+              <h4 className="text-sm font-medium text-base-content mb-2">Domaine d'activité</h4>
+              <p className="text-sm text-base-content/70 leading-relaxed">
+                {cell.domain}
+              </p>
             </div>
 
             {/* Action Button */}

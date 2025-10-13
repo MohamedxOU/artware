@@ -24,6 +24,13 @@ const nextConfig = {
                 port: '',
                 pathname: '/**',
             },
+
+            {
+                protocol: 'https',
+                hostname: 'ik.imagekit.io',
+                port: '',
+                pathname: '/**',
+            }
             // Add your own domain or other image sources here
             // {
             //     protocol: 'https',

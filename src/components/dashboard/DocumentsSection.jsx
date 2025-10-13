@@ -1,179 +1,194 @@
 "use client";
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { getAllDocuments } from '@/api/documents';
 
 export default function DocumentsSection() {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('date'); // 'date' or 'name'
   const [selectedField, setSelectedField] = useState('all');
+  const [documents, setDocuments] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Mock documents data - in real app this would come from props or API
-  const documents = [
-    {
-      id: 1,
-      title: "Guide des bonnes pratiques React",
-      author: "Sarah Mohamed",
-      authorImage: "/bureau/Salim.png",
-      field: "dev",
-      fieldLabel: "Développement",
-      type: "PDF",
-      size: "2.4 MB",
-      dateAdded: "2024-11-01",
-      description: "Guide complet pour développer des applications React modernes et performantes",
-      downloads: 156,
-      tags: ["React", "JavaScript", "Frontend"]
-    },
-    {
-      id: 2,
-      title: "Introduction au Machine Learning",
-      author: "Ahmed Alami",
-      authorImage: "/bureau/Hamza.png",
-      field: "ai",
-      fieldLabel: "Intelligence Artificielle",
-      type: "PDF",
-      size: "5.1 MB",
-      dateAdded: "2024-10-28",
-      description: "Concepts fondamentaux du machine learning avec exemples pratiques",
-      downloads: 243,
-      tags: ["ML", "Python", "AI"]
-    },
-    {
-      id: 3,
-      title: "Sécurité des Applications Web",
-      author: "Youssef Bennani",
-      authorImage: "/bureau/Yassine.png",
-      field: "cs",
-      fieldLabel: "Cybersécurité",
-      type: "PDF",
-      size: "3.7 MB",
-      dateAdded: "2024-10-25",
-      description: "Techniques de sécurisation et tests de pénétration pour applications web",
-      downloads: 89,
-      tags: ["Security", "OWASP", "WebApp"]
-    },
-    {
-      id: 4,
-      title: "Design System et UI Components",
-      author: "Nadia Elkhalfi",
-      authorImage: "/bureau/Houda.png",
-      field: "design",
-      fieldLabel: "UI/UX Design",
-      type: "Figma",
-      size: "15.2 MB",
-      dateAdded: "2024-10-20",
-      description: "Système de design complet avec composants réutilisables",
-      downloads: 178,
-      tags: ["Design", "Figma", "UI"]
-    },
-    {
-      id: 5,
-      title: "Conteneurisation avec Docker",
-      author: "Karim Idrissi",
-      authorImage: "/bureau/Badr.png",
-      field: "devops",
-      fieldLabel: "DevOps",
-      type: "PDF",
-      size: "4.3 MB",
-      dateAdded: "2024-10-15",
-      description: "Guide pratique pour containeriser vos applications avec Docker",
-      downloads: 134,
-      tags: ["Docker", "DevOps", "Container"]
-    },
-    {
-      id: 6,
-      title: "Architecture Microservices",
-      author: "Fatima Zahra",
-      authorImage: "/bureau/Mona.png",
-      field: "dev",
-      fieldLabel: "Développement",
-      type: "PDF",
-      size: "6.8 MB",
-      dateAdded: "2024-10-12",
-      description: "Patterns et bonnes pratiques pour architectures microservices",
-      downloads: 201,
-      tags: ["Microservices", "Architecture", "Backend"]
-    },
-    {
-      id: 7,
-      title: "Flutter pour débutants",
-      author: "Omar Bennani",
-      authorImage: "/bureau/Salim.png",
-      field: "mobile",
-      fieldLabel: "Mobile",
-      type: "PDF",
-      size: "3.2 MB",
-      dateAdded: "2024-10-08",
-      description: "Développement d'applications mobiles cross-platform avec Flutter",
-      downloads: 167,
-      tags: ["Flutter", "Dart", "Mobile"]
-    },
-    {
-      id: 8,
-      title: "Analyse de données avec Python",
-      author: "Laila Amrani",
-      authorImage: "/bureau/Mona.png",
-      field: "ai",
-      fieldLabel: "Intelligence Artificielle",
-      type: "Jupyter",
-      size: "2.9 MB",
-      dateAdded: "2024-10-05",
-      description: "Techniques d'analyse et visualisation de données avec pandas et matplotlib",
-      downloads: 112,
-      tags: ["Python", "Data", "Analytics"]
+  // Fetch documents from API
+  useEffect(() => {
+    const fetchDocuments = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const response = await getAllDocuments();
+        
+        // Transform API response to match component format
+        const transformedDocuments = response.documents.map((doc) => ({
+          id: doc.id,
+          title: doc.title,
+          file_path: doc.file_path,
+          created_at: doc.created_at,
+          // Add derived fields for the UI
+          type: getFileTypeFromPath(doc.file_path),
+          size: "N/A", // Not provided by API
+          dateAdded: doc.created_at,
+          author: "Unknown", // Not provided by API
+          authorImage: "/bureau/Salim.png", // Default image
+          field: "general",
+          fieldLabel: "Général",
+          description: `Document: ${doc.title}`,
+          downloads: Math.floor(Math.random() * 200), // Mock downloads since not in API
+          tags: [getFileTypeFromPath(doc.file_path)]
+        }));
+        
+        setDocuments(transformedDocuments);
+      } catch (err) {
+        console.error('Failed to fetch documents:', err);
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchDocuments();
+  }, []);
+
+  // Helper function to get file type from file path
+  const getFileTypeFromPath = (filePath) => {
+    const extension = filePath.split('.').pop().toUpperCase();
+    switch (extension) {
+      case 'PDF': return 'PDF';
+      case 'PNG': 
+      case 'JPG': 
+      case 'JPEG': return 'Image';
+      case 'DOC': 
+      case 'DOCX': return 'Word';
+      case 'PPT': 
+      case 'PPTX': return 'PowerPoint';
+      default: return 'Document';
     }
-  ];
+  };
 
-  const fields = [
-    { value: 'all', label: 'Tous les domaines', count: documents.length },
-    { value: 'dev', label: 'Développement', count: documents.filter(d => d.field === 'dev').length },
-    { value: 'ai', label: 'Intelligence Artificielle', count: documents.filter(d => d.field === 'ai').length },
-    { value: 'cs', label: 'Cybersécurité', count: documents.filter(d => d.field === 'cs').length },
-    { value: 'design', label: 'UI/UX Design', count: documents.filter(d => d.field === 'design').length },
-    { value: 'devops', label: 'DevOps', count: documents.filter(d => d.field === 'devops').length },
-    { value: 'mobile', label: 'Mobile', count: documents.filter(d => d.field === 'mobile').length }
-  ];
+  // Helper function to handle file download
+  const handleDownload = (doc) => {
+    const downloadUrl = `http://localhost:3500/${doc.file_path}`;
+    window.open(downloadUrl, '_blank');
+  };
+
+  // Helper function to generate random rating (since not in API)
+  const getDocumentRating = (docId) => {
+    // Generate consistent rating based on document ID
+    const seed = docId.toString().split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    return Math.floor((seed % 30) + 70); // Rating between 70-99%
+  };
+
+  // Calculate fields - must be before conditional returns to maintain hook order
+  const fields = useMemo(() => {
+    // Calculate fields based on file types from API data
+    const typeGroups = {
+      'pdf': { value: 'pdf', label: 'PDF', count: 0 },
+      'image': { value: 'image', label: 'Images', count: 0 },
+      'word': { value: 'word', label: 'Word', count: 0 },
+      'powerpoint': { value: 'powerpoint', label: 'PowerPoint', count: 0 },
+      'other': { value: 'other', label: 'Autres', count: 0 }
+    };
+
+    documents.forEach(doc => {
+      const type = doc.type?.toLowerCase() || 'other';
+      if (type === 'pdf') typeGroups.pdf.count++;
+      else if (type === 'image') typeGroups.image.count++;
+      else if (type === 'word') typeGroups.word.count++;
+      else if (type === 'powerpoint') typeGroups.powerpoint.count++;
+      else typeGroups.other.count++;
+    });
+
+    return [
+      { value: 'all', label: 'Tous les types', count: documents.length },
+      ...Object.values(typeGroups).filter(group => group.count > 0)
+    ];
+  }, [documents]);
 
   // Filter and sort documents
   const filteredAndSortedDocuments = useMemo(() => {
     let filtered = documents.filter(doc => {
-      const matchesSearch = doc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                           doc.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                           doc.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-      const matchesField = selectedField === 'all' || doc.field === selectedField;
-      return matchesSearch && matchesField;
+      const matchesSearch = doc.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                           doc.author?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                           doc.tags?.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+      
+      // Filter by file type instead of field
+      const matchesType = selectedField === 'all' || doc.type?.toLowerCase() === selectedField;
+      return matchesSearch && matchesType;
     });
 
     return filtered.sort((a, b) => {
       if (sortBy === 'name') {
-        return a.title.localeCompare(b.title);
+        return (a.title || '').localeCompare(b.title || '');
       } else {
-        return new Date(b.dateAdded) - new Date(a.dateAdded);
+        return new Date(b.created_at || 0) - new Date(a.created_at || 0);
       }
     });
-  }, [searchQuery, sortBy, selectedField]);
+  }, [documents, searchQuery, sortBy, selectedField]);
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="w-full max-w-7xl mx-auto relative min-h-full">
+        <div className="backdrop-blur-sm bg-base-100/80 rounded-2xl p-8 text-center border border-base-300/20 shadow-sm relative z-10">
+          <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p className="text-base-content/60">Chargement des documents...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="w-full max-w-7xl mx-auto relative min-h-full">
+        <div className="backdrop-blur-sm bg-base-100/80 rounded-2xl p-8 text-center border border-base-300/20 shadow-sm relative z-10">
+          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+          </div>
+          <h3 className="text-xl font-semibold text-base-content mb-2">Erreur de chargement</h3>
+          <p className="text-base-content/60 mb-4">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-content rounded-lg text-sm font-medium transition-colors"
+          >
+            Réessayer
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const getFileIcon = (type) => {
-    switch (type) {
+    switch (type.toUpperCase()) {
       case 'PDF':
         return (
           <svg className="w-8 h-8 text-red-600" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
           </svg>
         );
-      case 'Figma':
+      case 'IMAGE':
         return (
-          <svg className="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
+          <svg className="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
           </svg>
         );
-      case 'Jupyter':
+      case 'WORD':
+        return (
+          <svg className="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
+          </svg>
+        );
+      case 'POWERPOINT':
         return (
           <svg className="w-8 h-8 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
+            <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
           </svg>
         );
       default:
         return (
-          <svg className="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+          <svg className="w-8 h-8 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
           </svg>
         );
@@ -277,77 +292,71 @@ export default function DocumentsSection() {
       </div>
 
       {/* Documents Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 relative z-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 relative z-10">
         {filteredAndSortedDocuments.map((doc) => (
           <div
             key={doc.id}
-            className="backdrop-blur-sm bg-base-100/80 rounded-2xl p-6 border border-base-300/20 shadow-sm hover:shadow-lg transition-all duration-300 hover:scale-105"
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer"
+            onClick={() => handleDownload(doc)}
           >
-            {/* Document Header */}
-            <div className="flex items-start gap-4 mb-4">
-              <div className="flex-shrink-0">
-                {getFileIcon(doc.type)}
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="text-lg font-bold text-base-content mb-1 line-clamp-2">
-                  {doc.title}
-                </h3>
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="px-2 py-1 bg-primary/10 text-primary rounded-md text-xs font-medium">
-                    {doc.fieldLabel}
-                  </span>
-                  <span className="text-xs text-base-content/60">
-                    {doc.type} • {doc.size}
+            {/* Document Preview/Icon */}
+            <div className="h-48 bg-gray-100 dark:bg-gray-700 flex items-center justify-center relative">
+              {doc.type === 'PDF' ? (
+                <div className="flex flex-col items-center">
+                  {/* PDF Icon */}
+                  <div className="w-16 h-20 bg-red-600 rounded-md flex items-center justify-center mb-2">
+                    <span className="text-white font-bold text-sm">PDF</span>
+                  </div>
+                  {/* Document preview representation */}
+                  <div className="w-full max-w-[120px] bg-white rounded shadow-sm p-2">
+                    <div className="space-y-1">
+                      <div className="h-1 bg-gray-300 rounded w-full"></div>
+                      <div className="h-1 bg-gray-300 rounded w-3/4"></div>
+                      <div className="h-1 bg-gray-300 rounded w-1/2"></div>
+                    </div>
+                    <div className="text-center mt-2 text-xs text-gray-600 font-medium">
+                      [Titre du rapport de stage]
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center">
+                  {getFileIcon(doc.type)}
+                </div>
+              )}
+            </div>
+
+            {/* Document Info */}
+            <div className="p-4">
+              {/* Title */}
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1 line-clamp-2">
+                {doc.title}
+              </h3>
+              
+              {/* Author */}
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
+                Ajouté par {doc.author}
+              </p>
+
+              {/* Rating and Bookmark */}
+              <div className="flex items-center justify-between">
+                {/* Rating */}
+                <div className="flex items-center gap-1">
+                  <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-6.55 8.18L10 18z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    {getDocumentRating(doc.id)}% ({doc.downloads})
                   </span>
                 </div>
-              </div>
-            </div>
 
-            {/* Description */}
-            <p className="text-sm text-base-content/70 mb-4 line-clamp-3 leading-relaxed">
-              {doc.description}
-            </p>
-
-            {/* Tags */}
-            <div className="mb-4">
-              <div className="flex flex-wrap gap-2">
-                {doc.tags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className="px-2 py-1 bg-base-content/10 text-base-content/80 rounded-md text-xs"
-                  >
-                    {tag}
-                  </span>
-                ))}
+                {/* Bookmark */}
+                <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                  </svg>
+                </button>
               </div>
-            </div>
-
-            {/* Author Section */}
-            <div className="flex items-center gap-3 mb-4 p-3 bg-white/30 dark:bg-black/20 rounded-lg">
-              <div className="w-8 h-8 rounded-full overflow-hidden bg-base-300">
-                <img 
-                  src={doc.authorImage} 
-                  alt={doc.author}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="flex-1">
-                <div className="text-sm font-medium text-base-content">{doc.author}</div>
-                <div className="text-xs text-base-content/60">{formatDate(doc.dateAdded)}</div>
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1 text-base-content/60">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                <span className="text-xs">{doc.downloads} téléchargements</span>
-              </div>
-              <button className="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-content rounded-lg text-sm font-medium transition-colors">
-                Télécharger
-              </button>
             </div>
           </div>
         ))}

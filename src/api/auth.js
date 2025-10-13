@@ -60,9 +60,18 @@ export const login = async (email, password, retryCount = 0) => {
 
 //logout api
 export const logout = async () => {
+    const token = localStorage.getItem('auth_token');
+    const headers = {};
+    
+    // Add Authorization header if token exists
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
     const response = await fetch(`${API_BASE}/logout`, {
       method: "GET",
       credentials: "include",
+      headers: headers,
     });
     
     // Handle successful logout responses
@@ -94,9 +103,10 @@ export const logout = async () => {
 
 //refresh token
 export const refreshToken = async () => {
+    // Refresh token comes from HttpOnly cookies, not Authorization header
     const response = await fetch(`${API_BASE}/refresh`, {
       method: "GET",
-      credentials: "include",
+      credentials: "include", // This sends cookies automatically
     });
     
     if (response.ok) {
