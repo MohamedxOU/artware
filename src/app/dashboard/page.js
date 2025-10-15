@@ -50,7 +50,7 @@ function DashboardContent() {
           recentActivities={[]} 
         />;
       case 'cells':
-        return <CellsSection />;
+        return <CellsSection user={user} />;
       case 'events':
         return <EventsSection />;
       case 'documents':

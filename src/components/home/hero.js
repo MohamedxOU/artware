@@ -59,7 +59,7 @@ export default function Hero() {
       style={{ height: "100vh" }}
     >
       <Iridescence
-        color={[0.8, 0, 0.8]}
+        color={[0.4, 0, 0.5]}
         mouseReact={false}
         amplitude={0.1}
         speed={1.0}

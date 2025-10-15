@@ -1,12 +1,29 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { getAllCells } from '@/api/cells';
+import { getAllCells, getUserCells, joinCell, quitCell } from '@/api/cells';
+import useAuthStore from '@/stores/authStore';
 
 export default function CellsSection({ user }) {
+  // Get user from auth store as fallback
+  const authUser = useAuthStore(state => state.user);
+  const currentUser = user || authUser;
+  
   const [filterJoined, setFilterJoined] = useState(false);
   const [allCells, setAllCells] = useState([]);
+  const [userCells, setUserCells] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [joiningCell, setJoiningCell] = useState(null); // Track which cell is being joined
+  const [quittingCell, setQuittingCell] = useState(null); // Track which cell is being quit
+
+  // Add debugging
+  useEffect(() => {
+    console.log('CellsSection Debug Info:');
+    console.log('- user prop:', user);
+    console.log('- authUser:', authUser);
+    console.log('- currentUser:', currentUser);
+    console.log('- currentUser.user_id:', currentUser?.user_id);
+  }, [user, authUser, currentUser]);
 
   // Fetch cells from API
   useEffect(() => {
@@ -14,22 +31,52 @@ export default function CellsSection({ user }) {
       try {
         setIsLoading(true);
         setError(null);
-        const response = await getAllCells();
         
-        // Transform API response to component format
-        const transformedCells = response.cells.map((cell, index) => ({
-          id: cell.id,
-          name: cell.name,
-          abbreviation: cell.abbreviation,
-          domain: cell.domain,
-          image_cell: cell.image_cell,
-          // Add some visual variety with colors
-          color: getColorByIndex(index),
-          // Mock data for fields not provided by API (you can remove these if not needed)
-          isUserJoined: false, // This should come from user's cell memberships
-        }));
+        console.log('Fetching cells for user:', currentUser?.user_id);
         
-        setAllCells(transformedCells);
+        // Step 1: Get all cells
+        const allCellsResponse = await getAllCells();
+        console.log('All cells response:', allCellsResponse);
+        
+        // Step 2: Get user cells if user ID is available
+        let userCellsResponse = { cells: [] };
+        if (currentUser?.user_id) {
+          try {
+            console.log('Fetching user cells for ID:', currentUser.user_id);
+            userCellsResponse = await getUserCells(currentUser.user_id);
+            console.log('User cells response:', userCellsResponse);
+            setUserCells(userCellsResponse.cells);
+          } catch (userCellsError) {
+            console.warn('Failed to fetch user cells:', userCellsError);
+          }
+        } else {
+          console.warn('No user ID available, skipping user cells fetch');
+        }
+        
+        // Step 3: Compare IDs and mark cells where user is member
+        const cellsWithMembership = allCellsResponse.cells.map((cell, index) => {
+          // Check if this cell ID exists in user cells
+          let isMember = false;
+          for (let i = 0; i < userCellsResponse.cells.length; i++) {
+            if (userCellsResponse.cells[i].id === cell.id) {
+              isMember = true;
+              console.log(`✅ User IS member of cell ${cell.id} (${cell.name})`);
+              break;
+            }
+          }
+          if (!isMember) {
+            console.log(`❌ User is NOT member of cell ${cell.id} (${cell.name})`);
+          }
+          
+          return {
+            ...cell,
+            color: getColorByIndex(index),
+            isMember: isMember  // Add this flag
+          };
+        });
+        
+        console.log('Final cells with membership:', cellsWithMembership);
+        setAllCells(cellsWithMembership);
       } catch (err) {
         console.error('Failed to fetch cells:', err);
         setError(err.message);
@@ -39,7 +86,96 @@ export default function CellsSection({ user }) {
     };
 
     fetchCells();
-  }, []);
+  }, [currentUser?.user_id]);
+
+  // Handle joining a cell
+  const handleJoinCell = async (cellId, cellName) => {
+    if (!currentUser?.user_id) {
+      console.warn('No user ID available for joining cell');
+      return;
+    }
+
+    // Confirmation alert
+    const confirmJoin = window.confirm(`Êtes-vous sûr de vouloir rejoindre la cellule "${cellName}" ?`);
+    if (!confirmJoin) {
+      return;
+    }
+
+    try {
+      setJoiningCell(cellId);
+      console.log(`Attempting to join cell ${cellId}`);
+      
+      const result = await joinCell(cellId);
+      console.log('Join cell result:', result);
+      
+      // Update the cell's membership status locally
+      setAllCells(prevCells => 
+        prevCells.map(cell => 
+          cell.id === cellId 
+            ? { ...cell, isMember: true }
+            : cell
+        )
+      );
+      
+      // Also update userCells state
+      const cellToAdd = allCells.find(cell => cell.id === cellId);
+      if (cellToAdd) {
+        setUserCells(prevUserCells => [...prevUserCells, cellToAdd]);
+      }
+      
+      console.log(`✅ Successfully joined cell ${cellId}`);
+      alert(`Vous avez rejoint la cellule "${cellName}" avec succès !`);
+    } catch (error) {
+      console.error('Failed to join cell:', error);
+      alert(`Erreur lors de l'adhésion à la cellule: ${error.message}`);
+    } finally {
+      setJoiningCell(null);
+    }
+  };
+
+  // Handle quitting a cell
+  const handleQuitCell = async (cellId, cellName) => {
+    if (!currentUser?.user_id) {
+      console.warn('No user ID available for quitting cell');
+      return;
+    }
+
+    // Confirmation alert
+    const confirmQuit = window.confirm(`Êtes-vous sûr de vouloir quitter la cellule "${cellName}" ?`);
+    if (!confirmQuit) {
+      return;
+    }
+
+    try {
+      setQuittingCell(cellId);
+      console.log(`Attempting to quit cell ${cellId}`);
+      
+      const result = await quitCell(cellId);
+      console.log('Quit cell result:', result);
+      
+      // Update the cell's membership status locally
+      setAllCells(prevCells => 
+        prevCells.map(cell => 
+          cell.id === cellId 
+            ? { ...cell, isMember: false }
+            : cell
+        )
+      );
+      
+      // Remove from userCells state
+      setUserCells(prevUserCells => 
+        prevUserCells.filter(cell => cell.id !== cellId)
+      );
+      
+      console.log(`✅ Successfully quit cell ${cellId}`);
+      alert(`Vous avez quitté la cellule "${cellName}" avec succès !`);
+    } catch (error) {
+      console.error('Failed to quit cell:', error);
+      alert(`Erreur lors de la sortie de la cellule: ${error.message}`);
+    } finally {
+      setQuittingCell(null);
+    }
+  };
 
   // Helper function to assign colors cyclically
   const getColorByIndex = (index) => {
@@ -48,8 +184,61 @@ export default function CellsSection({ user }) {
   };
 
   const displayedCells = filterJoined 
-    ? allCells.filter(cell => cell.isUserJoined) 
+    ? allCells.filter(cell => cell.isMember) 
     : allCells;
+
+  const getColorClasses = (color, isJoined) => {
+    const baseClasses = {
+      blue: isJoined 
+        ? "bg-blue-50/80 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800" 
+        : "bg-blue-50/40 border-blue-100 dark:bg-blue-900/10 dark:border-blue-900",
+      purple: isJoined 
+        ? "bg-purple-50/80 border-purple-200 dark:bg-purple-900/20 dark:border-purple-800" 
+        : "bg-purple-50/40 border-purple-100 dark:bg-purple-900/10 dark:border-purple-900",
+      green: isJoined 
+        ? "bg-green-50/80 border-green-200 dark:bg-green-900/20 dark:border-green-800" 
+        : "bg-green-50/40 border-green-100 dark:bg-green-900/10 dark:border-green-900",
+      red: isJoined 
+        ? "bg-red-50/80 border-red-200 dark:bg-red-900/20 dark:border-red-800" 
+        : "bg-red-50/40 border-red-100 dark:bg-red-900/10 dark:border-red-900",
+      orange: isJoined 
+        ? "bg-orange-50/80 border-orange-200 dark:bg-orange-900/20 dark:border-orange-800" 
+        : "bg-orange-50/40 border-orange-100 dark:bg-orange-900/10 dark:border-orange-900",
+      pink: isJoined 
+        ? "bg-pink-50/80 border-pink-200 dark:bg-pink-900/20 dark:border-pink-800" 
+        : "bg-pink-50/40 border-pink-100 dark:bg-pink-900/10 dark:border-pink-900"
+    };
+    return baseClasses[color] || baseClasses.blue;
+  };
+
+  const getBadgeColor = (color) => {
+    const colors = {
+      blue: "bg-blue-500",
+      purple: "bg-purple-500",
+      green: "bg-green-500", 
+      red: "bg-red-500",
+      orange: "bg-orange-500",
+      pink: "bg-pink-500"
+    };
+    return colors[color] || "bg-blue-500";
+  };
+
+  const getButtonClasses = (color, isJoined) => {
+    if (isJoined) {
+      return "hidden"; // Hide button if user is already a member
+    }
+    
+    const buttonClasses = {
+      blue: "bg-blue-500 hover:bg-blue-600 text-white",
+      purple: "bg-purple-500 hover:bg-purple-600 text-white",
+      green: "bg-green-500 hover:bg-green-600 text-white",
+      red: "bg-red-500 hover:bg-red-600 text-white", 
+      orange: "bg-orange-500 hover:bg-orange-600 text-white",
+      pink: "bg-pink-500 hover:bg-pink-600 text-white"
+    };
+    
+    return `w-full py-2 px-4 rounded-lg font-medium transition-all duration-200 ${buttonClasses[color] || buttonClasses.blue}`;
+  };
 
   // Show loading state
   if (isLoading) {
@@ -86,53 +275,6 @@ export default function CellsSection({ user }) {
     );
   }
 
-  const getColorClasses = (color, isJoined) => {
-    const baseClasses = {
-      blue: isJoined 
-        ? "bg-blue-50/80 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800" 
-        : "bg-blue-50/40 border-blue-100 dark:bg-blue-900/10 dark:border-blue-900",
-      purple: isJoined 
-        ? "bg-purple-50/80 border-purple-200 dark:bg-purple-900/20 dark:border-purple-800" 
-        : "bg-purple-50/40 border-purple-100 dark:bg-purple-900/10 dark:border-purple-900",
-      green: isJoined 
-        ? "bg-green-50/80 border-green-200 dark:bg-green-900/20 dark:border-green-800" 
-        : "bg-green-50/40 border-green-100 dark:bg-green-900/10 dark:border-green-900",
-      red: isJoined 
-        ? "bg-red-50/80 border-red-200 dark:bg-red-900/20 dark:border-red-800" 
-        : "bg-red-50/40 border-red-100 dark:bg-red-900/10 dark:border-red-900",
-      orange: isJoined 
-        ? "bg-orange-50/80 border-orange-200 dark:bg-orange-900/20 dark:border-orange-800" 
-        : "bg-orange-50/40 border-orange-100 dark:bg-orange-900/10 dark:border-orange-900",
-      pink: isJoined 
-        ? "bg-pink-50/80 border-pink-200 dark:bg-pink-900/20 dark:border-pink-800" 
-        : "bg-pink-50/40 border-pink-100 dark:bg-pink-900/10 dark:border-pink-900"
-    };
-    return baseClasses[color];
-  };
-
-  const getIconColor = (color) => {
-    const colors = {
-      blue: "text-blue-600",
-      purple: "text-purple-600", 
-      green: "text-green-600",
-      red: "text-red-600",
-      orange: "text-orange-600",
-      pink: "text-pink-600"
-    };
-    return colors[color];
-  };
-
-  const getBadgeColor = (color) => {
-    const colors = {
-      blue: "bg-blue-500",
-      purple: "bg-purple-500",
-      green: "bg-green-500", 
-      red: "text-red-500",
-      orange: "bg-orange-500",
-      pink: "bg-pink-500"
-    };
-    return colors[color];
-  };
   return (
     <div className="w-full max-w-7xl mx-auto relative min-h-full">
       {/* Header */}
@@ -166,7 +308,7 @@ export default function CellsSection({ user }) {
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-green-600">
-                {allCells.filter(cell => cell.isUserJoined).length}
+                {allCells.filter(cell => cell.isMember).length}
               </div>
               <div className="text-xs text-base-content/60">Mes cellules</div>
             </div>
@@ -179,10 +321,10 @@ export default function CellsSection({ user }) {
         {displayedCells.map((cell) => (
           <div
             key={cell.id}
-            className={`backdrop-blur-md rounded-2xl p-6 border transition-all duration-300 hover:shadow-lg hover:scale-105 relative ${getColorClasses(cell.color, cell.isUserJoined)}`}
+            className={`backdrop-blur-md rounded-2xl p-6 border transition-all duration-300 hover:shadow-lg hover:scale-105 relative ${getColorClasses(cell.color, cell.isMember)}`}
           >
             {/* Joined Badge */}
-            {cell.isUserJoined && (
+            {cell.isMember && (
               <div className="absolute -top-2 -right-2">
                 <div className="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1">
                   <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
@@ -224,16 +366,51 @@ export default function CellsSection({ user }) {
               </p>
             </div>
 
-            {/* Action Button */}
-            <button
-              className={`w-full py-2 px-4 rounded-lg font-medium transition-all duration-200 ${
-                cell.isUserJoined
-                  ? 'bg-green-500 hover:bg-green-600 text-white'
-                  : `bg-${cell.color}-500 hover:bg-${cell.color}-600 text-white`
-              }`}
-            >
-              {cell.isUserJoined ? 'Voir la cellule' : 'Rejoindre la cellule'}
-            </button>
+            {/* Action Button or Member Status */}
+            {cell.isMember ? (
+              <div className="space-y-3">
+                {/* Member Status */}
+                <div className="w-full py-3 px-4 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-center">
+                  <div className="flex items-center justify-center gap-2 text-green-700 dark:text-green-300">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span className="font-medium">Vous êtes membre de cette cellule</span>
+                  </div>
+                </div>
+                
+                {/* Quit Button */}
+                <button
+                  onClick={() => handleQuitCell(cell.id, cell.name)}
+                  disabled={quittingCell === cell.id}
+                  className="w-full py-2 px-4 rounded-lg font-medium transition-all duration-200 bg-red-500 hover:bg-red-600 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {quittingCell === cell.id ? (
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
+                      <span>Sortie en cours...</span>
+                    </div>
+                  ) : (
+                    'Quitter la cellule'
+                  )}
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => handleJoinCell(cell.id, cell.name)}
+                disabled={joiningCell === cell.id}
+                className={`w-full py-2 px-4 rounded-lg font-medium transition-all duration-200 ${getBadgeColor(cell.color)} hover:${getBadgeColor(cell.color)}/90 text-white disabled:opacity-50 disabled:cursor-not-allowed`}
+              >
+                {joiningCell === cell.id ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
+                    <span>Adhésion en cours...</span>
+                  </div>
+                ) : (
+                  'Rejoindre la cellule'
+                )}
+              </button>
+            )}
           </div>
         ))}
       </div>
