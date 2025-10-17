@@ -300,133 +300,124 @@ export default function EventsSection() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredEvents.map((event) => (
-                <div key={event.id} className="group backdrop-blur-sm bg-base-100/90 rounded-3xl shadow-lg border border-base-300/30 overflow-hidden hover:shadow-2xl hover:bg-base-100/95 transition-all duration-300 hover:-translate-y-1">
-                  {/* Event Image with Date Badge */}
-                  <div className="relative h-48 bg-primary overflow-hidden">
-                    {/* Background Image */}
-                    {event.image && (
+                <div key={event.id} className="relative bg-gray-900 rounded-2xl overflow-hidden group hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                  {/* Background Image */}
+                  <div className="absolute inset-0">
+                    {event.image ? (
                       <Image
                         src={event.image}
                         alt={event.title}
                         fill
                         className="object-cover"
                       />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-blue-600 to-purple-700"></div>
                     )}
-                    {/* Overlay for better text readability */}
-                    <div className="absolute inset-0 bg-black/30"></div>
-                    
-                    {/* Background Pattern for fallback */}
-                    {!event.image && (
-                      <div className="absolute inset-0 opacity-20">
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,_rgba(255,255,255,0.3)_0%,_transparent_50%)]"></div>
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,_rgba(255,255,255,0.2)_0%,_transparent_50%)]"></div>
+                    {/* Dark Overlay */}
+                    <div className="absolute inset-0 bg-black/50"></div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="relative z-10 p-6 h-80 flex flex-col justify-between text-white">
+                    {/* Header with Date */}
+                    <div className="flex justify-between items-start">
+                      <div className="bg-blue-600/80 backdrop-blur-sm px-3 py-1 rounded-lg text-sm font-medium">
+                        {event.category || event.celluleName}
                       </div>
-                    )}
-                    
-                    {/* Date Badge */}
-                    <div className="absolute top-4 left-4 bg-white rounded-2xl p-3 shadow-lg min-w-[60px] text-center">
-                      <div className="text-2xl font-bold text-gray-900">
-                        {event.date.split(' ')[1]}
-                      </div>
-                      <div className="text-xs font-medium text-gray-600 uppercase">
-                        {event.date.split(' ')[0].replace(',', '')}
+                      <div className="bg-black/30 backdrop-blur-sm rounded-lg px-3 py-2 text-center">
+                        <div className="text-xs text-gray-300 uppercase">
+                          {new Date().toLocaleString('fr-FR', { month: 'short' }).toUpperCase()}
+                        </div>
+                        <div className="text-lg font-bold">
+                          {event.date.split(' ')[1] || '24'}
+                        </div>
                       </div>
                     </div>
 
-                    {/* Heart Icon */}
-                    <div className="absolute top-4 right-4 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                      </svg>
+                    {/* Stats */}
+                    <div className="grid grid-cols-3 gap-4 my-4">
+                      <div>
+                        <div className="text-xs text-gray-300 mb-1">Participants</div>
+                        <div className="text-sm font-bold">{event.attendees}</div>
+                      </div>
+                      <div>
+                        <div className="text-xs text-gray-300 mb-1">Durée</div>
+                        <div className="text-sm font-bold">
+                          {event.timeStart && event.timeEnd 
+                            ? `${Math.round((new Date(`2000-01-01 ${event.timeEnd}`) - new Date(`2000-01-01 ${event.timeStart}`)) / (1000 * 60 * 60))}h`
+                            : '2h'
+                          }
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-xs text-gray-300 mb-1">Type</div>
+                        <div className="text-sm font-bold">
+                          {event.eventType === 'workshop' ? 'Workshop' : 
+                           event.eventType === 'conference' ? 'Conférence' :
+                           event.eventType === 'hackathon' ? 'Hackathon' : 'Événement'}
+                        </div>
+                      </div>
                     </div>
 
-                    {/* Going indicator */}
-                    <div className="absolute bottom-4 left-4 flex items-center gap-2">
-                      <div className="flex -space-x-2">
-                        {[...Array(Math.min(4, Math.floor(event.attendees / 10)))].map((_, i) => (
-                          <div key={i} className="w-8 h-8 bg-white rounded-full border-2 border-white flex items-center justify-center">
-                            <div className={`w-6 h-6 rounded-full ${
-                              i === 0 ? 'bg-blue-500' : 
-                              i === 1 ? 'bg-green-500' : 
-                              i === 2 ? 'bg-purple-500' : 'bg-orange-500'
-                            }`}></div>
-                          </div>
-                        ))}
-                      </div>
-                      <span className="text-white text-sm font-medium bg-black/20 backdrop-blur-sm px-2 py-1 rounded-full">
-                        +{event.attendees} participants
+                    {/* Status Indicator */}
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className={`w-2 h-2 rounded-full ${
+                        activeTab === 'upcoming' ? 'bg-green-400' : 'bg-blue-400'
+                      }`}></div>
+                      <span className="text-xs text-gray-300 uppercase">
+                        {activeTab === 'upcoming' ? 'À VENIR' : 'PARTICIPÉ'}
                       </span>
                     </div>
 
-                    {/* Tech/Category Badge */}
-                    <div className="absolute top-16 left-4 bg-black/20 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-medium capitalize">
-                      {event.eventType} • {event.celluleName}
-                    </div>
-                  </div>
-
-                  {/* Event Content */}
-                  <div className="p-6 backdrop-blur-sm bg-base-100/70">
-                    <h3 className="text-xl font-bold text-base-content mb-3 group-hover:text-primary transition-colors duration-200 line-clamp-2">
-                      {event.title}
-                    </h3>
-                    
-                    {/* Description */}
-                    <p className="text-sm text-base-content/70 mb-4 line-clamp-2 leading-relaxed">
-                      {event.description}
-                    </p>
-                    
-                    <div className="space-y-3 mb-4">
-                      <div className="flex items-center gap-2 text-base-content/70">
-                        <div className="w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                          <svg className="w-3 h-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                          </svg>
-                        </div>
-                        <span className="text-sm font-medium">{event.location}</span>
-                      </div>
-                      
-                      <div className="flex items-center gap-2 text-base-content/70">
-                        <div className="w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                          <svg className="w-3 h-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
-                        </div>
-                        <span className="text-sm font-medium">{event.date} • {event.timeStart} - {event.timeEnd}</span>
-                      </div>
-
-                      <div className="flex items-center gap-2 text-base-content/70">
-                        <div className="w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                          <svg className="w-3 h-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                          </svg>
-                        </div>
-                        <span className="text-lg font-bold text-primary">{event.price}</span>
-                      </div>
-                    </div>
-
-                    {/* Organizer */}
-                    <div className="flex items-center gap-2 mb-4 text-sm text-base-content/60">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                      </svg>
-                      <span>Par {event.responsable} • {event.celluleName}</span>
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="flex gap-3">
-                      <button className="flex-1 btn btn-primary border-none text-white font-semibold hover:scale-105 transition-transform duration-200">
-                        {activeTab === 'upcoming' ? 'S\'inscrire' : 'Voir détails'}
-                      </button>
-                      <button className="btn btn-outline btn-primary hover:bg-primary/10">
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                    {/* Title and Location */}
+                    <div className="mb-4">
+                      <h3 className="text-xl font-bold mb-1 line-clamp-2">{event.title}</h3>
+                      <p className="text-sm text-gray-300 flex items-center gap-1">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4-4a8 8 0 1111.314 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
+                        {event.location} • {event.responsable}
+                      </p>
+                    </div>
+
+                    {/* Bottom Section - Members and Action */}
+                    <div className="flex items-center justify-between">
+                      {/* Member Avatars */}
+                      <div className="flex items-center -space-x-2">
+                        {[...Array(Math.min(4, Math.floor(event.attendees / 5)))].map((_, i) => (
+                          <div
+                            key={i}
+                            className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 border-2 border-white flex items-center justify-center text-xs font-medium"
+                          >
+                            {String.fromCharCode(65 + i)}
+                          </div>
+                        ))}
+                        <div className="w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm border-2 border-white flex items-center justify-center text-xs font-medium">
+                          +{Math.max(0, event.attendees - 4)}
+                        </div>
+                      </div>
+
+                      {/* Action Button */}
+                      <button className="px-6 py-2 rounded-lg font-medium transition-all duration-200 bg-yellow-500/80 hover:bg-yellow-500 backdrop-blur-sm text-black text-sm">
+                        {activeTab === 'upcoming' ? 'Rejoindre' : 'Voir détails'}
                       </button>
                     </div>
                   </div>
+
+                  {/* Status Badge */}
+                  {activeTab === 'attended' && (
+                    <div className="absolute top-4 left-4 z-20">
+                      <div className="bg-green-500/90 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                        Participé
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
