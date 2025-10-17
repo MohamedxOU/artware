@@ -1,34 +1,33 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { useThemeStore, useUIStore } from '@/stores';
+import { useThemeStore } from '@/stores';
 
-const sidebarItems = [
+const navItems = [
   {
     id: 'dashboard',
-    label: 'ff',
+    label: 'Dashboard',
     icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5a2 2 0 012-2h4a2 2 0 012 2v0H8v0z" />
-      </svg>
-    )
-  },
-  {
-    id: 'cells',
-    label: 'Cells',
-    icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
       </svg>
     )
   },
   {
     id: 'events',
-    label: 'Events',
+    label: 'Evenements',
     icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+      </svg>
+    )
+  },
+  {
+    id: 'cells',
+    label: 'Cellules',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
       </svg>
     )
   },
@@ -36,67 +35,30 @@ const sidebarItems = [
     id: 'documents',
     label: 'Documents',
     icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
       </svg>
     )
   }
 ];
 
-const additionalItems = [
-  {
-    id: 'library',
-    label: 'Library',
-    icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-      </svg>
-    )
-  },
-  {
-    id: 'account',
-    label: 'Account',
-    icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-      </svg>
-    )
-  },
-  {
-    id: 'notifications',
-    label: 'Notifications',
-    icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-3.5-3.5a.5.5 0 010-.707L20 9h-5M9 12a3 3 0 100-6 3 3 0 000 6z" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    )
-  },
-  {
-    id: 'settings',
-    label: 'Settings',
-    icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-      </svg>
-    )
-  }
-];
 
-export default function DashboardSidebar({ user, activeSection, setActiveSection, onLogout, isLoading, isMobileOpen, onCloseMobile, onCollapseChange, notifications = [] }) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [showNotifications, setShowNotifications] = useState(false);
-  const { isDarkMode, toggleTheme } = useThemeStore();
-  const { addNotification } = useUIStore();
 
-  const handleCollapseToggle = () => {
-    const newCollapsedState = !isCollapsed;
-    setIsCollapsed(newCollapsedState);
-    if (onCollapseChange) {
-      onCollapseChange(newCollapsedState);
-    }
-  };
+export default function DashboardSidebar({ 
+  activeSection, 
+  setActiveSection, 
+  onLogout, 
+  isLoading,
+  mobileMenuOpen = false,
+  setMobileMenuOpen,
+  className = ""
+}) {
+  const [isMounted, setIsMounted] = useState(false);
+  const { isDarkMode, isInitialized } = useThemeStore();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleLogout = async () => {
     const confirmed = window.confirm('Êtes-vous sûr de vouloir vous déconnecter ?');
@@ -109,207 +71,91 @@ export default function DashboardSidebar({ user, activeSection, setActiveSection
     }
   };
 
+  // Determine logo source based on theme
+  const getLogoSource = () => {
+    if (!isMounted || !isInitialized) {
+      return "/logos/ArtwareLogo.png";
+    }
+    
+    return isDarkMode ? "/logos/ArtwareLogo-darkMode.png" : "/logos/ArtwareLogo.png";
+  };
+
   return (
-    <>
-      {/* Mobile Overlay */}
-      {isMobileOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-          onClick={onCloseMobile}
-        ></div>
-      )}
-      
-      {/* Sidebar */}
-      <div className={`fixed left-4 top-4 bottom-4 bg-primary rounded-3xl shadow-2xl backdrop-blur-md transition-all duration-300 z-50 ${
-        isCollapsed ? 'w-16' : 'w-60'
-      } ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:block`}>
-        <div className="flex flex-col h-full text-white">
+    <div className={`w-64 h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 flex flex-col ${className}`}>
+      {/* Logo Section */}
+      <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 lg:border-b-0">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <Image 
+              src={getLogoSource()}
+              alt="Artware Logo" 
+              width={120} 
+              height={40}  
+              className="h-6 sm:h-8 w-auto" 
+              priority
+            />
+          </div>
           
-          {/* Header with Logo */}
-          <div className="flex items-center justify-between p-4">
-            <div className={`flex items-center space-x-3 ${isCollapsed ? 'justify-center' : ''}`}>
-              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-              </div>
-              {!isCollapsed && (
-                <span className="text-lg font-bold text-white">Dashboard</span>
-              )}
-            </div>
-            <button
-              onClick={handleCollapseToggle}
-              className="p-2 hover:bg-white/10 rounded-lg transition-colors hidden lg:flex"
-            >
-              <svg className={`w-4 h-4 transition-transform text-white ${isCollapsed ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-          </div>
+          {/* Close button for mobile */}
+          <button
+            onClick={() => setMobileMenuOpen && setMobileMenuOpen(false)}
+            className="lg:hidden p-1.5 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
 
-          {/* Navigation Items */}
-          <div className="flex-1 py-4">
-            <nav className="space-y-2 px-4">
-              {/* Main Navigation */}
-              <div className="space-y-1">
-                {sidebarItems.map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => setActiveSection(item.id)}
-                    className={`cursor-target w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition-all duration-200 group ${
-                      activeSection === item.id
-                        ? 'bg-white/20 text-white shadow-lg backdrop-blur-sm'
-                        : 'text-white/70 hover:text-white hover:bg-white/10'
-                    } ${isCollapsed ? 'justify-center' : ''}`}
-                    title={isCollapsed ? item.label : ''}
-                  >
-                    <div className="flex-shrink-0">
-                      {item.icon}
-                    </div>
-                    {!isCollapsed && (
-                      <span className="font-medium">{item.label}</span>
-                    )}
-                  </button>
-                ))}
-              </div>
-
-              {/* Separator */}
-              <div className="my-4 border-t border-white/20"></div>
-
-              {/* Additional Items */}
-              <div className="space-y-1">
-                {additionalItems.map((item) => (
-                  <div key={item.id} className="relative">
-                    <button
-                      onClick={() => {
-                        if (item.id === 'notifications') {
-                          setActiveSection('notifications');
-                          setShowNotifications(false);
-                          if (onCloseMobile) onCloseMobile();
-                        } else {
-                          setActiveSection(item.id);
-                          setShowNotifications(false);
-                          if (onCloseMobile) onCloseMobile();
-                        }
-                      }}
-                      className={`cursor-target w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition-all duration-200 group ${
-                        activeSection === item.id
-                          ? 'bg-white/20 text-white shadow-lg backdrop-blur-sm'
-                          : 'text-white/70 hover:text-white hover:bg-white/10'
-                      } ${isCollapsed ? 'justify-center' : ''}`}
-                      title={isCollapsed ? item.label : ''}
-                    >
-                      <div className="flex-shrink-0 relative">
-                        {item.icon}
-                        {item.id === 'notifications' && notifications.some(n => !n.read) && (
-                          <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-400 rounded-full"></div>
-                        )}
-                      </div>
-                      {!isCollapsed && (
-                        <span className="font-medium">{item.label}</span>
-                      )}
-                    </button>
-                    
-                    {/* Notifications Dropdown */}
-                    {item.id === 'notifications' && showNotifications && !isCollapsed && (
-                      <div className="absolute right-full top-0 mr-2 w-80 bg-base-100 border border-base-300 rounded-xl shadow-lg z-50">
-                        <div className="p-4 border-b border-base-300">
-                          <h3 className="text-lg font-semibold text-base-content">Notifications</h3>
-                        </div>
-                        <div className="max-h-96 overflow-y-auto">
-                          {notifications.length > 0 ? (
-                            notifications.map((notification) => (
-                              <div
-                                key={notification.id}
-                                className={`p-4 border-b border-base-300 hover:bg-base-200 cursor-pointer ${
-                                  !notification.read ? 'bg-primary/5' : ''
-                                }`}
-                              >
-                                <div className="flex items-start space-x-3">
-                                  <div className={`w-2 h-2 rounded-full mt-2 ${
-                                    !notification.read ? 'bg-primary' : 'bg-base-300'
-                                  }`}></div>
-                                  <div className="flex-1">
-                                    <h4 className="text-sm font-medium text-base-content">
-                                      {notification.title}
-                                    </h4>
-                                    <p className="text-sm text-base-content/70 mt-1">
-                                      {notification.message}
-                                    </p>
-                                    <p className="text-xs text-base-content/50 mt-2">
-                                      {notification.time}
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-                            ))
-                          ) : (
-                            <div className="p-4 text-center text-base-content/60">
-                              <p className="text-sm">Aucune notification</p>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </nav>
-          </div>
-
-          {/* Bottom Section - User Profile and Logout */}
-          <div className="mt-auto p-4 space-y-3">
-            {/* User Profile Section */}
-            <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'space-x-3'} p-3 bg-white/10 rounded-xl backdrop-blur-sm`}>
-              {user?.avatar ? (
-                <div className="avatar">
-                  <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
-                    <Image 
-                      src={user.avatar} 
-                      alt={`${user.first_name} ${user.last_name}`}
-                      width={40}
-                      height={40}
-                      className="w-full h-full object-cover"
-                      unoptimized={user.avatar.includes('unsplash.com')}
-                    />
-                  </div>
-                </div>
-              ) : (
-                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
-                  <span className="text-white text-sm font-medium">
-                    {user?.first_name?.[0]}{user?.last_name?.[0]}
+      {/* Navigation Section */}
+      <div className="flex-1 overflow-y-auto">
+        <div className="p-4">
+          <div className="mb-6">
+            <h3 className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-3">
+              OVERVIEW
+            </h3>
+            <nav className="space-y-1">
+              {navItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    setActiveSection(item.id);
+                    // Close mobile menu when item is selected
+                    if (setMobileMenuOpen) {
+                      setMobileMenuOpen(false);
+                    }
+                  }}
+                  className={`w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
+                    activeSection === item.id 
+                      ? 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-400 border-l-4 border-purple-500' 
+                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+                  }`}
+                >
+                  <span className={`mr-3 ${activeSection === item.id ? 'text-purple-600 dark:text-purple-400' : 'text-gray-400'}`}>
+                    {item.icon}
                   </span>
-                </div>
-              )}
-              {!isCollapsed && user && (
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-white truncate">
-                    {user.first_name} {user.last_name}
-                  </div>
-                  <div className="text-xs text-white/60 truncate">
-                    {user.role === 'admin' ? 'Administrateur' : 'Membre'}
-                  </div>
-                </div>
-              )}
-            </div>
-            
-            {/* Logout Button - Always at the bottom */}
-            <button
-              onClick={handleLogout}
-              disabled={isLoading}
-              className={`w-full flex items-center ${isCollapsed ? 'justify-center' : 'justify-center space-x-2'} px-3 py-3 text-sm text-white/90 hover:text-white hover:bg-red-500/30 bg-red-500/20 border border-red-500/40 rounded-xl transition-all duration-200 group backdrop-blur-sm`}
-              title={isCollapsed ? (isLoading ? 'Déconnexion...' : 'Logout') : ''}
-            >
-              <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-              </svg>
-              {!isCollapsed && (
-                <span className="font-medium">{isLoading ? 'Déconnexion...' : 'Déconnexion'}</span>
-              )}
-            </button>
+                  {item.label}
+                </button>
+              ))}
+            </nav>
           </div>
         </div>
       </div>
-    </>
+
+      {/* Logout Section */}
+      <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+        <button
+          onClick={handleLogout}
+          disabled={isLoading}
+          className="w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200"
+        >
+          <svg className="w-5 h-5 mr-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+          </svg>
+          {isLoading ? 'Logging out...' : 'Logout'}
+        </button>
+      </div>
+    </div>
   );
 }
