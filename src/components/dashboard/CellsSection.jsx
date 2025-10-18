@@ -321,10 +321,10 @@ export default function CellsSection({ user }) {
         {displayedCells.map((cell) => (
           <div
             key={cell.id}
-            className="relative bg-gray-900 rounded-2xl overflow-hidden group hover:shadow-2xl transition-all duration-300 hover:scale-105"
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 group"
           >
-            {/* Background Image */}
-            <div className="absolute inset-0">
+            {/* Logos/Images Section */}
+            <div className="h-32 bg-gray-50 dark:bg-gray-700 flex items-center justify-center relative">
               {cell.image_cell ? (
                 <img 
                   src={cell.image_cell} 
@@ -332,126 +332,98 @@ export default function CellsSection({ user }) {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full bg-gradient-to-br from-blue-600 to-purple-700"></div>
+                <div className="grid grid-cols-3 gap-2 w-full h-full p-4">
+                  {/* Mock logos grid */}
+                  <div className="bg-blue-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-xs">{cell.abbreviation}</span>
+                  </div>
+                  <div className="bg-gray-300 dark:bg-gray-600 rounded-lg flex items-center justify-center">
+                    <span className="text-gray-600 dark:text-gray-300 font-bold text-xs">FST</span>
+                  </div>
+                  <div className="bg-green-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-xs">★</span>
+                  </div>
+                  <div className="bg-red-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-xs">ENSA</span>
+                  </div>
+                  <div className="bg-purple-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-xs">UI</span>
+                  </div>
+                  <div className="bg-orange-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-xs">DEV</span>
+                  </div>
+                </div>
               )}
-              {/* Dark Overlay */}
-              <div className="absolute inset-0 bg-black/50"></div>
+              
+              {/* Member Status Badge */}
+              {cell.isMember && (
+                <div className="absolute top-2 right-2">
+                  <div className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    Membre
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* Content */}
-            <div className="relative z-10 p-6 h-80 flex flex-col justify-between text-white">
-              {/* Header with Date */}
-              <div className="flex justify-between items-start">
-                <div className={`px-3 py-1 rounded-lg text-sm font-medium ${getBadgeColor(cell.color)} bg-opacity-90`}>
-                  {cell.abbreviation}
-                </div>
-                <div className="bg-black/30 backdrop-blur-sm rounded-lg px-3 py-2 text-center">
-                  <div className="text-xs text-gray-300 uppercase">DEC</div>
-                  <div className="text-lg font-bold">24</div>
-                </div>
-              </div>
+            {/* Content Section */}
+            <div className="p-6">
+              {/* Group Name */}
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                {cell.name}
+              </h3>
 
               {/* Stats */}
-              <div className="grid grid-cols-3 gap-4 my-4">
-                <div>
-                  <div className="text-xs text-gray-300 mb-1">Membres</div>
-                  <div className="text-sm font-bold">{Math.floor(Math.random() * 50) + 10}</div>
-                </div>
-                <div>
-                  <div className="text-xs text-gray-300 mb-1">Projets</div>
-                  <div className="text-sm font-bold">{Math.floor(Math.random() * 20) + 5}</div>
-                </div>
-                <div>
-                  <div className="text-xs text-gray-300 mb-1">Niveau</div>
-                  <div className="text-sm font-bold">
-                    {Math.random() > 0.5 ? 'Avancé' : 'Moyen'}
-                  </div>
-                </div>
-              </div>
-
-              {/* Status Indicator */}
-              <div className="flex items-center gap-2 mb-3">
-                <div className={`w-2 h-2 rounded-full ${cell.isMember ? 'bg-green-400' : 'bg-blue-400'}`}></div>
-                <span className="text-xs text-gray-300 uppercase">
-                  {cell.isMember ? 'MEMBRE' : 'DISPONIBLE'}
-                </span>
-              </div>
-
-              {/* Title and Location */}
-              <div className="mb-4">
-                <h3 className="text-xl font-bold mb-1">{cell.name}</h3>
-                <p className="text-sm text-gray-300 flex items-center gap-1">
+              <div className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+                <div className="flex items-center gap-1 mb-1">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
                   </svg>
-                  Technologie • {cell.domain.split(' ').slice(0, 2).join(' ')}
-                </p>
+                  <span>{Math.floor(Math.random() * 50) + 10},6 K membres</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                  </svg>
+                  <span>{Math.floor(Math.random() * 20) + 5} publications par jour</span>
+                </div>
               </div>
 
-              {/* Bottom Section - Members and Action */}
-              <div className="flex items-center justify-between">
-                {/* Member Avatars */}
-                <div className="flex items-center -space-x-2">
-                  {[...Array(3)].map((_, i) => (
-                    <div
-                      key={i}
-                      className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 border-2 border-white flex items-center justify-center text-xs font-medium"
-                    >
-                      {String.fromCharCode(65 + i)}
+              {/* Action Button */}
+              {cell.isMember ? (
+                <button
+                  onClick={() => handleQuitCell(cell.id, cell.name)}
+                  disabled={quittingCell === cell.id}
+                  className="w-full py-3 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed border border-red-200"
+                >
+                  {quittingCell === cell.id ? (
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="animate-spin w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full"></div>
+                      <span>Sortie en cours...</span>
                     </div>
-                  ))}
-                  <div className="w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm border-2 border-white flex items-center justify-center text-xs font-medium">
-                    +{Math.floor(Math.random() * 10) + 2}
-                  </div>
-                </div>
-
-                {/* Action Button */}
-                {cell.isMember ? (
-                  <button
-                    onClick={() => handleQuitCell(cell.id, cell.name)}
-                    disabled={quittingCell === cell.id}
-                    className="px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-red-500/80 hover:bg-red-500 backdrop-blur-sm text-white disabled:opacity-50 disabled:cursor-not-allowed text-sm"
-                  >
-                    {quittingCell === cell.id ? (
-                      <div className="flex items-center gap-2">
-                        <div className="animate-spin w-3 h-3 border border-white border-t-transparent rounded-full"></div>
-                        <span>Sortie...</span>
-                      </div>
-                    ) : (
-                      'Quitter'
-                    )}
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => handleJoinCell(cell.id, cell.name)}
-                    disabled={joiningCell === cell.id}
-                    className="px-6 py-2 rounded-lg font-medium transition-all duration-200 bg-yellow-500/80 hover:bg-yellow-500 backdrop-blur-sm text-black disabled:opacity-50 disabled:cursor-not-allowed text-sm"
-                  >
-                    {joiningCell === cell.id ? (
-                      <div className="flex items-center gap-2">
-                        <div className="animate-spin w-3 h-3 border border-black border-t-transparent rounded-full"></div>
-                        <span>Rejoindre...</span>
-                      </div>
-                    ) : (
-                      'Rejoindre'
-                    )}
-                  </button>
-                )}
-              </div>
+                  ) : (
+                    'Quitter le groupe'
+                  )}
+                </button>
+              ) : (
+                <button
+                  onClick={() => handleJoinCell(cell.id, cell.name)}
+                  disabled={joiningCell === cell.id}
+                  className="w-full py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-lg font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {joiningCell === cell.id ? (
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
+                      <span>Adhésion...</span>
+                    </div>
+                  ) : (
+                    'Rejoindre le groupe'
+                  )}
+                </button>
+              )}
             </div>
-
-            {/* Joined Badge */}
-            {cell.isMember && (
-              <div className="absolute top-4 left-4 z-20">
-                <div className="bg-green-500/90 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1">
-                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  Membre
-                </div>
-              </div>
-            )}
           </div>
         ))}
       </div>

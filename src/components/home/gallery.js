@@ -1,72 +1,55 @@
 "use client";
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function Gallery() {
   const [isVisible, setIsVisible] = useState(false);
-  const [hoveredCategory, setHoveredCategory] = useState(null);
-  const [currentImageIndex, setCurrentImageIndex] = useState({});
+  const [showMore, setShowMore] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
   const router = useRouter();
 
-  const galleryCategories = [
-    {
-      id: "formations",
-      title: "Formations",
-      subtitle: "Sessions de formation technique",
-      images: [
-        "https://picsum.photos/id/1015/800/600?grayscale",
-        "https://picsum.photos/id/1011/800/600?grayscale",
-        "https://picsum.photos/id/1020/800/600?grayscale",
-        "https://picsum.photos/id/1021/800/600?grayscale"
-      ]
-    },
-    {
-      id: "evenements-academiques",
-      title: "Événements académiques",
-      subtitle: "Conférences et workshops",
-      images: [
-        "https://picsum.photos/id/1022/800/600?grayscale",
-        "https://picsum.photos/id/1023/800/600?grayscale",
-        "https://picsum.photos/id/1024/800/600?grayscale",
-        "https://picsum.photos/id/1025/800/600?grayscale"
-      ]
-    },
-    {
-      id: "evenements-solidaires",
-      title: "Événements solidaires",
-      subtitle: "Actions communautaires",
-      images: [
-        "https://picsum.photos/id/1026/800/600?grayscale",
-        "https://picsum.photos/id/1027/800/600?grayscale",
-        "https://picsum.photos/id/1028/800/600?grayscale",
-        "https://picsum.photos/id/1029/800/600?grayscale"
-      ]
-    },
-    {
-      id: "activities",
-      title: "Activités fun",
-      subtitle: "Moments de détente et team building",
-      images: [
-        "https://picsum.photos/id/1030/800/600?grayscale",
-        "https://picsum.photos/id/1031/800/600?grayscale",
-        "https://picsum.photos/id/1032/800/600?grayscale",
-        "https://picsum.photos/id/1033/800/600?grayscale"
-      ]
-    },
-    {
-      id: "hackathons",
-      title: "Hackathons",
-      subtitle: "Compétitions de programmation",
-      images: [
-        "https://picsum.photos/id/1034/800/600?grayscale",
-        "https://picsum.photos/id/1035/800/600?grayscale",
-        "https://picsum.photos/id/1036/800/600?grayscale",
-        "https://picsum.photos/id/1037/800/600?grayscale"
-      ]
-    },
-   
-  ];
+  // Initial number of images to show (responsive)
+  const [initialCount, setInitialCount] = useState(12); // Default count
+  const [mounted, setMounted] = useState(false);
+
+  const getInitialImageCount = () => {
+    if (typeof window !== 'undefined') {
+      if (window.innerWidth < 640) return 8; // Mobile: 8 images
+      if (window.innerWidth < 1024) return 12; // Tablet: 12 images
+      return 16; // Desktop: 16 images
+    } 
+    return 12; // Default for SSR
+  };
+ 
+  // Generate items from gallery folder (images 1-40)
+  const allItems = Array.from({ length: 40 }, (_, index) => {
+    const imageNumber = index + 1;
+    // Generate random heights between 300-600 for masonry layout
+    const heights = [300, 350, 400, 450, 500, 550, 600];
+    const randomHeight = heights[index % heights.length];
+    
+    return {
+      id: imageNumber.toString(),
+      img: `/gallery/${imageNumber}.jpg`, // Assuming images are in jpg format
+      url: `/gallery/${imageNumber}.jpg`, // Link to full image
+      height: randomHeight,
+      title: `Gallery Image ${imageNumber}`,
+      category: getImageCategory(imageNumber)
+    };
+  });
+
+  // Items to display based on showMore state
+  const items = showMore ? allItems : allItems.slice(0, initialCount);
+
+  // Helper function to categorize images based on their number
+  function getImageCategory(imageNumber) {
+    if (imageNumber <= 8) return "Formations";
+    if (imageNumber <= 16) return "Événements académiques";
+    if (imageNumber <= 24) return "Événements solidaires";
+    if (imageNumber <= 32) return "Activités fun";
+    return "Hackathons";
+  }
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -93,34 +76,48 @@ export default function Gallery() {
     };
   }, []);
 
-  // Auto-rotate images for hovered category
+  // Set mounted and initial count after component mounts
   useEffect(() => {
-    if (!hoveredCategory) return;
+    setMounted(true);
+    setInitialCount(getInitialImageCount());
+  }, []);
 
-    const interval = setInterval(() => {
-      setCurrentImageIndex(prev => ({
-        ...prev,
-        [hoveredCategory]: (prev[hoveredCategory] || 0) + 1
-      }));
-    }, 1500);
+  // Update initial count on window resize
+  useEffect(() => {
+    if (!mounted) return;
+    
+    const handleResize = () => {
+      setInitialCount(getInitialImageCount());
+    };
 
-    return () => clearInterval(interval);
-  }, [hoveredCategory]);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [mounted]);
 
-  const handleCategoryHover = (categoryId) => {
-    setHoveredCategory(categoryId);
-    if (!currentImageIndex[categoryId]) {
-      setCurrentImageIndex(prev => ({ ...prev, [categoryId]: 0 }));
-    }
-  };
+  // Keyboard navigation for image modal
+  useEffect(() => {
+    if (!selectedImage) return;
 
-  const getCurrentImage = (category) => {
-    const index = currentImageIndex[category.id] || 0;
-    return category.images[index % category.images.length];
-  };
+    const handleKeyPress = (e) => {
+      if (e.key === 'Escape') {
+        setSelectedImage(null);
+      } else if (e.key === 'ArrowLeft') {
+        const currentIndex = items.findIndex(item => item.id === selectedImage.id);
+        const prevIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
+        setSelectedImage(items[prevIndex]);
+      } else if (e.key === 'ArrowRight') {
+        const currentIndex = items.findIndex(item => item.id === selectedImage.id);
+        const nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
+        setSelectedImage(items[nextIndex]);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [selectedImage, items]);
 
   return (
-    <section id="gallery" className="relative bg-gradient-to-br from-base-100 via-base-200 to-base-100">
+    <section id="gallery" className="relative bg-gradient-to-br from-base-100 via-base-200 to-base-100 h-full">
       {/* Section Title */}
       <div className={`text-center pt-20 pb-12 px-4 transition-all duration-1000 ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
@@ -133,75 +130,71 @@ export default function Gallery() {
         </p>
       </div>
 
-      {/* Gallery Grid */}
+      {/* Custom Gallery Grid Layout */}
       <div className={`max-w-7xl mx-auto px-4 pb-16 transition-all duration-1000 delay-300 ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       }`}>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {galleryCategories.map((category, index) => (
-            <div
-              key={category.id}
-              className={`cursor-target group relative bg-base-100 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer ${
-                index === 0 ? 'md:col-span-2 lg:col-span-1' : ''
-              } ${index === 1 ? 'lg:col-span-2' : ''}`}
-              style={{
-                height: index === 0 ? '400px' : index === 1 ? '400px' : '350px'
-              }}
-              onMouseEnter={() => handleCategoryHover(category.id)}
-              onMouseLeave={() => setHoveredCategory(null)}
-            >
-              {/* Background Image */}
-              <div className="absolute inset-0">
+        {/* Custom Masonry Layout with Natural Aspect Ratios */}
+        <div className="columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4 mb-8">
+          {items.map((item, index) => {
+            return (
+              <div
+                key={item.id}
+                className="break-inside-avoid mb-4 group cursor-pointer relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] hover:z-10"
+                onClick={() => setSelectedImage(item)}
+              >
+                {/* Image with natural aspect ratio */}
                 <Image
-                  src={getCurrentImage(category)}
-                  alt={category.title}
-                  fill
-                  className="object-cover transition-all duration-700 group-hover:scale-110"
+                  src={item.img}
+                  alt={item.title}
+                  width={400}
+                  height={item.height}
+                  className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-110"
+                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
                 />
                 
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500"></div>
-              </div>
-
-              {/* Content */}
-              <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                <div className="transform translate-y-0 group-hover:-translate-y-2 transition-transform duration-500">
-                  <h3 className="text-white text-xl md:text-2xl font-bold mb-2">
-                    {category.title}
-                  </h3>
-                  <p className="text-white/80 text-sm md:text-base mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200">
-                    {category.subtitle}
-                  </p>
-                  
-                  {/* Image counter for hovered category */}
-                  {hoveredCategory === category.id && (
-                    <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-300">
-                      {category.images.map((_, idx) => (
-                        <div
-                          key={idx}
-                          className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                            idx === (currentImageIndex[category.id] || 0) % category.images.length
-                              ? 'bg-white' 
-                              : 'bg-white/50'
-                          }`}
-                        />
-                      ))}
-                    </div>
-                  )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                
+                {/* Content overlay */}
+                <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                  <h3 className="font-semibold text-sm mb-1">{item.title}</h3>
+                  <p className="text-xs opacity-80">{item.category}</p>
                 </div>
-              </div>
-
-              {/* Hover Effects */}
-              <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                <div className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                
+                {/* View icon */}
+                <div className="absolute top-3 right-3 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                   </svg>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
+
+        {/* Show More / Show Less Button - Only show if there are more items */}
+        {mounted && allItems.length > initialCount && (
+          <div className="text-center mb-8">
+            <button
+              onClick={() => setShowMore(!showMore)}
+              className="cursor-target group inline-flex items-center px-6 py-3 bg-base-200 hover:bg-base-300 dark:bg-base-700 dark:hover:bg-base-600 text-base-content font-medium rounded-xl transition-all duration-300 hover:scale-105 shadow-md hover:shadow-lg border border-base-300 dark:border-base-600"
+            >
+              <span className="mr-2">
+                {showMore ? 'Voir moins' : `Voir plus (${allItems.length - items.length} images)`}
+              </span>
+              <svg 
+                className={`w-4 h-4 transform transition-transform duration-300 ${showMore ? 'rotate-180' : ''}`}
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+          </div>
+        )}
 
         {/* Visit Full Gallery Button */}
         <div className="text-center">
@@ -221,6 +214,77 @@ export default function Gallery() {
           </button>
         </div>
       </div>
+
+      {/* Image Modal/Lightbox */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div className="relative max-w-7xl max-h-full">
+            {/* Close button */}
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-4 right-4 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors duration-200 z-10"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            {/* Image */}
+            <div className="relative">
+              <Image
+                src={selectedImage.img}
+                alt={selectedImage.title}
+                width={800}
+                height={600}
+                className="max-w-full max-h-[90vh] object-contain rounded-lg"
+                sizes="90vw"
+              />
+              
+              {/* Image info */}
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
+                <h3 className="text-white text-xl font-bold mb-2">{selectedImage.title}</h3>
+                <p className="text-white/80 text-sm">{selectedImage.category}</p>
+              </div>
+            </div>
+
+            {/* Navigation arrows (if needed later) */}
+            <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const currentIndex = items.findIndex(item => item.id === selectedImage.id);
+                  const prevIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
+                  setSelectedImage(items[prevIndex]);
+                }}
+                className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors duration-200"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const currentIndex = items.findIndex(item => item.id === selectedImage.id);
+                  const nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
+                  setSelectedImage(items[nextIndex]);
+                }}
+                className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors duration-200"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

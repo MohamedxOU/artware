@@ -185,13 +185,7 @@ export default function EventsSection() {
 
   return (
     <div className="w-full max-w-7xl mx-auto relative min-h-full">
-      {/* Header */}
-      <div className="mb-6 relative z-10">
-        <div className="backdrop-blur-sm bg-base-100/70 rounded-2xl p-4 lg:p-6 border border-base-300/30 shadow-sm">
-          <h1 className="text-2xl lg:text-3xl font-bold text-base-content mb-2">Événements</h1>
-          <p className="text-base-content/60">Découvrez et participez aux événements du club</p>
-        </div>
-      </div>
+      
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6 relative z-10">
@@ -253,9 +247,9 @@ export default function EventsSection() {
       </div>
 
       {/* Event Tabs */}
-      <div className="backdrop-blur-sm bg-base-100/80 rounded-2xl shadow-lg border border-base-300/30 overflow-hidden relative z-10">
+      <div className="backdrop-blur-sm bg-base-100/5 rounded-2xl shadow-lg border border-base-300/30 overflow-hidden relative z-10">
         {/* Tab Navigation */}
-        <div className="border-b border-base-300/30 bg-base-200/60 backdrop-blur-sm">
+        <div className="border-b border-base-100/10 bg-base-100/10 backdrop-blur-sm">
           <div className="flex">
             <button
               onClick={() => setActiveTab('upcoming')}
@@ -300,124 +294,98 @@ export default function EventsSection() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {filteredEvents.map((event) => (
-                <div key={event.id} className="relative bg-gray-900 rounded-2xl overflow-hidden group hover:shadow-2xl transition-all duration-300 hover:scale-105">
-                  {/* Background Image */}
-                  <div className="absolute inset-0">
-                    {event.image ? (
-                      <Image
-                        src={event.image}
-                        alt={event.title}
-                        fill
-                        className="object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-blue-600 to-purple-700"></div>
-                    )}
-                    {/* Dark Overlay */}
-                    <div className="absolute inset-0 bg-black/50"></div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="relative z-10 p-6 h-80 flex flex-col justify-between text-white">
-                    {/* Header with Date */}
-                    <div className="flex justify-between items-start">
-                      <div className="bg-blue-600/80 backdrop-blur-sm px-3 py-1 rounded-lg text-sm font-medium">
-                        {event.category || event.celluleName}
-                      </div>
-                      <div className="bg-black/30 backdrop-blur-sm rounded-lg px-3 py-2 text-center">
-                        <div className="text-xs text-gray-300 uppercase">
-                          {new Date().toLocaleString('fr-FR', { month: 'short' }).toUpperCase()}
+                <div key={event.id} className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300">
+                  <div className="flex">
+                    {/* Left side - Profile/Event Image */}
+                    <div className="w-1/3 relative">
+                      {event.image ? (
+                        <Image
+                          src={event.image}
+                          alt={event.title}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center">
+                          <svg className="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
                         </div>
-                        <div className="text-lg font-bold">
-                          {event.date.split(' ')[1] || '24'}
-                        </div>
-                      </div>
+                      )}
                     </div>
 
-                    {/* Stats */}
-                    <div className="grid grid-cols-3 gap-4 my-4">
-                      <div>
-                        <div className="text-xs text-gray-300 mb-1">Participants</div>
-                        <div className="text-sm font-bold">{event.attendees}</div>
-                      </div>
-                      <div>
-                        <div className="text-xs text-gray-300 mb-1">Durée</div>
-                        <div className="text-sm font-bold">
-                          {event.timeStart && event.timeEnd 
-                            ? `${Math.round((new Date(`2000-01-01 ${event.timeEnd}`) - new Date(`2000-01-01 ${event.timeStart}`)) / (1000 * 60 * 60))}h`
-                            : '2h'
-                          }
+                    {/* Right side - Event Details */}
+                    <div className="w-2/3 p-6 relative">
+                      {/* Date Badge */}
+                      <div className="absolute top-4 right-4 text-center">
+                        <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                          {event.date.split(' ')[2] || 'OCT'}
+                        </div>
+                        <div className="text-2xl font-bold text-pink-500">
+                          {event.date.split(' ')[1] || '21'}
                         </div>
                       </div>
-                      <div>
-                        <div className="text-xs text-gray-300 mb-1">Type</div>
-                        <div className="text-sm font-bold">
+
+                      {/* Event Title and Type */}
+                      <div className="pr-16 mb-4">
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1 line-clamp-2">
+                          {event.title}
+                        </h3>
+                        <p className="text-gray-600 dark:text-gray-400 text-sm">
                           {event.eventType === 'workshop' ? 'Workshop' : 
                            event.eventType === 'conference' ? 'Conférence' :
                            event.eventType === 'hackathon' ? 'Hackathon' : 'Événement'}
+                        </p>
+                      </div>
+
+                      {/* Location */}
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center">
+                          <svg className="w-4 h-4 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4-4a8 8 0 1111.314 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <div className="text-lg font-bold text-pink-500">{event.location}</div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400">
+                            {event.celluleName}, Maroc
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Status Indicator */}
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className={`w-2 h-2 rounded-full ${
-                        activeTab === 'upcoming' ? 'bg-green-400' : 'bg-blue-400'
-                      }`}></div>
-                      <span className="text-xs text-gray-300 uppercase">
-                        {activeTab === 'upcoming' ? 'À VENIR' : 'PARTICIPÉ'}
-                      </span>
-                    </div>
-
-                    {/* Title and Location */}
-                    <div className="mb-4">
-                      <h3 className="text-xl font-bold mb-1 line-clamp-2">{event.title}</h3>
-                      <p className="text-sm text-gray-300 flex items-center gap-1">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4-4a8 8 0 1111.314 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                        {event.location} • {event.responsable}
-                      </p>
-                    </div>
-
-                    {/* Bottom Section - Members and Action */}
-                    <div className="flex items-center justify-between">
-                      {/* Member Avatars */}
-                      <div className="flex items-center -space-x-2">
-                        {[...Array(Math.min(4, Math.floor(event.attendees / 5)))].map((_, i) => (
-                          <div
-                            key={i}
-                            className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 border-2 border-white flex items-center justify-center text-xs font-medium"
-                          >
-                            {String.fromCharCode(65 + i)}
+                      {/* Countdown Timer */}
+                      <div className="flex items-center gap-2 mb-6">
+                        <div className="w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center">
+                          <svg className="w-4 h-4 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <div className="text-sm">
+                            <span className="text-pink-500 font-bold">
+                              {Math.floor(Math.random() * 10) + 1} jours {Math.floor(Math.random() * 24)} heures {Math.floor(Math.random() * 60)} minutes
+                            </span>
+                            <span className="text-gray-600 dark:text-gray-400 ml-1">
+                              avant l'événement!
+                            </span>
                           </div>
-                        ))}
-                        <div className="w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm border-2 border-white flex items-center justify-center text-xs font-medium">
-                          +{Math.max(0, event.attendees - 4)}
                         </div>
                       </div>
 
                       {/* Action Button */}
-                      <button className="px-6 py-2 rounded-lg font-medium transition-all duration-200 bg-yellow-500/80 hover:bg-yellow-500 backdrop-blur-sm text-black text-sm">
-                        {activeTab === 'upcoming' ? 'Rejoindre' : 'Voir détails'}
+                      <button className="cursor-target w-full py-3  border-2 border-pink-500 text-pink-500 rounded-lg font-medium hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-colors duration-200">
+                        {activeTab === 'upcoming' ? 'S\'inscrire à l\'événement' : 'Voir les détails'}
                       </button>
+
+                      {/* Small disclaimer */}
+                      <p className="text-xs text-gray-400 text-center mt-2 italic">
+                        *Places limitées, inscription obligatoire
+                      </p>
                     </div>
                   </div>
-
-                  {/* Status Badge */}
-                  {activeTab === 'attended' && (
-                    <div className="absolute top-4 left-4 z-20">
-                      <div className="bg-green-500/90 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1">
-                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                        Participé
-                      </div>
-                    </div>
-                  )}
                 </div>
               ))}
             </div>

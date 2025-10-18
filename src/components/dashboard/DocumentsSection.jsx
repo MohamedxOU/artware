@@ -277,46 +277,40 @@ export default function DocumentsSection() {
           </button>
         </div>
 
-        {/* Recommended Books Horizontal Scroll */}
+        {/* Recommended Documents Horizontal Scroll */}
         <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
           {recommendedDocuments.map((doc) => (
-            <div key={doc.id} className="flex-shrink-0 w-40 cursor-pointer group" onClick={() => handleDownload(doc)}>
-              <div className={`${doc.color} rounded-xl p-4 h-52 flex flex-col justify-between relative overflow-hidden mb-3 group-hover:shadow-lg transition-all duration-200`}>
-                {doc.id === 'rec-5' ? (
-                  // Special card for the blue one (Company of One)
-                  <div className="text-white relative z-10">
-                    <h3 className="font-bold text-lg mb-1">Company of One</h3>
-                    <p className="text-blue-200 text-sm mb-3">Paul Jarvis</p>
-                    <div className="flex items-center gap-1 mb-4">
-                      {[...Array(4)].map((_, i) => (
-                        <svg key={i} className="w-3 h-3 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                      ))}
-                      <span className="text-xs ml-1">4.8</span>
+            <div
+              key={doc.id}
+              className="flex-shrink-0 cursor-pointer group"
+              onClick={() => handleDownload(doc)}
+            >
+              {/* Document Card - Same design as main documents */}
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-200 group-hover:border-blue-300 w-40">
+                {/* Document Icon */}
+                <div className="flex justify-center mb-3">
+                  <div className="w-12 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center relative">
+                    {/* File type badge - Default to PDF for recommended */}
+                    <div className="absolute -top-2 -right-2 px-2 py-1 rounded text-xs font-bold text-white bg-red-500">
+                      PDF
                     </div>
-                    <div className="text-xs text-blue-200">
-                      <div>320 Pages</div>
-                      <div>643 Ratings</div>
-                      <div>110 Reviews</div>
-                    </div>
+                    
+                    {/* Document icon */}
+                    <svg className="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
+                    </svg>
                   </div>
-                ) : (
-                  <div className="text-gray-800 relative z-10">
-                    <div className="h-full flex flex-col justify-center">
-                      <h3 className="font-bold text-base mb-1 leading-tight">{doc.title}</h3>
-                      <p className="text-sm opacity-75">{doc.author}</p>
-                    </div>
-                  </div>
-                )}
+                </div>
                 
-                {/* Book spine effect */}
-                <div className="absolute right-0 top-0 bottom-0 w-1 bg-black/10"></div>
-              </div>
-              
-              <div>
-                <h4 className="font-medium text-gray-900 dark:text-white text-sm truncate">{doc.title}</h4>
-                <p className="text-gray-600 dark:text-gray-400 text-xs">{doc.author}</p>
+                {/* Document Info */}
+                <div className="text-center">
+                  <h4 className="font-medium text-gray-900 dark:text-white text-sm mb-1 line-clamp-2">
+                    {doc.title}
+                  </h4>
+                  <p className="text-gray-500 dark:text-gray-400 text-xs">
+                    {doc.author}
+                  </p>
+                </div>
               </div>
             </div>
           ))}
@@ -333,70 +327,48 @@ export default function DocumentsSection() {
         </div>
 
         {/* Documents Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
           {filteredAndSortedDocuments.map((doc) => (
             <div
               key={doc.id}
               className="cursor-pointer group"
               onClick={() => handleDownload(doc)}
             >
-              {/* Book Cover */}
-              <div className="aspect-[3/4] bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 rounded-lg mb-3 relative overflow-hidden group-hover:shadow-lg transition-all duration-200">
-                {/* Book Cover Design */}
-                <div className="absolute inset-0 p-4 flex flex-col justify-between">
-                  <div>
-                    <h3 className="font-bold text-sm text-gray-800 dark:text-white leading-tight">
-                      {doc.title}
-                    </h3>
-                    <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">
-                      {doc.author}
-                    </p>
-                  </div>
-                  
-                  {/* File Type Badge */}
-                  <div className="self-end">
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${
+              {/* Document Card */}
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-200 group-hover:border-blue-300">
+                {/* Document Icon */}
+                <div className="flex justify-center mb-3">
+                  <div className="w-12 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center relative">
+                    {/* File type badge */}
+                    <div className={`absolute -top-2 -right-2 px-2 py-1 rounded text-xs font-bold text-white ${
                       doc.type === 'PDF' 
-                        ? 'bg-red-100 text-red-800' 
+                        ? 'bg-red-500' 
                         : doc.type === 'Image'
-                        ? 'bg-green-100 text-green-800'
+                        ? 'bg-green-500'
                         : doc.type === 'Word'
-                        ? 'bg-blue-100 text-blue-800'
-                        : 'bg-gray-100 text-gray-800'
+                        ? 'bg-blue-500'
+                        : doc.type === 'PowerPoint'
+                        ? 'bg-orange-500'
+                        : 'bg-gray-500'
                     }`}>
-                      {doc.type}
-                    </span>
+                      {doc.type === 'Word' ? 'DOC' : doc.type === 'Image' ? 'IMG' : doc.type}
+                    </div>
+                    
+                    {/* Document icon */}
+                    <svg className="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
+                    </svg>
                   </div>
                 </div>
                 
-                {/* Book spine effect */}
-                <div className="absolute right-0 top-0 bottom-0 w-1 bg-black/10"></div>
-              </div>
-              
-              {/* Book Info */}
-              <div>
-                <h4 className="font-medium text-gray-900 dark:text-white text-sm truncate mb-1">
-                  {doc.title}
-                </h4>
-                <p className="text-gray-600 dark:text-gray-400 text-xs mb-2">
-                  {doc.author}
-                </p>
-                
-                {/* Rating */}
-                <div className="flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <svg 
-                      key={i} 
-                      className={`w-3 h-3 ${i < 4 ? 'text-yellow-400' : 'text-gray-300'}`} 
-                      fill="currentColor" 
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                  <span className="text-xs text-gray-500 ml-1">
-                    {((getDocumentRating(doc.id) / 100) * 5).toFixed(1)}
-                  </span>
+                {/* Document Info */}
+                <div className="text-center">
+                  <h4 className="font-medium text-gray-900 dark:text-white text-sm mb-1 line-clamp-2">
+                    {doc.title}
+                  </h4>
+                  <p className="text-gray-500 dark:text-gray-400 text-xs">
+                    {formatDate(doc.created_at)}
+                  </p>
                 </div>
               </div>
             </div>

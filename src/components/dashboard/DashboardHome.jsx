@@ -197,17 +197,35 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {upcomingEvents.map((event) => (
-                <div key={event.id} className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700 relative overflow-hidden">
-                  <div className="relative z-10">
-                    <div className="text-4xl mb-4">{event.icon}</div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">{event.title}</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">{event.subtitle}</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">{event.date} | {event.time} | {event.location}</p>
-                    <button className="bg-blue-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-600 transition-colors flex items-center space-x-2">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                      </svg>
-                      <span>S'inscrire</span>
+                <div key={event.id} className="bg-gray-50 dark:bg-gray-800 rounded-3xl p-0 overflow-hidden hover:shadow-lg transition-all duration-300">
+                  {/* Image Section */}
+                  <div className="h-48 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 p-6 flex items-center justify-center relative">
+                    <div className="text-6xl opacity-80">{event.icon}</div>
+                    {/* Decorative elements */}
+                    <div className="absolute top-4 right-4 w-3 h-3 bg-white/30 rounded-full"></div>
+                    <div className="absolute bottom-6 left-6 w-2 h-2 bg-white/20 rounded-full"></div>
+                  </div>
+                  
+                  {/* Content Section */}
+                  <div className="p-6">
+                    {/* Category Label */}
+                    <div className="text-sm text-gray-500 dark:text-gray-400 mb-2 font-medium">
+                      Fireside chat
+                    </div>
+                    
+                    {/* Title */}
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
+                      {event.title}
+                    </h3>
+                    
+                    {/* Description */}
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+                      Apprenez des fondateurs qui ont réussi à développer leurs startups et découvrez des stratégies pour croître durablement.
+                    </p>
+                    
+                    {/* View Details Button */}
+                    <button className="bg-purple-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-purple-700 transition-colors w-full">
+                      View details
                     </button>
                   </div>
                 </div>
