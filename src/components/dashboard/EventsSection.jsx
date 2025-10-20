@@ -1,85 +1,62 @@
 "use client";
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { getAllEvents } from '@/api/events';
+import { getAllEvents, getUserRegistredEvents, getUserAttendedEvents } from '@/api/events';
+import useAuthStore from '@/stores/authStore';
 
 // Mock data for demonstration
-const mockEvents = [
-  {
-    id: 1,
-    title: "Hackathon Intelligence Artificielle 2024",
-    date: "Samedi, 12 Oct",
-    location: "ISS École, Fès",
-    price: "Gratuit",
-    image: "/events/hackathon-ai.jpg",
-    attendees: 45,
-    category: "Intelligence Artificielle",
-    type: "upcoming"
-  },
-  {
-    id: 2,
-    title: "Workshop React & Next.js Avancé",
-    date: "Vendredi, 18 Oct",
-    location: "ISS École, Fès",
-    price: "Gratuit",
-    image: "/events/workshop-react.jpg",
-    attendees: 32,
-    category: "Développement Web",
-    type: "upcoming"
-  },
-  {
-    id: 3,
-    title: "Conférence Cybersécurité & Éthique",
-    date: "Mercredi, 25 Sep",
-    location: "ISS École, Fès",
-    price: "Gratuit",
-    image: "/events/conference-cyber.jpg",
-    attendees: 28,
-    category: "Cybersécurité",
-    type: "attended"
-  },
-  {
-    id: 4,
-    title: "Formation Machine Learning",
-    date: "Lundi, 23 Sep",
-    location: "En ligne",
-    price: "Gratuit",
-    image: "/events/formation-ml.jpg",
-    attendees: 22,
-    category: "Machine Learning",
-    type: "attended"
-  },
-  {
-    id: 5,
-    title: "DevFest Mobile & Flutter",
-    date: "Dimanche, 03 Nov",
-    location: "ISS École, Fès",
-    price: "Gratuit",
-    image: "/events/devfest-mobile.jpg",
-    attendees: 67,
-    category: "Développement Mobile",
-    type: "upcoming"
-  }
-];
 
-const eventStats = {
-  totalEvents: 12,
-  upcomingEvents: 3,
-  attendedEvents: 9,
-  totalParticipants: 234
-};
+
+
 
 export default function EventsSection() {
   const [activeTab, setActiveTab] = useState('upcoming');
-  const [events, setEvents] = useState([]);
+  const [upcomingEvents, setUpcomingEvents] = useState([]);
+  const [registeredEvents, setRegisteredEvents] = useState([]);
+  const [attendedEvents, setAttendedEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { user } = useAuthStore();
   const [stats, setStats] = useState({
     totalEvents: 0,
     upcomingEvents: 0,
+    registeredEvents: 0,
     attendedEvents: 0,
     totalParticipants: 0
   });
+
+  // Transform event data helper function
+  const transformEvent = (event, isRegistered = false) => {
+    const eventDate = new Date(event.date);
+    const currentDate = new Date();
+    const isUpcoming = eventDate > currentDate;
+    
+    // Format date for display
+    const formattedDate = eventDate.toLocaleDateString('fr-FR', {
+      weekday: 'long',
+      day: '2-digit',
+      month: 'short'
+    });
+
+    return {
+      id: event.id,
+      title: event.title,
+      date: formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1),
+      location: event.location,
+      price: "Gratuit",
+      image: event.image_url,
+      attendees: Math.floor(Math.random() * 50) + 15,
+      category: event.cellule_name || event.type,
+      description: event.description,
+      responsable: event.responsable,
+      timeStart: event.time_start,
+      timeEnd: event.time_end,
+      celluleName: event.cellule_name,
+      eventType: event.type,
+      registrationId: event.registration_id,
+      registeredAt: event.registered_at
+    };
+  };
 
   // Fetch events from API
   useEffect(() => {
@@ -87,50 +64,78 @@ export default function EventsSection() {
       try {
         setIsLoading(true);
         setError(null);
-        const response = await getAllEvents();
         
-        // Transform API response to match component format
-        const transformedEvents = response.event.map((event) => {
-          const eventDate = new Date(event.date);
-          const currentDate = new Date();
-          const isUpcoming = eventDate > currentDate;
-          
-          // Format date for display
-          const formattedDate = eventDate.toLocaleDateString('fr-FR', {
-            weekday: 'long',
-            day: '2-digit',
-            month: 'short'
-          });
+        // Fetch all events (upcoming)
+        const allEventsResponse = await getAllEvents();
+        const currentDate = new Date();
+        const upcoming = allEventsResponse.event
+          .filter(event => new Date(event.date) > currentDate)
+          .map(event => transformEvent(event));
+        setUpcomingEvents(upcoming);
 
-          return {
-            id: event.id,
-            title: event.title,
-            date: formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1),
-            location: event.location,
-            price: "Gratuit", // Default to free
-            image: event.image_url,
-            attendees: Math.floor(Math.random() * 50) + 15, // Mock attendees since not in API
-            category: event.cellule_name || event.type,
-            type: isUpcoming ? 'upcoming' : 'attended',
-            description: event.description,
-            responsable: event.responsable,
-            timeStart: event.time_start,
-            timeEnd: event.time_end,
-            celluleName: event.cellule_name,
-            eventType: event.type
-          };
+        // Fetch registered events if user is logged in
+        if (user?.user_id) {
+          console.log('Fetching registered events for user:', user.user_id);
+          try {
+            const registeredResponse = await getUserRegistredEvents(user.user_id);
+            console.log('Registered events response:', registeredResponse);
+            const registered = registeredResponse.user.map(event => transformEvent(event, true));
+            console.log('Transformed registered events:', registered);
+            setRegisteredEvents(registered);
+          } catch (err) {
+            console.error('Failed to fetch registered events:', err);
+            setRegisteredEvents([]);
+          }
+
+          // Fetch attended events
+          try {
+            const attendedResponse = await getUserAttendedEvents(user.user_id);
+            console.log('Attended events response:', attendedResponse);
+            const attended = attendedResponse.user.map(event => transformEvent(event));
+            console.log('Transformed attended events:', attended);
+            setAttendedEvents(attended);
+          } catch (err) {
+            console.error('Failed to fetch attended events:', err);
+            setAttendedEvents([]);
+          }
+        } else {
+          console.log('No user logged in or user.user_id is missing:', user);
+        }
+        
+        // Calculate stats - need to wait for state updates or use local variables
+        const totalParticipants = [...upcoming].reduce((acc, e) => acc + e.attendees, 0);
+        
+        // Use local counts since state might not be updated yet
+        let registeredCount = 0;
+        let attendedCount = 0;
+        
+        if (user?.user_id) {
+          try {
+            const registeredResponse = await getUserRegistredEvents(user.user_id);
+            registeredCount = registeredResponse.user?.length || 0;
+          } catch (err) {
+            console.error('Error counting registered events:', err);
+          }
+          
+          try {
+            const attendedResponse = await getUserAttendedEvents(user.user_id);
+            attendedCount = attendedResponse.user?.length || 0;
+          } catch (err) {
+            console.error('Error counting attended events:', err);
+          }
+        }
+        
+        console.log('Setting stats:', {
+          totalEvents: allEventsResponse.event.length,
+          upcomingEvents: upcoming.length,
+          registeredEvents: registeredCount,
+          attendedEvents: attendedCount
         });
         
-        setEvents(transformedEvents);
-        
-        // Calculate stats
-        const upcomingCount = transformedEvents.filter(e => e.type === 'upcoming').length;
-        const attendedCount = transformedEvents.filter(e => e.type === 'attended').length;
-        const totalParticipants = transformedEvents.reduce((acc, e) => acc + e.attendees, 0);
-        
         setStats({
-          totalEvents: transformedEvents.length,
-          upcomingEvents: upcomingCount,
+          totalEvents: allEventsResponse.event.length,
+          upcomingEvents: upcoming.length,
+          registeredEvents: registeredCount,
           attendedEvents: attendedCount,
           totalParticipants: totalParticipants
         });
@@ -144,9 +149,23 @@ export default function EventsSection() {
     };
 
     fetchEvents();
-  }, []);
+  }, [user?.user_id]);
 
-  const filteredEvents = events.filter(event => event.type === activeTab);
+  // Get events based on active tab
+  const getCurrentEvents = () => {
+    switch(activeTab) {
+      case 'upcoming':
+        return upcomingEvents;
+      case 'registered':
+        return registeredEvents;
+      case 'attended':
+        return attendedEvents;
+      default:
+        return [];
+    }
+  };
+
+  const filteredEvents = getCurrentEvents();
 
   // Show loading state
   if (isLoading) {
@@ -203,6 +222,20 @@ export default function EventsSection() {
           </div>
         </div>
 
+        <div className="backdrop-blur-sm bg-gradient-to-br from-purple-50/80 to-purple-100/80 dark:from-purple-900/40 dark:to-purple-800/40 rounded-2xl p-4 lg:p-6 border border-purple-200/30 dark:border-purple-700/30 shadow-lg">
+          <div className="flex items-center justify-between mb-2 lg:mb-4">
+            <div className="w-10 h-10 lg:w-12 lg:h-12 bg-purple-500 rounded-xl flex items-center justify-center">
+              <svg className="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+            </div>
+          </div>
+          <div>
+            <h3 className="text-xl lg:text-2xl font-bold text-purple-700 dark:text-purple-300">{stats.registeredEvents}</h3>
+            <p className="text-purple-600 dark:text-purple-400 text-xs lg:text-sm font-medium">Événements inscrits</p>
+          </div>
+        </div>
+
         <div className="backdrop-blur-sm bg-gradient-to-br from-green-50/60 to-green-100/60 dark:from-green-900/30 dark:to-green-800/30 rounded-2xl p-4 lg:p-6 border border-green-200/40 dark:border-green-700/40 shadow-lg">
           <div className="flex items-center justify-between mb-2 lg:mb-4">
             <div className="w-10 h-10 lg:w-12 lg:h-12 bg-green-500 rounded-xl flex items-center justify-center">
@@ -217,31 +250,17 @@ export default function EventsSection() {
           </div>
         </div>
 
-        <div className="backdrop-blur-sm bg-gradient-to-br from-purple-50/80 to-purple-100/80 dark:from-purple-900/40 dark:to-purple-800/40 rounded-2xl p-6 border border-purple-200/30 dark:border-purple-700/30 shadow-lg">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="backdrop-blur-sm bg-gradient-to-br from-orange-50/80 to-orange-100/80 dark:from-orange-900/40 dark:to-orange-800/40 rounded-2xl p-4 lg:p-6 border border-orange-200/30 dark:border-orange-700/30 shadow-lg">
+          <div className="flex items-center justify-between mb-2 lg:mb-4">
+            <div className="w-10 h-10 lg:w-12 lg:h-12 bg-orange-500 rounded-xl flex items-center justify-center">
+              <svg className="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
           </div>
           <div>
-            <h3 className="text-2xl font-bold text-purple-700 dark:text-purple-300">{stats.attendedEvents}</h3>
-            <p className="text-purple-600 dark:text-purple-400 text-sm font-medium">Événements suivis</p>
-          </div>
-        </div>
-
-        <div className="backdrop-blur-sm bg-gradient-to-br from-orange-50/80 to-orange-100/80 dark:from-orange-900/40 dark:to-orange-800/40 rounded-2xl p-6 border border-orange-200/30 dark:border-orange-700/30 shadow-lg">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
-            </div>
-          </div>
-          <div>
-            <h3 className="text-2xl font-bold text-orange-700 dark:text-orange-300">{stats.totalParticipants}</h3>
-            <p className="text-orange-600 dark:text-orange-400 text-sm font-medium">Total participants</p>
+            <h3 className="text-xl lg:text-2xl font-bold text-orange-700 dark:text-orange-300">{stats.attendedEvents}</h3>
+            <p className="text-orange-600 dark:text-orange-400 text-xs lg:text-sm font-medium">Événements suivis</p>
           </div>
         </div>
       </div>
@@ -250,26 +269,36 @@ export default function EventsSection() {
       <div className="backdrop-blur-sm bg-base-100/5 rounded-2xl shadow-lg border border-base-300/30 overflow-hidden relative z-10">
         {/* Tab Navigation */}
         <div className="border-b border-base-100/10 bg-base-100/10 backdrop-blur-sm">
-          <div className="flex">
+          <div className="flex overflow-x-auto">
             <button
               onClick={() => setActiveTab('upcoming')}
-              className={`px-6 py-4 font-medium transition-all duration-200 border-b-2 ${
+              className={`px-4 lg:px-6 py-4 font-medium transition-all duration-200 border-b-2 whitespace-nowrap text-sm lg:text-base ${
                 activeTab === 'upcoming'
                   ? 'border-primary text-primary bg-primary/5'
                   : 'border-transparent text-base-content/70 hover:text-base-content hover:bg-base-200'
               }`}
             >
-              Événements à venir
+              À venir
+            </button>
+            <button
+              onClick={() => setActiveTab('registered')}
+              className={`px-4 lg:px-6 py-4 font-medium transition-all duration-200 border-b-2 whitespace-nowrap text-sm lg:text-base ${
+                activeTab === 'registered'
+                  ? 'border-primary text-primary bg-primary/5'
+                  : 'border-transparent text-base-content/70 hover:text-base-content hover:bg-base-200'
+              }`}
+            >
+              Mes inscriptions
             </button>
             <button
               onClick={() => setActiveTab('attended')}
-              className={`px-6 py-4 font-medium transition-all duration-200 border-b-2 ${
+              className={`px-4 lg:px-6 py-4 font-medium transition-all duration-200 border-b-2 whitespace-nowrap text-sm lg:text-base ${
                 activeTab === 'attended'
                   ? 'border-primary text-primary bg-primary/5'
                   : 'border-transparent text-base-content/70 hover:text-base-content hover:bg-base-200'
               }`}
             >
-              Vos événements
+              Événements assistés
             </button>
           </div>
         </div>
@@ -284,29 +313,30 @@ export default function EventsSection() {
                 </svg>
               </div>
               <h3 className="text-lg font-medium text-base-content mb-2">
-                {activeTab === 'upcoming' ? 'Aucun événement à venir' : 'Aucun événement suivi'}
+                {activeTab === 'upcoming' && 'Aucun événement à venir'}
+                {activeTab === 'registered' && 'Aucune inscription'}
+                {activeTab === 'attended' && 'Aucun événement suivi'}
               </h3>
               <p className="text-base-content/60">
-                {activeTab === 'upcoming' 
-                  ? 'Les prochains événements apparaîtront ici.' 
-                  : 'Les événements auxquels vous avez participé apparaîtront ici.'
-                }
+                {activeTab === 'upcoming' && 'Les prochains événements apparaîtront ici.'}
+                {activeTab === 'registered' && 'Les événements auxquels vous êtes inscrit apparaîtront ici.'}
+                {activeTab === 'attended' && 'Les événements auxquels vous avez participé apparaîtront ici.'}
               </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {filteredEvents.map((event) => (
                 <div key={event.id} className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300">
-                  <div className="flex">
+                  <div className="flex flex-col lg:flex-row">
                     {/* Left side - Profile/Event Image */}
-                    <div className="w-1/3 relative min-h-[280px]">
+                    <div className="w-full lg:w-1/3 relative h-48 lg:h-auto lg:min-h-[280px]">
                       {event.image ? (
                         <Image
                           src={event.image}
                           alt={event.title}
                           fill
                           className="object-cover"
-                          sizes="(max-width: 768px) 33vw, (max-width: 1200px) 25vw, 20vw"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         />
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center">
@@ -318,7 +348,7 @@ export default function EventsSection() {
                     </div>
 
                     {/* Right side - Event Details */}
-                    <div className="w-2/3 p-6 relative flex flex-col">
+                    <div className="w-full lg:w-2/3 p-6 relative flex flex-col">
                       {/* Date Badge */}
                       <div className="absolute top-4 right-4 text-center">
                         <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">
@@ -379,13 +409,17 @@ export default function EventsSection() {
                       {/* Action Button */}
                       <div className="mt-auto">
                         <button className="cursor-target w-full py-3 border-2 border-pink-500 text-pink-500 rounded-lg font-medium hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-colors duration-200">
-                          {activeTab === 'upcoming' ? 'S\'inscrire à l\'événement' : 'Voir les détails'}
+                          {activeTab === 'upcoming' && 'S\'inscrire à l\'événement'}
+                          {activeTab === 'registered' && 'Annuler l\'inscription'}
+                          {activeTab === 'attended' && 'Voir les détails'}
                         </button>
 
                         {/* Small disclaimer */}
-                        <p className="text-xs text-gray-400 text-center mt-2 italic">
-                          *Places limitées, inscription obligatoire
-                        </p>
+                        {activeTab === 'upcoming' && (
+                          <p className="text-xs text-gray-400 text-center mt-2 italic">
+                            *Places limitées, inscription obligatoire
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>

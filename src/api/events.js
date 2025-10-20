@@ -31,7 +31,7 @@ export const getAllEvents = async () => {
 //get all events user is registred to
 export const getUserRegistredEvents = async (userId) => {
     try {
-        const response = await fetch(`${API_BASE}/api/events/${userId}/registrations`, {
+        const response = await fetch(`${API_BASE}/api/users/${userId}/registrations`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem('auth_token')}`
@@ -57,7 +57,7 @@ export const getUserRegistredEvents = async (userId) => {
 //get events user attended
 export const getUserAttendedEvents = async (userId) => {
     try {
-        const response = await fetch(`${API_BASE}/api/events/${userId}/attendance`, {
+        const response = await fetch(`${API_BASE}/api/users/${userId}/attendance`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem('auth_token')}`
