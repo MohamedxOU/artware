@@ -134,9 +134,11 @@ export default function Navbar() {
       <nav className={`fixed top-0 z-50 w-full transition-all duration-300 ${
         isScrolled 
           ? "bg-base-100 border-b border-base-300 shadow-sm" 
-          : "bg-transparent"
+          : ""
       }`}>
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-4">
+        <div className={`max-w-7xl mx-auto flex items-center justify-between px-4 py-4 transition-all duration-300 ${
+          !isScrolled ? "mx-8 mt-4 bg-white/10 backdrop-blur-md rounded-full shadow-lg border border-white/20" : ""
+        }`}>
           {/* Logo */}
           <Link href="#hero" className="flex items-center gap-2">
             <div>
