@@ -4,8 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 /* import LiquidEther from "@/components/LiquidEther.jsx"; */
 import Iridescence from "@/components/Iridescence.jsx";
+import Aurora from "@/components/Aurora.jsx";
 import Shuffle from "@/components/Shuffle.jsx";
-import LetterGlitch from "../LetterGlitch";
 import { useTranslations } from 'next-intl';
 
 
@@ -19,9 +19,18 @@ const hero = {
 export default function Hero() {
   const [showImage, setShowImage] = useState(false);
   const [showText, setShowText] = useState(false);
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const [isDarkTheme, setIsDarkTheme] = useState(true);
 
   const t = useTranslations('HomePage');
+
+  // Aurora colors - same for both themes
+  const auroraColors = ["#9333ea", "#a855f7", "#f43098" ]; // Purples and pink
+
+  // Theme-aware text color
+  const textColor = isDarkTheme ? "text-white" : "text-base-content";
+
+  // Theme-aware logo
+  const logoSrc = isDarkTheme ? "/logos/ArtwareLogo-darkMode.png" : "/logos/ArtwareLogo.png";
 
   useEffect(() => {
     setTimeout(() => setShowImage(true), 100);
@@ -51,15 +60,15 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className={`bg-base-100 relative overflow-hidden`}
+      className={`bg-base-300 relative overflow-hidden`}
       style={{ height: "100vh" }}
     >
      
-<LetterGlitch
-  glitchSpeed={50}
-  centerVignette={true}
-  outerVignette={true}
-  smooth={true}
+<Aurora
+  colorStops={auroraColors}
+  blend={0.5}
+  amplitude={1.0}
+  speed={0.5}
 />
       
       {/* Dark overlay for better contrast */}
@@ -80,7 +89,7 @@ export default function Hero() {
                 }`}
               >
                 <Image 
-                  src="/logos/ArtwareLogo-darkMode.png" 
+                  src={logoSrc} 
                   alt="Artware Logo" 
                   width={300} 
                   height={300}
@@ -90,7 +99,7 @@ export default function Hero() {
 
               {/* Title */}
               <h1
-                className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-8 lg:mb-12 transition-all duration-1000 delay-200 ${
+                className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold ${textColor} mb-8 lg:mb-12 transition-all duration-1000 delay-200 ${
                   showText
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-8"
@@ -130,7 +139,11 @@ export default function Hero() {
                       behavior: 'smooth' 
                     });
                   }}
-                  className=" cursor-target btn btn-lg sm:btn-xl btn-outline border-white text-white font-semibold px-8 sm:px-10 py-3 sm:py-4 text-base sm:text-lg shadow-xl w-44 sm:w-48 hover:bg-white hover:text-black/80 hover:scale-105 transition-all duration-300"
+                  className={`cursor-target btn btn-lg sm:btn-xl btn-outline font-semibold px-8 sm:px-10 py-3 sm:py-4 text-base sm:text-lg shadow-xl w-44 sm:w-48 hover:scale-105 transition-all duration-300 ${
+                    isDarkTheme 
+                      ? "border-white text-white hover:bg-white hover:text-black/80" 
+                      : "border-base-content text-base-content hover:bg-base-content hover:text-base-100"
+                  }`}
                 >
                   {hero.cta2}
                 </button>

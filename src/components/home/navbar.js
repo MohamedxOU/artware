@@ -137,7 +137,7 @@ export default function Navbar() {
           : ""
       }`}>
         <div className={`max-w-7xl mx-auto flex items-center justify-between px-4 py-4 transition-all duration-300 ${
-          !isScrolled ? "mx-8 mt-4 bg-white/10 backdrop-blur-md rounded-full shadow-lg border border-white/20" : ""
+          !isScrolled && !isMobileMenuOpen ? "mx-8 mt-4 bg-white/10 backdrop-blur-md rounded-full shadow-lg border border-white/20" : ""
         }`}>
           {/* Logo */}
           <Link href="#hero" className="flex items-center gap-2">
