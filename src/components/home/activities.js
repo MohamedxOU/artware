@@ -4,27 +4,27 @@ import Image from "next/image";
 
 const activities = [
 	{
-		title: "Développement Web & Mobile",
+		title: "Formations & Ateliers",
 		image: "/activities/activity.jpg",
 		description: "Nous créons des applications web et mobiles innovantes avec les dernières technologies. Nos experts développent des solutions sur mesure pour optimiser votre présence digitale et améliorer l'expérience utilisateur.",
 	},
 	{
-		title: "Intelligence Artificielle",
+		title: "Evenements & Conférences",
 		image: "/activities/activity.jpg",
 		description: "Explorez le potentiel de l'IA avec nos solutions personnalisées. Nous développons des modèles de machine learning et des systèmes intelligents pour automatiser vos processus métier.",
 	},
 	{
-		title: "Programmation Compétitive",
+		title: "Competitions & Hackathons",
 		image: "/activities/activity.jpg",
 		description: "Perfectionnez vos compétences algorithmiques et participez aux compétitions internationales. Nous organisons des séances d'entraînement et des workshops pour tous les niveaux.",
 	},
 	{
-		title: "Événements & Workshops",
+		title: "Communauté & Networking",
 		image: "/activities/activity.jpg",
 		description: "Rejoignez notre communauté dynamique à travers nos événements tech, hackathons et workshops. Apprenez, partagez et créez des liens avec d'autres passionnés de technologie.",
 	},
 	{
-		title: "Formation & Mentorat",
+		title: "Solidarité & Engagement Social",
 		image: "/activities/activity.jpg",
 		description: "Bénéficiez de notre programme de mentorat et de formations techniques. Nos experts vous accompagnent dans votre parcours d'apprentissage et votre développement professionnel.",
 	},

@@ -16,12 +16,19 @@ export default function DashboardAppBar({
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const { isDarkMode, theme, isInitialized } = useThemeStore();
   const { addNotification } = useUIStore();
 
-  // Set mounted state
+  // Set mounted state and check if mobile
   useEffect(() => {
     setIsMounted(true);
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   // Close dropdowns when clicking outside
@@ -129,7 +136,7 @@ export default function DashboardAppBar({
               )}
             </button>
             
-            {showNotifications && (
+            {showNotifications && !isMobile && (
               <div className="absolute right-0 mt-2 w-72 sm:w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-50">
                 <div className="p-4 border-b border-gray-200 dark:border-gray-700">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Notifications</h3>
@@ -214,12 +221,12 @@ export default function DashboardAppBar({
               </svg>
             </button>
             
-            {showProfileMenu && (
-              <div className="absolute right-0 mt-2 w-56 sm:w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-50">
+            {showProfileMenu && !isMobile && (
+              <div className="absolute right-0 mt-2 w-[calc(100vw-2rem)] max-w-sm sm:w-72 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-50">
                 <div className="p-4 border-b border-gray-200 dark:border-gray-700">
                   <div className="flex items-center space-x-3">
                     {user?.profile_image_url ? (
-                      <div className="w-12 h-12 rounded-full overflow-hidden">
+                      <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
                         <Image 
                           src={user.profile_image_url} 
                           alt={`${user.first_name} ${user.last_name}`}
@@ -230,18 +237,18 @@ export default function DashboardAppBar({
                         />
                       </div>
                     ) : (
-                      <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+                      <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
                         <span className="text-white text-lg font-medium">
                           {user?.first_name?.[0]}{user?.last_name?.[0]}
                         </span>
                       </div>
                     )}
                     
-                    <div>
-                      <div className="font-medium text-gray-900 dark:text-white">
+                    <div className="flex-1 min-w-0 overflow-hidden">
+                      <div className="font-medium text-gray-900 dark:text-white truncate">
                         {user?.first_name} {user?.last_name}
                       </div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                      <div className="text-sm text-gray-500 dark:text-gray-400 truncate">
                         {user?.email}
                       </div>
                     </div>
@@ -257,17 +264,6 @@ export default function DashboardAppBar({
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                     View Profile
-                  </button>
-                  
-                  <button 
-                    onClick={() => setShowProfileMenu(false)}
-                    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
-                  >
-                    <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    Settings
                   </button>
                   
                   <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
@@ -291,6 +287,144 @@ export default function DashboardAppBar({
           </div>
         </div>
       </div>
+
+      {/* Mobile Notifications Modal */}
+      {showNotifications && isMobile && (
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm" onClick={() => setShowNotifications(false)}>
+          <div className="fixed inset-x-0 bottom-0 bg-white dark:bg-gray-900 rounded-t-3xl shadow-2xl max-h-[85vh] overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            {/* Handle Bar */}
+            <div className="flex justify-center pt-3 pb-2">
+              <div className="w-12 h-1 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
+            </div>
+            
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Notifications</h3>
+              <button 
+                onClick={() => setShowNotifications(false)}
+                className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Notifications List */}
+            <div className="overflow-y-auto" style={{ maxHeight: 'calc(85vh - 120px)' }}>
+              {mockNotifications.length > 0 ? (
+                mockNotifications.map((notification) => (
+                  <div
+                    key={notification.id}
+                    className={`p-5 border-b border-gray-200 dark:border-gray-800 active:bg-gray-50 dark:active:bg-gray-800 ${
+                      !notification.read ? 'bg-purple-50 dark:bg-purple-900/10' : ''
+                    }`}
+                    onClick={() => setShowNotifications(false)}
+                  >
+                    <div className="flex items-start space-x-3">
+                      <div className={`w-3 h-3 rounded-full mt-1.5 flex-shrink-0 ${
+                        !notification.read ? 'bg-purple-500' : 'bg-gray-300 dark:bg-gray-600'
+                      }`}></div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-base font-medium text-gray-900 dark:text-white">
+                          {notification.title}
+                        </h4>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                          {notification.message}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">
+                          {notification.time}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="p-12 text-center text-gray-500 dark:text-gray-400">
+                  <svg className="w-16 h-16 mx-auto mb-4 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                  </svg>
+                  <p className="text-base">Aucune notification</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Mobile Profile Modal */}
+      {showProfileMenu && isMobile && (
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm" onClick={() => setShowProfileMenu(false)}>
+          <div className="fixed inset-x-0 bottom-0 bg-white dark:bg-gray-900 rounded-t-3xl shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            {/* Handle Bar */}
+            <div className="flex justify-center pt-3 pb-2">
+              <div className="w-12 h-1 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
+            </div>
+            
+            {/* Profile Header */}
+            <div className="px-6 py-6 border-b border-gray-200 dark:border-gray-800">
+              <div className="flex items-center space-x-4">
+                {user?.profile_image_url ? (
+                  <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
+                    <Image 
+                      src={user.profile_image_url} 
+                      alt={`${user.first_name} ${user.last_name}`}
+                      width={64}
+                      height={64}
+                      className="w-full h-full object-cover"
+                      unoptimized={user.profile_image_url.includes('imagekit.io')}
+                    />
+                  </div>
+                ) : (
+                  <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-white text-2xl font-medium">
+                      {user?.first_name?.[0]}{user?.last_name?.[0]}
+                    </span>
+                  </div>
+                )}
+                
+                <div className="flex-1 min-w-0">
+                  <div className="text-lg font-semibold text-gray-900 dark:text-white truncate">
+                    {user?.first_name} {user?.last_name}
+                  </div>
+                  <div className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                    {user?.email}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Menu Items */}
+            <div className="py-4">
+              <button 
+                onClick={() => setShowProfileMenu(false)}
+                className="flex items-center w-full px-6 py-4 text-base text-gray-700 dark:text-gray-300 active:bg-gray-50 dark:active:bg-gray-800"
+              >
+                <svg className="w-6 h-6 mr-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                View Profile
+              </button>
+              
+              <div className="border-t border-gray-200 dark:border-gray-800 my-2"></div>
+              
+              <button 
+                onClick={() => {
+                  handleLogout();
+                  setShowProfileMenu(false);
+                }}
+                disabled={isLoading}
+                className="flex items-center w-full px-6 py-4 text-base text-red-600 active:bg-red-50 dark:active:bg-red-900/20"
+              >
+                <svg className="w-6 h-6 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                {isLoading ? 'Déconnexion...' : 'Sign out'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

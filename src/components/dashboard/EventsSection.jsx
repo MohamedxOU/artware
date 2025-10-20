@@ -299,13 +299,14 @@ export default function EventsSection() {
                 <div key={event.id} className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300">
                   <div className="flex">
                     {/* Left side - Profile/Event Image */}
-                    <div className="w-1/3 relative">
+                    <div className="w-1/3 relative min-h-[280px]">
                       {event.image ? (
                         <Image
                           src={event.image}
                           alt={event.title}
                           fill
                           className="object-cover"
+                          sizes="(max-width: 768px) 33vw, (max-width: 1200px) 25vw, 20vw"
                         />
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center">
@@ -317,7 +318,7 @@ export default function EventsSection() {
                     </div>
 
                     {/* Right side - Event Details */}
-                    <div className="w-2/3 p-6 relative">
+                    <div className="w-2/3 p-6 relative flex flex-col">
                       {/* Date Badge */}
                       <div className="absolute top-4 right-4 text-center">
                         <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">
@@ -342,28 +343,28 @@ export default function EventsSection() {
 
                       {/* Location */}
                       <div className="flex items-center gap-2 mb-4">
-                        <div className="w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center">
+                        <div className="w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
                           <svg className="w-4 h-4 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4-4a8 8 0 1111.314 0z" />
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                           </svg>
                         </div>
-                        <div>
-                          <div className="text-lg font-bold text-pink-500">{event.location}</div>
-                          <div className="text-sm text-gray-600 dark:text-gray-400">
+                        <div className="min-w-0">
+                          <div className="text-lg font-bold text-pink-500 truncate">{event.location}</div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400 truncate">
                             {event.celluleName}, Maroc
                           </div>
                         </div>
                       </div>
 
                       {/* Countdown Timer */}
-                      <div className="flex items-center gap-2 mb-6">
-                        <div className="w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center">
+                      <div className="flex items-start gap-2 mb-6">
+                        <div className="w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
                           <svg className="w-4 h-4 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
                         </div>
-                        <div>
+                        <div className="min-w-0 flex-1">
                           <div className="text-sm">
                             <span className="text-pink-500 font-bold">
                               {Math.floor(Math.random() * 10) + 1} jours {Math.floor(Math.random() * 24)} heures {Math.floor(Math.random() * 60)} minutes
@@ -376,14 +377,16 @@ export default function EventsSection() {
                       </div>
 
                       {/* Action Button */}
-                      <button className="cursor-target w-full py-3  border-2 border-pink-500 text-pink-500 rounded-lg font-medium hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-colors duration-200">
-                        {activeTab === 'upcoming' ? 'S\'inscrire à l\'événement' : 'Voir les détails'}
-                      </button>
+                      <div className="mt-auto">
+                        <button className="cursor-target w-full py-3 border-2 border-pink-500 text-pink-500 rounded-lg font-medium hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-colors duration-200">
+                          {activeTab === 'upcoming' ? 'S\'inscrire à l\'événement' : 'Voir les détails'}
+                        </button>
 
-                      {/* Small disclaimer */}
-                      <p className="text-xs text-gray-400 text-center mt-2 italic">
-                        *Places limitées, inscription obligatoire
-                      </p>
+                        {/* Small disclaimer */}
+                        <p className="text-xs text-gray-400 text-center mt-2 italic">
+                          *Places limitées, inscription obligatoire
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
