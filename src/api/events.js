@@ -130,3 +130,30 @@ export const unregisterUserFromEvent = async (userId, eventId) => {
         throw error;
     }
 };
+
+
+
+//get qr code
+
+export const getQrCode = async (userId) => {
+    try {
+        const response = await fetch(`${API_BASE}/api/users/${userId}/qr`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem('auth_token')}`
+            }
+        });
+        if (response.ok) {
+            return response.json();
+        } else {
+            const contentType = response.headers.get('content-type');
+            const errorMessage = contentType === 'application/json'
+                ? (await response.json()).error || 'Unknown error'
+                : 'Unknown error';
+            throw new Error(errorMessage);
+        }
+    } catch (error) {
+        console.error('Failed to fetch QR code:', error);
+        throw error;
+    }
+};

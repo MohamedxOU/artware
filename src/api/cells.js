@@ -9,7 +9,7 @@ export const getAllCells = async () => {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem('auth_token')}`
-            }  
+            }   
         });
         
         if (response.ok) {

@@ -34,49 +34,23 @@ export default function CellsSection({ user }) {
         
         console.log('Fetching cells for user:', currentUser?.user_id);
         
-        // Step 1: Get all cells
+        // Get all cells with membership info
         const allCellsResponse = await getAllCells();
         console.log('All cells response:', allCellsResponse);
         
-        // Step 2: Get user cells if user ID is available
-        let userCellsResponse = { cells: [] };
-        if (currentUser?.user_id) {
-          try {
-            console.log('Fetching user cells for ID:', currentUser.user_id);
-            userCellsResponse = await getUserCells(currentUser.user_id);
-            console.log('User cells response:', userCellsResponse);
-            setUserCells(userCellsResponse.cells);
-          } catch (userCellsError) {
-            console.warn('Failed to fetch user cells:', userCellsError);
-          }
-        } else {
-          console.warn('No user ID available, skipping user cells fetch');
-        }
+        // Map cells with color and use isInCell from API
+        const cellsWithColor = allCellsResponse.cells.map((cell, index) => ({
+          ...cell,
+          color: getColorByIndex(index),
+          isMember: cell.isInCell // Use the isInCell field from API
+        }));
         
-        // Step 3: Compare IDs and mark cells where user is member
-        const cellsWithMembership = allCellsResponse.cells.map((cell, index) => {
-          // Check if this cell ID exists in user cells
-          let isMember = false;
-          for (let i = 0; i < userCellsResponse.cells.length; i++) {
-            if (userCellsResponse.cells[i].id === cell.id) {
-              isMember = true;
-              console.log(`✅ User IS member of cell ${cell.id} (${cell.name})`);
-              break;
-            }
-          }
-          if (!isMember) {
-            console.log(`❌ User is NOT member of cell ${cell.id} (${cell.name})`);
-          }
-          
-          return {
-            ...cell,
-            color: getColorByIndex(index),
-            isMember: isMember  // Add this flag
-          };
-        });
+        console.log('Final cells with membership:', cellsWithColor);
+        setAllCells(cellsWithColor);
         
-        console.log('Final cells with membership:', cellsWithMembership);
-        setAllCells(cellsWithMembership);
+        // Set user cells for stats
+        const userCellsList = cellsWithColor.filter(cell => cell.isMember);
+        setUserCells(userCellsList);
       } catch (err) {
         console.error('Failed to fetch cells:', err);
         setError(err.message);
@@ -95,12 +69,6 @@ export default function CellsSection({ user }) {
       return;
     }
 
-    // Confirmation alert
-    const confirmJoin = window.confirm(`Êtes-vous sûr de vouloir rejoindre la cellule "${cellName}" ?`);
-    if (!confirmJoin) {
-      return;
-    }
-
     try {
       setJoiningCell(cellId);
       console.log(`Attempting to join cell ${cellId}`);
@@ -112,15 +80,15 @@ export default function CellsSection({ user }) {
       setAllCells(prevCells => 
         prevCells.map(cell => 
           cell.id === cellId 
-            ? { ...cell, isMember: true }
+            ? { ...cell, isMember: true, isInCell: true }
             : cell
         )
       );
       
-      // Also update userCells state
+      // Update userCells state
       const cellToAdd = allCells.find(cell => cell.id === cellId);
       if (cellToAdd) {
-        setUserCells(prevUserCells => [...prevUserCells, cellToAdd]);
+        setUserCells(prevUserCells => [...prevUserCells, { ...cellToAdd, isMember: true }]);
       }
       
       console.log(`✅ Successfully joined cell ${cellId}`);
@@ -140,12 +108,6 @@ export default function CellsSection({ user }) {
       return;
     }
 
-    // Confirmation alert
-    const confirmQuit = window.confirm(`Êtes-vous sûr de vouloir quitter la cellule "${cellName}" ?`);
-    if (!confirmQuit) {
-      return;
-    }
-
     try {
       setQuittingCell(cellId);
       console.log(`Attempting to quit cell ${cellId}`);
@@ -157,7 +119,7 @@ export default function CellsSection({ user }) {
       setAllCells(prevCells => 
         prevCells.map(cell => 
           cell.id === cellId 
-            ? { ...cell, isMember: false }
+            ? { ...cell, isMember: false, isInCell: false }
             : cell
         )
       );
@@ -321,108 +283,107 @@ export default function CellsSection({ user }) {
         {displayedCells.map((cell) => (
           <div
             key={cell.id}
-            className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 group"
+            className="relative rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 group"
           >
-            {/* Logos/Images Section */}
-            <div className="h-32 bg-gray-50 dark:bg-gray-700 flex items-center justify-center relative">
+            {/* Background Image with Gradient Overlay */}
+            <div className="absolute inset-0">
               {cell.image_cell ? (
-                <img 
-                  src={cell.image_cell} 
-                  alt={cell.name}
-                  className="w-full h-full object-cover"
-                />
+                <>
+                  <img 
+                    src={cell.image_cell} 
+                    alt={cell.name}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  {/* Gradient overlay for better text readability */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/80"></div>
+                </>
               ) : (
-                <div className="grid grid-cols-3 gap-2 w-full h-full p-4">
-                  {/* Mock logos grid */}
-                  <div className="bg-blue-600 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-xs">{cell.abbreviation}</span>
-                  </div>
-                  <div className="bg-gray-300 dark:bg-gray-600 rounded-lg flex items-center justify-center">
-                    <span className="text-gray-600 dark:text-gray-300 font-bold text-xs">FST</span>
-                  </div>
-                  <div className="bg-green-600 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-xs">★</span>
-                  </div>
-                  <div className="bg-red-600 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-xs">ENSA</span>
-                  </div>
-                  <div className="bg-purple-600 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-xs">UI</span>
-                  </div>
-                  <div className="bg-orange-600 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-xs">DEV</span>
-                  </div>
+                <div className="w-full h-full bg-gradient-to-br from-blue-500 via-purple-600 to-pink-600">
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60"></div>
                 </div>
               )}
-              
-              {/* Member Status Badge */}
-              {cell.isMember && (
-                <div className="absolute top-2 right-2">
-                  <div className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+            </div>
+
+            {/* Content */}
+            <div className="relative h-[420px] flex flex-col justify-between p-6">
+              {/* Top Section - Badge */}
+              <div className="flex justify-between items-start">
+                {cell.isMember && (
+                  <div className="bg-white/20 backdrop-blur-md border border-white/30 text-white px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 shadow-lg">
                     <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                     Membre
                   </div>
-                </div>
-              )}
-            </div>
-
-            {/* Content Section */}
-            <div className="p-6">
-              {/* Group Name */}
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
-                {cell.name}
-              </h3>
-
-              {/* Stats */}
-              <div className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-                <div className="flex items-center gap-1 mb-1">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
-                  </svg>
-                  <span>{Math.floor(Math.random() * 50) + 10},6 K membres</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-                  </svg>
-                  <span>{Math.floor(Math.random() * 20) + 5} publications par jour</span>
-                </div>
+                )}
               </div>
 
-              {/* Action Button */}
-              {cell.isMember ? (
-                <button
-                  onClick={() => handleQuitCell(cell.id, cell.name)}
-                  disabled={quittingCell === cell.id}
-                  className="w-full py-3 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed border border-red-200"
-                >
-                  {quittingCell === cell.id ? (
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="animate-spin w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full"></div>
-                      <span>Sortie en cours...</span>
-                    </div>
-                  ) : (
-                    'Quitter le groupe'
-                  )}
-                </button>
-              ) : (
-                <button
-                  onClick={() => handleJoinCell(cell.id, cell.name)}
-                  disabled={joiningCell === cell.id}
-                  className="w-full py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-lg font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {joiningCell === cell.id ? (
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
-                      <span>Adhésion...</span>
-                    </div>
-                  ) : (
-                    'Rejoindre le groupe'
-                  )}
-                </button>
+              {/* Center - Logo/Icon if no image */}
+              {!cell.image_cell && (
+                <div className="flex justify-center items-center flex-1">
+                  <div className="w-32 h-32 bg-white/20 backdrop-blur-md rounded-3xl flex items-center justify-center border border-white/30">
+                    <span className="text-white font-bold text-5xl">{cell.abbreviation}</span>
+                  </div>
+                </div>
               )}
+
+              {/* Bottom Section - Info */}
+              <div className="space-y-4">
+                {/* Cell Name */}
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <h3 className="text-2xl font-bold text-white">
+                      {cell.name}
+                    </h3>
+                    <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  
+                  {/* Abbreviation Badge */}
+                  <span className="inline-block px-2 py-1 bg-white/20 backdrop-blur-md border border-white/30 text-white text-xs font-semibold rounded-md">
+                    {cell.abbreviation}
+                  </span>
+                </div>
+
+                {/* Domain/Description */}
+                <p className="text-sm text-white/90 line-clamp-2 leading-relaxed">
+                  {cell.domain}
+                </p>
+
+                {/* Action Button */}
+                {cell.isMember ? (
+                  <button
+                    onClick={() => handleQuitCell(cell.id, cell.name)}
+                    disabled={quittingCell === cell.id}
+                    className="cursor-target w-full py-3 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white rounded-xl font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {quittingCell === cell.id ? (
+                      <div className="flex items-center justify-center gap-2">
+                        <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
+                        <span>Sortie en cours...</span>
+                      </div>
+                    ) : (
+                      'Quitter la cellule'
+                    )}
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleJoinCell(cell.id, cell.name)}
+                    disabled={joiningCell === cell.id}
+                    className="cursor-target w-full py-3 bg-white/90 hover:bg-white text-gray-900 rounded-xl font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur-md shadow-lg"
+                  >
+                    {joiningCell === cell.id ? (
+                      <div className="flex items-center justify-center gap-2">
+                        <div className="animate-spin w-4 h-4 border-2 border-gray-900 border-t-transparent rounded-full"></div>
+                        <span>Adhésion...</span>
+                      </div>
+                    ) : (
+                      'Rejoindre la cellule'
+                    )}
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         ))}

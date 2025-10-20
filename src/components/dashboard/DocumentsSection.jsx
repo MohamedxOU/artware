@@ -1,14 +1,18 @@
 "use client";
 import { useState, useMemo, useEffect } from 'react';
-import { getAllDocuments } from '@/api/documents';
+import { getAllDocuments, getDocumentsByEvent } from '@/api/documents';
+import { getUserAttendedEvents, getUserRegistredEvents } from '@/api/events';
+import useAuthStore from '@/stores/authStore';
 
 export default function DocumentsSection() {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('date'); // 'date' or 'name'
   const [selectedField, setSelectedField] = useState('all');
   const [documents, setDocuments] = useState([]);
+  const [recommendedDocuments, setRecommendedDocuments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { user } = useAuthStore();
 
   // Fetch documents from API
   useEffect(() => {
@@ -16,6 +20,8 @@ export default function DocumentsSection() {
       try {
         setIsLoading(true);
         setError(null);
+        
+        // Fetch all documents
         const response = await getAllDocuments();
         
         // Transform API response to match component format
@@ -24,6 +30,7 @@ export default function DocumentsSection() {
           title: doc.title,
           file_path: doc.file_path,
           created_at: doc.created_at,
+          event_id: doc.event_id,
           // Add derived fields for the UI
           type: getFileTypeFromPath(doc.file_path),
           size: "N/A", // Not provided by API
@@ -38,6 +45,11 @@ export default function DocumentsSection() {
         }));
         
         setDocuments(transformedDocuments);
+
+        // Fetch recommended documents from user's events
+        if (user?.user_id) {
+          await fetchRecommendedDocuments();
+        }
       } catch (err) {
         console.error('Failed to fetch documents:', err);
         setError(err.message);
@@ -47,7 +59,97 @@ export default function DocumentsSection() {
     };
 
     fetchDocuments();
-  }, []);
+  }, [user?.user_id]);
+
+  // Fetch recommended documents from attended and registered events
+  const fetchRecommendedDocuments = async () => {
+    try {
+      const recommendedDocs = [];
+      const processedEventIds = new Set();
+
+      // Priority 1: Attended events
+      try {
+        const attendedEventsResponse = await getUserAttendedEvents(user.user_id);
+        const attendedEvents = attendedEventsResponse.user || [];
+        
+        // Fetch documents from attended events
+        for (const event of attendedEvents.slice(0, 4)) { // Limit to 4 attended events
+          if (processedEventIds.has(event.id)) continue;
+          processedEventIds.add(event.id);
+
+          try {
+            const docsResponse = await getDocumentsByEvent(event.id);
+            const eventDocs = docsResponse.events || [];
+            
+            // Add documents from this event
+            eventDocs.forEach(doc => {
+              if (recommendedDocs.length < 6) {
+                recommendedDocs.push({
+                  id: doc.id,
+                  title: doc.title,
+                  file_path: doc.file_path,
+                  type: getFileTypeFromPath(doc.file_path),
+                  created_at: doc.created_at,
+                  event_id: doc.event_id,
+                  eventName: event.title
+                });
+              }
+            });
+
+            if (recommendedDocs.length >= 6) break;
+          } catch (err) {
+            console.warn(`Failed to fetch documents for attended event ${event.id}:`, err);
+          }
+        }
+      } catch (err) {
+        console.warn('Failed to fetch attended events:', err);
+      }
+
+      // Priority 2: Registered events (if we don't have 6 yet)
+      if (recommendedDocs.length < 6) {
+        try {
+          const registeredEventsResponse = await getUserRegistredEvents(user.user_id);
+          const registeredEvents = registeredEventsResponse.user || [];
+          
+          // Fetch documents from registered events
+          for (const event of registeredEvents) {
+            if (processedEventIds.has(event.id)) continue;
+            if (recommendedDocs.length >= 6) break;
+            
+            processedEventIds.add(event.id);
+
+            try {
+              const docsResponse = await getDocumentsByEvent(event.id);
+              const eventDocs = docsResponse.events || [];
+              
+              // Add documents from this event
+              eventDocs.forEach(doc => {
+                if (recommendedDocs.length < 6) {
+                  recommendedDocs.push({
+                    id: doc.id,
+                    title: doc.title,
+                    file_path: doc.file_path,
+                    type: getFileTypeFromPath(doc.file_path),
+                    created_at: doc.created_at,
+                    event_id: doc.event_id,
+                    eventName: event.title
+                  });
+                }
+              });
+            } catch (err) {
+              console.warn(`Failed to fetch documents for registered event ${event.id}:`, err);
+            }
+          }
+        } catch (err) {
+          console.warn('Failed to fetch registered events:', err);
+        }
+      }
+
+      setRecommendedDocuments(recommendedDocs.slice(0, 6)); // Ensure max 6 documents
+    } catch (err) {
+      console.error('Failed to fetch recommended documents:', err);
+    }
+  };
 
   // Helper function to get file type from file path
   const getFileTypeFromPath = (filePath) => {
@@ -200,51 +302,6 @@ export default function DocumentsSection() {
       day: 'numeric'
     });
   };
-  // Mock recommended documents
-  const recommendedDocuments = [
-    {
-      id: 'rec-1',
-      title: 'Psychologie & Money',
-      author: 'Morgan Housel',
-      image: '/mock/book-psychology-money.jpg',
-      rating: 4.8,
-      color: 'bg-green-100'
-    },
-    {
-      id: 'rec-2', 
-      title: 'How Innovation Works',
-      author: 'Matt Ridley',
-      image: '/mock/book-innovation.jpg',
-      rating: 4.6,
-      color: 'bg-yellow-400'
-    },
-    {
-      id: 'rec-3',
-      title: 'Company of One',
-      author: 'Paul Jarvis', 
-      image: '/mock/book-company-one.jpg',
-      rating: 4.7,
-      color: 'bg-gray-100'
-    },
-    {
-      id: 'rec-4',
-      title: 'Stupore E Tremori',
-      author: 'Amélie Nothomb',
-      image: '/mock/book-stupore.jpg',
-      rating: 4.5,
-      color: 'bg-amber-600'
-    },
-    {
-      id: 'rec-5',
-      title: 'Company of One',
-      author: 'Paul Jarvis',
-      image: '/mock/book-company-two.jpg', 
-      rating: 4.8,
-      color: 'bg-blue-900'
-    }
-  ];
-
-
 
   return (
     <div className="w-full max-w-7xl mx-auto relative min-h-full">
@@ -257,11 +314,12 @@ export default function DocumentsSection() {
             </svg>
             <input
               type="text"
-              placeholder="Rechercher des livres..."
+              placeholder="Rechercher des documents..."
               className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
+          </div>
         </div>
       </div>
 
@@ -269,12 +327,7 @@ export default function DocumentsSection() {
       <div className="mb-8">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Recommandés</h2>
-          <button className="text-blue-500 hover:text-blue-600 text-sm font-medium flex items-center gap-1">
-            Voir tout
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
+          
         </div>
 
         {/* Recommended Documents Horizontal Scroll */}
@@ -282,7 +335,7 @@ export default function DocumentsSection() {
           {recommendedDocuments.map((doc) => (
             <div
               key={doc.id}
-              className="flex-shrink-0 cursor-pointer group"
+              className="flex-shrink-0 cursor-pointer group cursor-target"
               onClick={() => handleDownload(doc)}
             >
               {/* Document Card - Same design as main documents */}
@@ -292,7 +345,7 @@ export default function DocumentsSection() {
                   <div className="w-12 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center relative">
                     {/* File type badge - Default to PDF for recommended */}
                     <div className="absolute -top-2 -right-2 px-2 py-1 rounded text-xs font-bold text-white bg-red-500">
-                      PDF
+                      {doc.type === 'Word' ? 'DOC' : doc.type === 'Image' ? 'IMG' : doc.type || 'PDF'}
                     </div>
                     
                     {/* Document icon */}
@@ -307,9 +360,15 @@ export default function DocumentsSection() {
                   <h4 className="font-medium text-gray-900 dark:text-white text-sm mb-1 line-clamp-2">
                     {doc.title}
                   </h4>
-                  <p className="text-gray-500 dark:text-gray-400 text-xs">
-                    {doc.author}
-                  </p>
+                  {doc.eventName ? (
+                    <p className="text-gray-500 dark:text-gray-400 text-xs line-clamp-1">
+                      {doc.eventName}
+                    </p>
+                  ) : (
+                    <p className="text-gray-500 dark:text-gray-400 text-xs">
+                      {formatDate(doc.created_at)}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -327,78 +386,77 @@ export default function DocumentsSection() {
         </div>
 
         {/* Documents Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-          {filteredAndSortedDocuments.map((doc) => (
-            <div
-              key={doc.id}
-              className="cursor-pointer group"
-              onClick={() => handleDownload(doc)}
-            >
-              {/* Document Card */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-200 group-hover:border-blue-300">
-                {/* Document Icon */}
-                <div className="flex justify-center mb-3">
-                  <div className="w-12 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center relative">
-                    {/* File type badge */}
-                    <div className={`absolute -top-2 -right-2 px-2 py-1 rounded text-xs font-bold text-white ${
-                      doc.type === 'PDF' 
-                        ? 'bg-red-500' 
-                        : doc.type === 'Image'
-                        ? 'bg-green-500'
-                        : doc.type === 'Word'
-                        ? 'bg-blue-500'
-                        : doc.type === 'PowerPoint'
-                        ? 'bg-orange-500'
-                        : 'bg-gray-500'
-                    }`}>
-                      {doc.type === 'Word' ? 'DOC' : doc.type === 'Image' ? 'IMG' : doc.type}
+        {filteredAndSortedDocuments.length > 0 ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+            {filteredAndSortedDocuments.map((doc) => (
+              <div
+                key={doc.id}
+                className="cursor-pointer group cursor-target"
+                onClick={() => handleDownload(doc)}
+              >
+                {/* Document Card */}
+                <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-200 group-hover:border-blue-300">
+                  {/* Document Icon */}
+                  <div className="flex justify-center mb-3">
+                    <div className="w-12 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center relative">
+                      {/* File type badge */}
+                      <div className={`absolute -top-2 -right-2 px-2 py-1 rounded text-xs font-bold text-white ${
+                        doc.type === 'PDF' 
+                          ? 'bg-red-500' 
+                          : doc.type === 'Image'
+                          ? 'bg-green-500'
+                          : doc.type === 'Word'
+                          ? 'bg-blue-500'
+                          : doc.type === 'PowerPoint'
+                          ? 'bg-orange-500'
+                          : 'bg-gray-500'
+                      }`}>
+                        {doc.type === 'Word' ? 'DOC' : doc.type === 'Image' ? 'IMG' : doc.type}
+                      </div>
+                      
+                      {/* Document icon */}
+                      <svg className="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
+                      </svg>
                     </div>
-                    
-                    {/* Document icon */}
-                    <svg className="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
-                    </svg>
+                  </div>
+                  
+                  {/* Document Info */}
+                  <div className="text-center">
+                    <h4 className="font-medium text-gray-900 dark:text-white text-sm mb-1 line-clamp-2">
+                      {doc.title}
+                    </h4>
+                    <p className="text-gray-500 dark:text-gray-400 text-xs">
+                      {formatDate(doc.created_at)}
+                    </p>
                   </div>
                 </div>
-                
-                {/* Document Info */}
-                <div className="text-center">
-                  <h4 className="font-medium text-gray-900 dark:text-white text-sm mb-1 line-clamp-2">
-                    {doc.title}
-                  </h4>
-                  <p className="text-gray-500 dark:text-gray-400 text-xs">
-                    {formatDate(doc.created_at)}
-                  </p>
-                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      </div>
-
-      {/* Empty State */}
-      {filteredAndSortedDocuments.length === 0 && (
-        <div className="text-center py-12">
-          <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-            </svg>
+            ))}
           </div>
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Aucun livre trouvé</h3>
-          <p className="text-gray-600 dark:text-gray-400 mb-4">
-            Aucun livre ne correspond à vos critères de recherche.
-          </p>
-          <button
-            onClick={() => {
-              setSearchQuery('');
-            }}
-            className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-colors"
-          >
-            Réinitialiser la recherche
-          </button>
-        </div>
-      )}
+        ) : (
+          /* Empty State */
+          <div className="text-center py-12">
+            <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Aucun document trouvé</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
+              Aucun document ne correspond à vos critères de recherche.
+            </p>
+            <button
+              onClick={() => {
+                setSearchQuery('');
+              }}
+              className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-colors"
+            >
+              Réinitialiser la recherche
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { getAllEvents, getUserRegistredEvents, getUserAttendedEvents } from '@/api/events';
+import { getAllEvents, getUserRegistredEvents, getUserAttendedEvents, registerUserToEvent, unregisterUserFromEvent, getQrCode } from '@/api/events';
 import useAuthStore from '@/stores/authStore';
 
 // Mock data for demonstration
@@ -17,6 +17,10 @@ export default function EventsSection() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useAuthStore();
+  const [actionLoading, setActionLoading] = useState(null); // Track which event is being processed
+  const [qrCodeModal, setQrCodeModal] = useState({ isOpen: false, qrCode: null, event: null });
+  const [notification, setNotification] = useState({ show: false, type: '', message: '', title: '' });
+  const [confirmModal, setConfirmModal] = useState({ show: false, title: '', message: '', onConfirm: null });
   const [stats, setStats] = useState({
     totalEvents: 0,
     upcomingEvents: 0,
@@ -68,11 +72,9 @@ export default function EventsSection() {
         // Fetch all events (upcoming)
         const allEventsResponse = await getAllEvents();
         const currentDate = new Date();
-        const upcoming = allEventsResponse.event
-          .filter(event => new Date(event.date) > currentDate)
-          .map(event => transformEvent(event));
-        setUpcomingEvents(upcoming);
-
+        
+        let registeredEventIds = [];
+        
         // Fetch registered events if user is logged in
         if (user?.user_id) {
           console.log('Fetching registered events for user:', user.user_id);
@@ -82,6 +84,9 @@ export default function EventsSection() {
             const registered = registeredResponse.user.map(event => transformEvent(event, true));
             console.log('Transformed registered events:', registered);
             setRegisteredEvents(registered);
+            
+            // Get IDs of registered events to filter them out from upcoming
+            registeredEventIds = registered.map(e => e.id);
           } catch (err) {
             console.error('Failed to fetch registered events:', err);
             setRegisteredEvents([]);
@@ -101,6 +106,16 @@ export default function EventsSection() {
         } else {
           console.log('No user logged in or user.user_id is missing:', user);
         }
+        
+        // Filter upcoming events to exclude registered events
+        const upcoming = allEventsResponse.event
+          .filter(event => {
+            const isUpcoming = new Date(event.date) > currentDate;
+            const isNotRegistered = !registeredEventIds.includes(event.id);
+            return isUpcoming && isNotRegistered;
+          })
+          .map(event => transformEvent(event));
+        setUpcomingEvents(upcoming);
         
         // Calculate stats - need to wait for state updates or use local variables
         const totalParticipants = [...upcoming].reduce((acc, e) => acc + e.attendees, 0);
@@ -166,6 +181,153 @@ export default function EventsSection() {
   };
 
   const filteredEvents = getCurrentEvents();
+
+  // Show notification
+  const showNotification = (type, title, message) => {
+    setNotification({ show: true, type, title, message });
+    setTimeout(() => {
+      setNotification({ show: false, type: '', title: '', message: '' });
+    }, 4000);
+  };
+
+  // Show confirm modal
+  const showConfirm = (title, message, onConfirm) => {
+    setConfirmModal({ show: true, title, message, onConfirm });
+  };
+
+  // Close confirm modal
+  const closeConfirm = () => {
+    setConfirmModal({ show: false, title: '', message: '', onConfirm: null });
+  };
+
+  // Handle event registration
+  const handleRegisterEvent = async (eventId) => {
+    if (!user?.user_id) {
+      showNotification('error', 'Erreur', 'Vous devez être connecté pour vous inscrire');
+      return;
+    }
+
+    try {
+      setActionLoading(eventId);
+      await registerUserToEvent(user.user_id, eventId);
+      
+      // Refresh registered events first
+      const registeredResponse = await getUserRegistredEvents(user.user_id);
+      const registered = registeredResponse.user.map(event => transformEvent(event, true));
+      setRegisteredEvents(registered);
+      
+      // Get IDs of registered events
+      const registeredEventIds = registered.map(e => e.id);
+      
+      // Refresh events after registration and filter out registered ones
+      const allEventsResponse = await getAllEvents();
+      const currentDate = new Date();
+      const upcoming = allEventsResponse.event
+        .filter(event => {
+          const isUpcoming = new Date(event.date) > currentDate;
+          const isNotRegistered = !registeredEventIds.includes(event.id);
+          return isUpcoming && isNotRegistered;
+        })
+        .map(event => transformEvent(event));
+      setUpcomingEvents(upcoming);
+      
+      showNotification('success', 'Succès', 'Inscription réussie! Votre place est confirmée.');
+    } catch (err) {
+      console.error('Failed to register for event:', err);
+      showNotification('error', 'Erreur', 'Échec de l\'inscription: ' + err.message);
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  // Handle event unregistration
+  const handleUnregisterEvent = async (eventId) => {
+    if (!user?.user_id) return;
+
+    showConfirm(
+      'Annuler l\'inscription',
+      'Êtes-vous sûr de vouloir annuler votre inscription à cet événement?',
+      async () => {
+        closeConfirm();
+        try {
+          setActionLoading(eventId);
+          await unregisterUserFromEvent(user.user_id, eventId);
+          
+          // Refresh registered events first
+          const registeredResponse = await getUserRegistredEvents(user.user_id);
+          const registered = registeredResponse.user.map(event => transformEvent(event, true));
+          setRegisteredEvents(registered);
+          
+          // Get IDs of registered events
+          const registeredEventIds = registered.map(e => e.id);
+          
+          // Refresh upcoming events and filter out registered ones
+          const allEventsResponse = await getAllEvents();
+          const currentDate = new Date();
+          const upcoming = allEventsResponse.event
+            .filter(event => {
+              const isUpcoming = new Date(event.date) > currentDate;
+              const isNotRegistered = !registeredEventIds.includes(event.id);
+              return isUpcoming && isNotRegistered;
+            })
+            .map(event => transformEvent(event));
+          setUpcomingEvents(upcoming);
+          
+          showNotification('success', 'Annulation réussie', 'Votre inscription a été annulée avec succès');
+        } catch (err) {
+          console.error('Failed to unregister from event:', err);
+          showNotification('error', 'Erreur', 'Échec de l\'annulation: ' + err.message);
+        } finally {
+          setActionLoading(null);
+        }
+      }
+    );
+  };
+
+  // Handle QR code retrieval
+  const handleGetQrCode = async (eventId) => {
+    if (!user?.user_id) return;
+
+    try {
+      setActionLoading(eventId);
+      const qrCodeData = await getQrCode(user.user_id);
+      console.log('QR Code data:', qrCodeData);
+      
+      // Find the event details
+      const event = registeredEvents.find(e => e.id === eventId);
+      
+      // Open modal with QR code
+      setQrCodeModal({
+        isOpen: true,
+        qrCode: qrCodeData.qrcode,
+        event: event
+      });
+      
+      showNotification('success', 'Succès', 'QR Code généré avec succès!');
+    } catch (err) {
+      console.error('Failed to get QR code:', err);
+      showNotification('error', 'Erreur', 'Échec de récupération du QR code: ' + err.message);
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  // Close QR code modal
+  const closeQrCodeModal = () => {
+    setQrCodeModal({ isOpen: false, qrCode: null, event: null });
+  };
+
+  // Download QR code as image
+  const downloadQrCode = () => {
+    if (!qrCodeModal.qrCode) return;
+    
+    const link = document.createElement('a');
+    link.href = qrCodeModal.qrCode;
+    link.download = `qrcode-event-${qrCodeModal.event?.id || 'unknown'}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   // Show loading state
   if (isLoading) {
@@ -260,7 +422,7 @@ export default function EventsSection() {
           </div>
           <div>
             <h3 className="text-xl lg:text-2xl font-bold text-orange-700 dark:text-orange-300">{stats.attendedEvents}</h3>
-            <p className="text-orange-600 dark:text-orange-400 text-xs lg:text-sm font-medium">Événements suivis</p>
+            <p className="text-orange-600 dark:text-orange-400 text-xs lg:text-sm font-medium">Événements assistés</p>
           </div>
         </div>
       </div>
@@ -382,43 +544,70 @@ export default function EventsSection() {
                         <div className="min-w-0">
                           <div className="text-lg font-bold text-pink-500 truncate">{event.location}</div>
                           <div className="text-sm text-gray-600 dark:text-gray-400 truncate">
-                            {event.celluleName}, Maroc
+                            {event.celluleName} 
                           </div>
                         </div>
                       </div>
 
-                      {/* Countdown Timer */}
-                      <div className="flex items-start gap-2 mb-6">
+                      {/* Event Date */}
+                      <div className="flex items-center gap-2 mb-6">
                         <div className="w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
                           <svg className="w-4 h-4 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                           </svg>
                         </div>
-                        <div className="min-w-0 flex-1">
-                          <div className="text-sm">
-                            <span className="text-pink-500 font-bold">
-                              {Math.floor(Math.random() * 10) + 1} jours {Math.floor(Math.random() * 24)} heures {Math.floor(Math.random() * 60)} minutes
-                            </span>
-                            <span className="text-gray-600 dark:text-gray-400 ml-1">
-                              avant l'événement!
-                            </span>
+                        <div className="min-w-0">
+                          <div className="text-lg font-bold text-pink-500">
+                            {event.date}
                           </div>
+                          {event.timeStart && (
+                            <div className="text-sm text-gray-600 dark:text-gray-400">
+                              {event.timeStart}{event.timeEnd && ` - ${event.timeEnd}`}
+                            </div>
+                          )}
                         </div>
                       </div>
 
                       {/* Action Button */}
                       <div className="mt-auto">
-                        <button className="cursor-target w-full py-3 border-2 border-pink-500 text-pink-500 rounded-lg font-medium hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-colors duration-200">
-                          {activeTab === 'upcoming' && 'S\'inscrire à l\'événement'}
-                          {activeTab === 'registered' && 'Annuler l\'inscription'}
-                          {activeTab === 'attended' && 'Voir les détails'}
-                        </button>
-
-                        {/* Small disclaimer */}
                         {activeTab === 'upcoming' && (
-                          <p className="text-xs text-gray-400 text-center mt-2 italic">
-                            *Places limitées, inscription obligatoire
-                          </p>
+                          <>
+                            <button 
+                              onClick={() => handleRegisterEvent(event.id)}
+                              disabled={actionLoading === event.id}
+                              className="cursor-target w-full py-3 border-2 border-pink-500 text-pink-500 rounded-lg font-medium hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              {actionLoading === event.id ? 'Inscription...' : 'S\'inscrire à l\'événement'}
+                            </button>
+                            <p className="text-xs text-gray-400 text-center mt-2 italic">
+                              *Places limitées, inscription obligatoire
+                            </p>
+                          </>
+                        )}
+                        
+                        {activeTab === 'registered' && (
+                          <div className="flex flex-col gap-2">
+                            <button 
+                              onClick={() => handleGetQrCode(event.id)}
+                              disabled={actionLoading === event.id}
+                              className="cursor-target w-full py-3 bg-pink-500 text-white rounded-lg font-medium hover:bg-pink-600 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              {actionLoading === event.id ? 'Chargement...' : 'Obtenir QR Code'}
+                            </button>
+                            <button 
+                              onClick={() => handleUnregisterEvent(event.id)}
+                              disabled={actionLoading === event.id}
+                              className="cursor-target w-full py-3 border-2 border-red-500 text-red-500 rounded-lg font-medium hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              {actionLoading === event.id ? 'Annulation...' : 'Annuler l\'inscription'}
+                            </button>
+                          </div>
+                        )}
+                        
+                        {activeTab === 'attended' && (
+                          <button className="cursor-target w-full py-3 border-2 border-pink-500 text-pink-500 rounded-lg font-medium hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-colors duration-200">
+                            Voir les détails
+                          </button>
                         )}
                       </div>
                     </div>
@@ -429,6 +618,228 @@ export default function EventsSection() {
           )}
         </div>
       </div>
+
+      {/* QR Code Modal */}
+      {qrCodeModal.isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="sticky top-0 bg-gradient-to-r from-pink-500 to-purple-600 text-white p-6 rounded-t-2xl">
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-bold">Votre QR Code</h2>
+                <button
+                  onClick={closeQrCodeModal}
+                  className="p-2 hover:bg-white/20 rounded-full transition-colors"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-8">
+              {/* User Information */}
+              <div className="mb-8 p-6 bg-gray-50 dark:bg-gray-700/50 rounded-xl border-2 border-gray-200 dark:border-gray-600">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Informations du participant</h3>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <svg className="w-5 h-5 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    <p className="text-gray-700 dark:text-gray-300">
+                      <span className="font-semibold">Nom:</span> {user?.first_name} {user?.last_name}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <svg className="w-5 h-5 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    <p className="text-gray-700 dark:text-gray-300">
+                      <span className="font-semibold">Email:</span> {user?.email}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Event Information */}
+              {qrCodeModal.event && (
+                <div className="mb-8 p-6 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl border-2 border-purple-200 dark:border-purple-700">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Détails de l'événement</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Titre</p>
+                      <p className="text-lg font-bold text-gray-900 dark:text-white">{qrCodeModal.event.title}</p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Date</p>
+                        <p className="font-semibold text-gray-900 dark:text-white">{qrCodeModal.event.date}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Horaire</p>
+                        <p className="font-semibold text-gray-900 dark:text-white">
+                          {qrCodeModal.event.timeStart}{qrCodeModal.event.timeEnd && ` - ${qrCodeModal.event.timeEnd}`}
+                        </p>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Lieu</p>
+                      <p className="font-semibold text-gray-900 dark:text-white">{qrCodeModal.event.location}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Type</p>
+                      <p className="font-semibold text-gray-900 dark:text-white">
+                        {qrCodeModal.event.eventType === 'workshop' ? 'Workshop' : 
+                         qrCodeModal.event.eventType === 'conference' ? 'Conférence' :
+                         qrCodeModal.event.eventType === 'hackathon' ? 'Hackathon' : 'Événement'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* QR Code Display */}
+              <div className="flex flex-col items-center justify-center p-8 bg-white dark:bg-gray-900 rounded-xl border-4 border-dashed border-gray-300 dark:border-gray-600">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 text-center">
+                  Présentez ce QR code à l'entrée de l'événement
+                </p>
+                {qrCodeModal.qrCode && (
+                  <img 
+                    src={qrCodeModal.qrCode} 
+                    alt="QR Code" 
+                    className="w-64 h-64 object-contain border-4 border-gray-200 dark:border-gray-700 rounded-lg"
+                  />
+                )}
+                <p className="text-xs text-gray-500 dark:text-gray-500 mt-4 text-center">
+                  ID: {user?.user_id}
+                </p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3 mt-8">
+                <button
+                  onClick={downloadQrCode}
+                  className="flex-1 py-3 px-6 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg font-semibold hover:from-pink-600 hover:to-purple-700 transition-all duration-200 flex items-center justify-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  Télécharger le QR Code
+                </button>
+                <button
+                  onClick={closeQrCodeModal}
+                  className="flex-1 py-3 px-6 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                >
+                  Fermer
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Notification Toast */}
+      {notification.show && (
+        <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-top-2 duration-300">
+          <div className={`rounded-xl shadow-2xl border-2 p-4 min-w-[320px] max-w-md backdrop-blur-md ${
+            notification.type === 'success' 
+              ? 'bg-green-50/95 dark:bg-green-900/95 border-green-500' 
+              : 'bg-red-50/95 dark:bg-red-900/95 border-red-500'
+          }`}>
+            <div className="flex items-start gap-3">
+              <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
+                notification.type === 'success' 
+                  ? 'bg-green-500' 
+                  : 'bg-red-500'
+              }`}>
+                {notification.type === 'success' ? (
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                ) : (
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                )}
+              </div>
+              <div className="flex-1">
+                <h4 className={`font-bold text-base mb-1 ${
+                  notification.type === 'success' 
+                    ? 'text-green-900 dark:text-green-100' 
+                    : 'text-red-900 dark:text-red-100'
+                }`}>
+                  {notification.title}
+                </h4>
+                <p className={`text-sm ${
+                  notification.type === 'success' 
+                    ? 'text-green-800 dark:text-green-200' 
+                    : 'text-red-800 dark:text-red-200'
+                }`}>
+                  {notification.message}
+                </p>
+              </div>
+              <button
+                onClick={() => setNotification({ show: false, type: '', message: '', title: '' })}
+                className={`flex-shrink-0 p-1 rounded-full hover:bg-black/10 transition-colors ${
+                  notification.type === 'success' 
+                    ? 'text-green-700 dark:text-green-300' 
+                    : 'text-red-700 dark:text-red-300'
+                }`}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Confirmation Modal */}
+      {confirmModal.show && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full animate-in zoom-in-95 duration-200">
+            {/* Modal Header */}
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center">
+                  <svg className="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1-1.968-1-2.732 0L3.732 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                  {confirmModal.title}
+                </h3>
+              </div>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6">
+              <p className="text-gray-600 dark:text-gray-300">
+                {confirmModal.message}
+              </p>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex gap-3">
+              <button
+                onClick={closeConfirm}
+                className="flex-1 py-3 px-4 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+              >
+                Annuler
+              </button>
+              <button
+                onClick={confirmModal.onConfirm}
+                className="flex-1 py-3 px-4 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg font-semibold hover:from-red-600 hover:to-red-700 transition-all duration-200"
+              >
+                Confirmer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
