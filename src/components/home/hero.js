@@ -6,12 +6,13 @@ import Link from "next/link";
 import Iridescence from "@/components/Iridescence.jsx";
 import Aurora from "@/components/Aurora.jsx";
 import Shuffle from "@/components/Shuffle.jsx";
+import RotatingText from "@/components/RotatingText.jsx";
 import { useTranslations } from 'next-intl';
 
 
 
 const hero = {
-  title: "Learn • Grow • Enjoy",
+  title: "Join ARTWARE - Where Art Meets Algorithm",
   cta1: "Join",
   cta2: "Show more",
 };
@@ -79,45 +80,31 @@ export default function Hero() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full flex-1 flex items-center justify-center relative z-20">
           <div className="w-full">
             {/* Left Column - Content (centered) */}
-            <div className="text-center mx-auto max-w-3xl">
-              {/* Logo */}
-              <div
-                className={`flex justify-center mb-6 transition-all duration-1000 ${
-                  showText
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-8"
-                }`}
-              >
-                <Image 
-                  src={logoSrc} 
-                  alt="Artware Logo" 
-                  width={300} 
-                  height={300}
-                  className=""
-                />
-              </div>
-
-              {/* Title */}
+            <div className="text-center mx-auto max-w-6xl">
+              {/* Title with Logo */}
               <h1
-                className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold ${textColor} mb-8 lg:mb-12 transition-all duration-1000 delay-200 ${
+                className={`flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-6 text-4xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold ${textColor} mb-8 lg:mb-12 transition-all duration-1000 delay-200 ${
                   showText
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-8"
                 }`}
               >
-                <Shuffle
-                  text={hero.title}
-                  shuffleDirection="right"
-                  duration={0.35}
-                  animationMode="evenodd"
-                  shuffleTimes={2}
-                  ease="power3.out"
-                  stagger={0.03}
-                  threshold={0.1}
-                  triggerOnce={false}
-                  triggerOnHover={true}
-                  respectReducedMotion={true}
-                />
+                <span>Welcome To</span>
+                <span className="underline decoration-4 decoration-primary">ARTWARE</span>
+                <span className="whitespace-nowrap">Where We</span>
+                 
+<RotatingText
+  texts={['Learn', 'Practice', 'Innovate', 'Socialize']}
+  mainClassName={`px-2 sm:px-2 md:px-3 overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg bg-primary ${isDarkTheme ? ' text-white' : ' text-black'}`}
+  staggerFrom={"last"}
+  initial={{ y: "100%" }}
+  animate={{ y: 0 }}
+  exit={{ y: "-120%" }}
+  staggerDuration={0.025}
+  splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
+  transition={{ type: "spring", damping: 30, stiffness: 400 }}
+  rotationInterval={2000}
+/>
               </h1>
 
               {/* CTA Buttons */}
