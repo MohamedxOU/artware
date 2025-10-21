@@ -18,7 +18,7 @@ const cells = [
   {
     id: 2,
     category: "Intelligence Artificielle",
-    title: "IA & Machine Learning",
+    title: "IA & Data science",
     subtitle: "15 Modèles",
     description: "Nous développons des solutions d'IA pour automatiser vos processus et améliorer vos performances business.",
     responsable: "Sarah El Amrani",
