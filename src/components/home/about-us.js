@@ -46,19 +46,9 @@ export default function AboutUs() {
 							Artware — là où la créativité rencontre l&apos;intelligence.
 						</h3>
 			<p className="text-base-content/80 text-lg">
-<<<<<<< HEAD
 Artware est un club fondé par les étudiants du cycle d’ingénieur en Ingénierie Logicielle et Intelligence Artificielle (ILIA). Il est ouvert à l’ensemble des étudiants de la Faculté des Sciences et Techniques ainsi que de la Faculté Polydisciplinaire d’Errachidia.<br/><br/>
 
 L’objectif du club Artware est de développer et renforcer les compétences de ses membres dans les domaines de l’informatique tels que le développement, le coding et la créativité. Pour atteindre cet objectif, le club propose une expérience enrichissante à travers des événements, formations, compétitions et hackathons, favorisant ainsi l’apprentissage collaboratif et l’innovation. <br/><br/>En parallèle, Artware s’engage également dans des activités solidaires et des événements ludiques et conviviaux visant à améliorer la vie et l’expérience académique des étudiants, tout en renforçant l’esprit de communauté et de partage.</p>
-=======
-					Né de la passion pour la technologie et l&apos;innovation, Artware est bien plus qu&apos;un club : c&apos;est une communauté d&apos;esprits curieux et ambitieux unis par la même vision — façonner l&apos;avenir du numérique à travers le software et l&apos;intelligence artificielle.
-
-					Chez Artware, chaque idée devient un projet, chaque projet une expérience, et chaque expérience une opportunité d&apos;apprendre et de créer autrement.
-					Nous croyons en la puissance de la collaboration, en l&apos;audace d&apos;innover et en la beauté du code lorsqu&apos;il devient art.
-
-					Artware, c&apos;est l&apos;alliance du savoir, de la créativité et de la technologie pour bâtir un futur intelligent, ensemble.
-			</p>
->>>>>>> dc4810d (Mise à jour des sections About, Activities, Cells, Contact et Footer)
 					</div>
 					{/* Right: Image */}
 					<div className="flex flex-col gap-6">
