@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { getAllEvents, getUserRegistredEvents, getUserAttendedEvents, registerForEvent, unregisterFromEvent, getQrCode } from '@/api/events';
+import { getAllEvents, getUserRegistredEvents, getUserAttendedEvents, registerForEvent, unregisterFromEvent } from '@/api/events';
 import useAuthStore from '@/stores/authStore';
 
 // Mock data for demonstration
@@ -18,7 +18,6 @@ export default function EventsSection() {
   const [error, setError] = useState(null);
   const { user } = useAuthStore();
   const [actionLoading, setActionLoading] = useState(null); // Track which event is being processed
-  const [qrCodeModal, setQrCodeModal] = useState({ isOpen: false, qrCode: null, event: null });
   const [notification, setNotification] = useState({ show: false, type: '', message: '', title: '' });
   const [confirmModal, setConfirmModal] = useState({ show: false, title: '', message: '', onConfirm: null });
   const [stats, setStats] = useState({
@@ -284,51 +283,6 @@ export default function EventsSection() {
     );
   };
 
-  // Handle QR code retrieval
-  const handleGetQrCode = async (eventId) => {
-    if (!user?.user_id) return;
-
-    try {
-      setActionLoading(eventId);
-      const qrCodeData = await getQrCode(user.user_id);
-      console.log('QR Code data:', qrCodeData);
-      
-      // Find the event details
-      const event = registeredEvents.find(e => e.id === eventId);
-      
-      // Open modal with QR code
-      setQrCodeModal({
-        isOpen: true,
-        qrCode: qrCodeData.qrcode,
-        event: event
-      });
-      
-      showNotification('success', 'Succès', 'QR Code généré avec succès!');
-    } catch (err) {
-      console.error('Failed to get QR code:', err);
-      showNotification('error', 'Erreur', 'Échec de récupération du QR code: ' + err.message);
-    } finally {
-      setActionLoading(null);
-    }
-  };
-
-  // Close QR code modal
-  const closeQrCodeModal = () => {
-    setQrCodeModal({ isOpen: false, qrCode: null, event: null });
-  };
-
-  // Download QR code as image
-  const downloadQrCode = () => {
-    if (!qrCodeModal.qrCode) return;
-    
-    const link = document.createElement('a');
-    link.href = qrCodeModal.qrCode;
-    link.download = `qrcode-event-${qrCodeModal.event?.id || 'unknown'}.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
   // Show loading state
   if (isLoading) {
     return (
@@ -586,22 +540,13 @@ export default function EventsSection() {
                         )}
                         
                         {activeTab === 'registered' && (
-                          <div className="flex flex-col gap-2">
-                            <button 
-                              onClick={() => handleGetQrCode(event.id)}
-                              disabled={actionLoading === event.id}
-                              className="cursor-target w-full py-3 bg-pink-500 text-white rounded-lg font-medium hover:bg-pink-600 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                              {actionLoading === event.id ? 'Chargement...' : 'Obtenir QR Code'}
-                            </button>
-                            <button 
-                              onClick={() => handleUnregisterEvent(event.id)}
-                              disabled={actionLoading === event.id}
-                              className="cursor-target w-full py-3 border-2 border-red-500 text-red-500 rounded-lg font-medium hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                              {actionLoading === event.id ? 'Annulation...' : 'Annuler l\'inscription'}
-                            </button>
-                          </div>
+                          <button 
+                            onClick={() => handleUnregisterEvent(event.id)}
+                            disabled={actionLoading === event.id}
+                            className="cursor-target w-full py-3 border-2 border-red-500 text-red-500 rounded-lg font-medium hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            {actionLoading === event.id ? 'Annulation...' : 'Annuler l\'inscription'}
+                          </button>
                         )}
                         
                         {activeTab === 'attended' && (
@@ -618,127 +563,6 @@ export default function EventsSection() {
           )}
         </div>
       </div>
-
-      {/* QR Code Modal */}
-      {qrCodeModal.isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            {/* Modal Header */}
-            <div className="sticky top-0 bg-gradient-to-r from-pink-500 to-purple-600 text-white p-6 rounded-t-2xl">
-              <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold">Votre QR Code</h2>
-                <button
-                  onClick={closeQrCodeModal}
-                  className="p-2 hover:bg-white/20 rounded-full transition-colors"
-                >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            {/* Modal Body */}
-            <div className="p-8">
-              {/* User Information */}
-              <div className="mb-8 p-6 bg-gray-50 dark:bg-gray-700/50 rounded-xl border-2 border-gray-200 dark:border-gray-600">
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Informations du participant</h3>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <svg className="w-5 h-5 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                    <p className="text-gray-700 dark:text-gray-300">
-                      <span className="font-semibold">Nom:</span> {user?.first_name} {user?.last_name}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <svg className="w-5 h-5 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    <p className="text-gray-700 dark:text-gray-300">
-                      <span className="font-semibold">Email:</span> {user?.email}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Event Information */}
-              {qrCodeModal.event && (
-                <div className="mb-8 p-6 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl border-2 border-purple-200 dark:border-purple-700">
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Détails de l'événement</h3>
-                  <div className="space-y-3">
-                    <div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">Titre</p>
-                      <p className="text-lg font-bold text-gray-900 dark:text-white">{qrCodeModal.event.title}</p>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">Date</p>
-                        <p className="font-semibold text-gray-900 dark:text-white">{qrCodeModal.event.date}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">Horaire</p>
-                        <p className="font-semibold text-gray-900 dark:text-white">
-                          {qrCodeModal.event.timeStart}{qrCodeModal.event.timeEnd && ` - ${qrCodeModal.event.timeEnd}`}
-                        </p>
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">Lieu</p>
-                      <p className="font-semibold text-gray-900 dark:text-white">{qrCodeModal.event.location}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">Type</p>
-                      <p className="font-semibold text-gray-900 dark:text-white">
-                        {qrCodeModal.event.eventType === 'workshop' ? 'Workshop' : 
-                         qrCodeModal.event.eventType === 'conference' ? 'Conférence' :
-                         qrCodeModal.event.eventType === 'hackathon' ? 'Hackathon' : 'Événement'}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* QR Code Display */}
-              <div className="flex flex-col items-center justify-center p-8 bg-white dark:bg-gray-900 rounded-xl border-4 border-dashed border-gray-300 dark:border-gray-600">
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 text-center">
-                  Présentez ce QR code à l'entrée de l'événement
-                </p>
-                {qrCodeModal.qrCode && (
-                  <img 
-                    src={qrCodeModal.qrCode} 
-                    alt="QR Code" 
-                    className="w-64 h-64 object-contain border-4 border-gray-200 dark:border-gray-700 rounded-lg"
-                  />
-                )}
-                <p className="text-xs text-gray-500 dark:text-gray-500 mt-4 text-center">
-                  ID: {user?.user_id}
-                </p>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3 mt-8">
-                <button
-                  onClick={downloadQrCode}
-                  className="flex-1 py-3 px-6 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg font-semibold hover:from-pink-600 hover:to-purple-700 transition-all duration-200 flex items-center justify-center gap-2"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                  </svg>
-                  Télécharger le QR Code
-                </button>
-                <button
-                  onClick={closeQrCodeModal}
-                  className="flex-1 py-3 px-6 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-                >
-                  Fermer
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Notification Toast */}
       {notification.show && (

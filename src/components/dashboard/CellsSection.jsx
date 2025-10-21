@@ -279,7 +279,7 @@ export default function CellsSection({ user }) {
       </div>
 
       {/* Cells Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 relative z-10">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 relative z-10">
         {displayedCells.map((cell) => (
           <div
             key={cell.id}
