@@ -45,9 +45,6 @@ export default function DashboardLayout({
         {/* Top Bar */}
         <DashboardTopBar
           user={user}
-          onLogout={onLogout}
-          isLoading={isLoading}
-          notifications={notifications}
           activeSection={activeSection}
           mobileMenuOpen={mobileMenuOpen}
           setMobileMenuOpen={setMobileMenuOpen}

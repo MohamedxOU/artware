@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { getAllEvents, getUserRegistredEvents, getUserAttendedEvents, registerUserToEvent, unregisterUserFromEvent, getQrCode } from '@/api/events';
+import { getAllEvents, getUserRegistredEvents, getUserAttendedEvents, registerForEvent, unregisterFromEvent, getQrCode } from '@/api/events';
 import useAuthStore from '@/stores/authStore';
 
 // Mock data for demonstration
@@ -209,7 +209,7 @@ export default function EventsSection() {
 
     try {
       setActionLoading(eventId);
-      await registerUserToEvent(user.user_id, eventId);
+      await registerForEvent(user.user_id, eventId);
       
       // Refresh registered events first
       const registeredResponse = await getUserRegistredEvents(user.user_id);
@@ -251,7 +251,7 @@ export default function EventsSection() {
         closeConfirm();
         try {
           setActionLoading(eventId);
-          await unregisterUserFromEvent(user.user_id, eventId);
+          await unregisterFromEvent(user.user_id, eventId);
           
           // Refresh registered events first
           const registeredResponse = await getUserRegistredEvents(user.user_id);

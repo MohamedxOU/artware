@@ -1,10 +1,11 @@
 // API utility functions for authenticated requests
+import { getAuthToken, removeAuthToken } from '@/utils/cookies';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3500';
+export const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3500';
 
 // Get authentication headers with access token
 export const getAuthHeaders = () => {
-  const token = localStorage.getItem('auth_token');
+  const token = getAuthToken();
   const headers = {
     "Content-Type": "application/json",
   };
@@ -39,7 +40,7 @@ export const authenticatedFetch = async (endpoint, options = {}) => {
     // Handle 401 Unauthorized - token might be expired
     if (response.status === 401) {
       // Clear invalid token
-      localStorage.removeItem('auth_token');
+      removeAuthToken();
       // Redirect to login or trigger auth refresh
       throw new Error('Authentication expired. Please login again.');
     }

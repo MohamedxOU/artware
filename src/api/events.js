@@ -1,4 +1,5 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3500';
+import { API_BASE } from './utils';
+import { getAuthToken } from '@/utils/cookies';
 
 
 //get all events
@@ -8,7 +9,7 @@ export const getAllEvents = async () => {
         const response = await fetch(`${API_BASE}/api/events`, {
             method: "GET",
             headers: {
-                "Authorization": `Bearer ${localStorage.getItem('auth_token')}`
+                "Authorization": `Bearer ${getAuthToken()}`
             }
         });
         if (response.ok) {
@@ -34,7 +35,7 @@ export const getUserRegistredEvents = async (userId) => {
         const response = await fetch(`${API_BASE}/api/users/${userId}/registrations`, {
             method: "GET",
             headers: {
-                "Authorization": `Bearer ${localStorage.getItem('auth_token')}`
+                "Authorization": `Bearer ${getAuthToken()}`
             }
         });
         if (response.ok) {
@@ -60,7 +61,7 @@ export const getUserAttendedEvents = async (userId) => {
         const response = await fetch(`${API_BASE}/api/users/${userId}/attendance`, {
             method: "GET",
             headers: {
-                "Authorization": `Bearer ${localStorage.getItem('auth_token')}`
+                "Authorization": `Bearer ${getAuthToken()}`
             }
         });
         if (response.ok) {
@@ -80,13 +81,13 @@ export const getUserAttendedEvents = async (userId) => {
 
 
 //register user to event
-export const registerUserToEvent = async (userId, eventId) => {
+export const registerForEvent = async (eventId, userId) => {
     try {
         const response = await fetch(`${API_BASE}/api/events/${eventId}/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem('auth_token')}`
+                "Authorization": `Bearer ${getAuthToken()}`
             },
             body: JSON.stringify({ userId })
         });
@@ -106,13 +107,13 @@ export const registerUserToEvent = async (userId, eventId) => {
 };
 
 //unregister user from event
-export const unregisterUserFromEvent = async (userId, eventId) => {
+export const unregisterFromEvent = async (eventId, userId) => {
     try {
-        const response = await fetch(`${API_BASE}/api/events/${eventId}/register`, {
-            method: "DELETE",
+        const response = await fetch(`${API_BASE}/api/events/${eventId}/unregister`, {
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem('auth_token')}`
+                "Authorization": `Bearer ${getAuthToken()}`
             },
             body: JSON.stringify({ userId })
         });
@@ -140,7 +141,7 @@ export const getQrCode = async (userId) => {
         const response = await fetch(`${API_BASE}/api/users/${userId}/qr`, {
             method: "GET",
             headers: {
-                "Authorization": `Bearer ${localStorage.getItem('auth_token')}`
+                "Authorization": `Bearer ${getAuthToken()}`
             }
         });
         if (response.ok) {

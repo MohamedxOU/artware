@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import * as authAPI from '@/api/auth';
+import { setAuthToken, removeAuthToken, getAuthToken } from '@/utils/cookies';
 
 const useAuthStore = create(
   persist(
@@ -42,8 +43,8 @@ const useAuthStore = create(
               return { success: false, error: 'Your account access is restricted. Please contact admin.' };
             }
 
-            // Store access token in localStorage
-            localStorage.setItem('auth_token', accessToken);
+            // Store access token in cookie instead of localStorage
+            setAuthToken(accessToken);
             
             // Update store with user data and authentication status
             set({ 
@@ -123,8 +124,8 @@ const useAuthStore = create(
             throw new Error('Logout failed');
           }
           
-          // Clear access token from localStorage
-          localStorage.removeItem('auth_token');
+          // Clear access token from cookie
+          removeAuthToken();
           
           set({ 
             user: null, 
@@ -141,8 +142,8 @@ const useAuthStore = create(
           console.error('Logout failed:', error);
           
           // Even if API fails, clear local state for security
-          // Clear access token from localStorage
-          localStorage.removeItem('auth_token');
+          // Clear access token from cookie
+          removeAuthToken();
           
           set({ 
             user: null, 
@@ -162,8 +163,8 @@ const useAuthStore = create(
         set({ isLoading: true });
         
         try {
-          // Check if we have an access token
-          const token = localStorage.getItem('auth_token');
+          // Check if we have an access token in cookie
+          const token = getAuthToken();
           if (!token) {
             set({ 
               user: null,
@@ -179,8 +180,8 @@ const useAuthStore = create(
           
           // Backend only returns { accessToken }, not user data
           if (result && result.accessToken) {
-            // Update the stored token
-            localStorage.setItem('auth_token', result.accessToken);
+            // Update the stored token in cookie
+            setAuthToken(result.accessToken);
             
             // Get current user from store (it should still be there from login)
             const currentState = get();
@@ -194,7 +195,7 @@ const useAuthStore = create(
               });
             } else {
               // No user data in store, need to re-login
-              localStorage.removeItem('auth_token');
+              removeAuthToken();
               set({ 
                 user: null,
                 isAuthenticated: false,
@@ -204,7 +205,7 @@ const useAuthStore = create(
             }
           } else {
             // Invalid token or refresh failed, clear it
-            localStorage.removeItem('auth_token');
+            removeAuthToken();
             set({ 
               user: null,
               isAuthenticated: false,
@@ -215,7 +216,7 @@ const useAuthStore = create(
         } catch (error) {
           // Silently handle auth check failures (like CORS issues)
           // Clear token if there's an error
-          localStorage.removeItem('auth_token');
+          removeAuthToken();
           set({ 
             user: null,
             isAuthenticated: false,

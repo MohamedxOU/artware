@@ -1,4 +1,5 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3500';
+import { API_BASE } from './utils';
+import { getAuthToken } from '@/utils/cookies';
 
 
 //get all documents
@@ -8,7 +9,7 @@ export const getAllDocuments = async () => {
         const response = await fetch(`${API_BASE}/api/documents`, {
             method: "GET",
             headers: {
-                "Authorization": `Bearer ${localStorage.getItem('auth_token')}`
+                "Authorization": `Bearer ${getAuthToken()}`
             }
         });
         if (response.ok) {
@@ -34,7 +35,7 @@ export const getDocumentsByEvent = async (eventId) => {
         const response = await fetch(`${API_BASE}/api/events/${eventId}/docs`, {
             method: "GET",
             headers: {
-                "Authorization": `Bearer ${localStorage.getItem('auth_token')}`
+                "Authorization": `Bearer ${getAuthToken()}`
             }
         });
         if (response.ok) {

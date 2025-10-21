@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuthStore } from '@/stores';
+import { getAuthToken } from '@/utils/cookies';
 
 // Hook for protecting routes that require authentication
 export function useProtectedRoute() {
@@ -39,7 +40,7 @@ export function useAuthCheck() {
 
   useEffect(() => {
     // Check auth status on mount if we have a stored token but no user data
-    const token = localStorage.getItem('auth_token');
+    const token = getAuthToken();
     if (token && !isAuthenticated && !isLoading) {
       checkAuth();
     }

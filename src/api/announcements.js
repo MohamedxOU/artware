@@ -1,4 +1,5 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3500';
+import { API_BASE } from './utils';
+import { getAuthToken } from '@/utils/cookies';
 
 
 //get all announcements
@@ -7,7 +8,7 @@ export const getAllAnnouncements = async () => {
         const response = await fetch(`${API_BASE}/api/announcements`, {
             method: "GET",
             headers: {
-                "Authorization": `Bearer ${localStorage.getItem('auth_token')}`
+                "Authorization": `Bearer ${getAuthToken()}`
             }
         });
         if (response.ok) {

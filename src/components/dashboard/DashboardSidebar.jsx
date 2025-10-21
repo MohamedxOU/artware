@@ -143,8 +143,28 @@ export default function DashboardSidebar({
         </div>
       </div>
 
-      {/* Logout Section */}
+      {/* Profile Section */}
       <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+        <button
+          onClick={() => {
+            setActiveSection('profile');
+            // Close mobile menu when profile is selected
+            if (setMobileMenuOpen) {
+              setMobileMenuOpen(false);
+            }
+          }}
+          className={`w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 mb-2 ${
+            activeSection === 'profile'
+              ? 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-400 border-l-4 border-purple-500'
+              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+          }`}
+        >
+          <svg className={`w-5 h-5 mr-3 ${activeSection === 'profile' ? 'text-purple-600 dark:text-purple-400' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+          Profile
+        </button>
+        
         <button
           onClick={handleLogout}
           disabled={isLoading}

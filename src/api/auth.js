@@ -1,8 +1,8 @@
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3500';
+import { API_BASE } from './utils';
+import { getAuthToken } from '@/utils/cookies';
 
 //login api with retry logic
-export const login = async (email, password, retryCount = 0) => {
+export async function login(email, password) {
   try {
     const response = await fetch(`${API_BASE}/login`, {
       method: "POST",
@@ -60,7 +60,7 @@ export const login = async (email, password, retryCount = 0) => {
 
 //logout api
 export const logout = async () => {
-    const token = localStorage.getItem('auth_token');
+    const token = getAuthToken();
     const headers = {};
     
     // Add Authorization header if token exists

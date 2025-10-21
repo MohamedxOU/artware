@@ -1,4 +1,5 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3500';
+import { API_BASE } from './utils';
+import { getAuthToken } from '@/utils/cookies';
 
 
 //get all cells (requires token)
@@ -8,7 +9,7 @@ export const getAllCells = async () => {
         const response = await fetch(`${API_BASE}/api/cellules`, {
             method: "GET",
             headers: {
-                "Authorization": `Bearer ${localStorage.getItem('auth_token')}`
+                "Authorization": `Bearer ${getAuthToken()}`
             }   
         });
         
@@ -35,7 +36,7 @@ export const getUserCells = async (userId) => {
         const response = await fetch(`${API_BASE}/api/users/${userId}/cells`, {
             method: "GET",
             headers: {  
-                "Authorization": `Bearer ${localStorage.getItem('auth_token')}`
+                "Authorization": `Bearer ${getAuthToken()}`
             }
         });
 
@@ -64,7 +65,7 @@ export const joinCell = async (cellId) => {
         const response = await fetch(`${API_BASE}/api/cellules/${cellId}/users`, {
             method: "POST",
             headers: {
-                "Authorization": `Bearer ${localStorage.getItem('auth_token')}`,
+                "Authorization": `Bearer ${getAuthToken()}`,
                 "Content-Type": "application/json"
             }
         });
@@ -90,7 +91,7 @@ export const quitCell = async (cellId) => {
         const response = await fetch(`${API_BASE}/api/cellules/${cellId}/users`, {
             method: "DELETE",
             headers: {
-                "Authorization": `Bearer ${localStorage.getItem('auth_token')}`,
+                "Authorization": `Bearer ${getAuthToken()}`,
                 "Content-Type": "application/json"
             }
         });
