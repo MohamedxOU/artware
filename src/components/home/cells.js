@@ -5,50 +5,42 @@ import { useState, useEffect } from "react";
 const cells = [
   {
     id: 1,
-    category: "Development",
-    title: "Développement Web & Mobile",
-    subtitle: "30 Projets",
-    description: "Nous créons des applications web et mobiles innovantes avec les dernières technologies pour optimiser votre présence digitale.",
-    responsable: "Amine Bensalah",
-    activities: ["React/Next.js", "Flutter", "Node.js", "MongoDB"],
+    category: "CODING",
+    title: "Coding & Competitive Programming",
+    description: "Preparation intensive aux compétitions de programmation et développement de projets algorithmiques.",
+    responsable: "AYOUB BOUAIK",
+    activities: ["Algorithmics", "Programming", "Competitions", "Coding challenges"],
     gradient: "bg-gradient-to-br from-green-400 to-blue-500",
-    buttonText: "En savoir plus →",
     image: "/cells/cell-1.jpg"
   },
   {
     id: 2,
-    category: "Intelligence Artificielle",
-    title: "IA & Data science",
-    subtitle: "15 Modèles",
-    description: "Nous développons des solutions d'IA pour automatiser vos processus et améliorer vos performances business.",
-    responsable: "Sarah El Amrani",
-    activities: ["Machine Learning", "Computer Vision", "NLP", "TensorFlow"],
+    category: "DEV",
+    title: "Development & Innovation",
+    description: "Formations et ateliers axés sur le développement web, mobile et logiciel.",
+    responsable: "OUCHARROU MOHAMED",
+    activities: ["Web Development", "Mobile Development", "Software Engineering", "Projects"],
     gradient: "bg-gradient-to-br from-yellow-400 to-orange-500",
-    buttonText: "En savoir plus →",
     image: "/cells/cell-1.jpg"
   },
   {
     id: 3,
-    category: "Programmation Compétitive",
-    title: "Algorithmes & Compétitions",
-    subtitle: "50 Concours",
+    category: "AI",
+    title: "Artificial Intelligence & Data",
     description: "Nous excellons dans la résolution de problèmes complexes et participons aux compétitions internationales.",
-    responsable: "Yassine Ouchani",
-    activities: ["Algorithmes", "Structures de données", "Codeforces", "ACM ICPC"],
+    responsable: "SALIM LAGHRIB",
+    activities: ["AI Algorithms", "Machine Learning", "Deep Learning", "DATA Science"],
     gradient: "bg-gradient-to-br from-blue-400 to-purple-600",
-    buttonText: "En savoir plus →",
     image: "/cells/cell-1.jpg"
   },
   {
     id: 4,
-    category: "Événements",
-    title: "Community & Events",
-    subtitle: "25 Événements",
-    description: "Nous organisons des événements tech et créons des communautés dynamiques pour favoriser l'apprentissage.",
-    responsable: "Fatima Zahra Idrissi",
-    activities: ["Tech Talks", "Workshops", "Hackathons", "Networking"],
+    category: "Community",
+    title: "Community & Solidarity",
+    description: "Engagement dans des activités solidaires et des événements visant à améliorer l'expérience académique des étudiants.",
+    responsable: "MONA FILALI",
+    activities: ["Communications", "Mutual aid", "Guidance", "Humanitarian actions"],
     gradient: "bg-gradient-to-br from-pink-400 to-purple-600",
-    buttonText: "En savoir plus →",
     image: "/cells/cell-1.jpg"
   }
 ];
@@ -284,18 +276,10 @@ export default function Cells() {
                         <span className="text-sm text-base-content/60 block">Responsable</span>
                         <p className="font-semibold text-base-content text-lg">{cell.responsable}</p>
                       </div>
-                      <div className="text-right">
-                        <span className="text-sm text-base-content/60 block">Réalisations</span>
-                        <p className="font-bold text-primary text-2xl">{cell.subtitle}</p>
-                      </div>
+                      
                     </div>
 
-                    {/* CTA Button */}
-                    <div className="pt-4">
-                      <button className="bg-primary text-white px-8 py-4 rounded-full font-semibold hover:bg-primary/90 transition-all duration-300 hover:scale-105 shadow-lg">
-                        {cell.buttonText}
-                      </button>
-                    </div>
+                    
                   </div>
                 </div>
               )}

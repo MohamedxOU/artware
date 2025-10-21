@@ -63,14 +63,14 @@ L’objectif du club Artware est de développer et renforcer les compétences de
 							/>
 						</div>
 						{/* Stats Cards */}
-						<div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-2">
+						<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
 							
 							<div className=" rounded-xl shadow p-4 flex flex-col items-center">
 								<span className="text-2xl font-bold text-base-content">4</span>
 								<span className="text-base text-base-content/70">Cells</span>
 							</div>
 							<div className=" rounded-xl shadow p-4 flex flex-col items-center">
-								<span className="text-2xl font-bold text-base-content">45+</span>
+								<span className="text-2xl font-bold text-base-content">90+</span>
 								<span className="text-base text-base-content/70">Members</span>
 							</div>
 							<div className=" rounded-xl shadow p-4 flex flex-col items-center">
