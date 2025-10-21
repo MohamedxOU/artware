@@ -6,7 +6,7 @@ const activities = [
 	{
 		title: "Formations & Ateliers",
 		image: "/activities/activity.jpg",
-		description: "Nous créons des applications web et mobiles innovantes avec les dernières technologies. Nos experts développent des solutions sur mesure pour optimiser votre présence digitale et améliorer l'expérience utilisateur.",
+		description: "Ensemble, formateurs et étudiants d’Artware conçoivent des applications web et mobiles innovantes. Nous apprenons, partageons et créons côte à côte pour transformer les idées en projets concrets.",
 	},
 	{
 		title: "Evenements & Conférences",

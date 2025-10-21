@@ -20,6 +20,7 @@ export default function EventsSection() {
   const [actionLoading, setActionLoading] = useState(null); // Track which event is being processed
   const [notification, setNotification] = useState({ show: false, type: '', message: '', title: '' });
   const [confirmModal, setConfirmModal] = useState({ show: false, title: '', message: '', onConfirm: null });
+  
   const [stats, setStats] = useState({
     totalEvents: 0,
     upcomingEvents: 0,
@@ -60,6 +61,8 @@ export default function EventsSection() {
       registeredAt: event.registered_at
     };
   };
+
+  
 
   // Fetch events from API
   useEffect(() => {
@@ -540,13 +543,15 @@ export default function EventsSection() {
                         )}
                         
                         {activeTab === 'registered' && (
-                          <button 
-                            onClick={() => handleUnregisterEvent(event.id)}
-                            disabled={actionLoading === event.id}
-                            className="cursor-target w-full py-3 border-2 border-red-500 text-red-500 rounded-lg font-medium hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                          >
-                            {actionLoading === event.id ? 'Annulation...' : 'Annuler l\'inscription'}
-                          </button>
+                          <div className="flex flex-col gap-2">
+                            <button 
+                              onClick={() => handleUnregisterEvent(event.id)}
+                              disabled={actionLoading === event.id}
+                              className="cursor-target w-full py-3 border-2 border-red-500 text-red-500 rounded-lg font-medium hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              {actionLoading === event.id ? 'Annulation...' : 'Annuler l\'inscription'}
+                            </button>
+                          </div>
                         )}
                         
                         {activeTab === 'attended' && (
@@ -664,6 +669,7 @@ export default function EventsSection() {
           </div>
         </div>
       )}
+      
     </div>
   );
 }
