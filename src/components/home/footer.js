@@ -83,7 +83,7 @@ export default function Footer() {
               
             </div>
             <p className="text-base-content/80 text-sm leading-relaxed">
-              Nous créons l&apos;avenir technologique à travers l&apos;innovation, la collaboration et l&apos;excellence académique.
+              We create the technological future through innovation, collaboration, and academic excellence.
             </p>
             {/* Social Media Links */}
             <div className="flex space-x-4">
@@ -128,26 +128,26 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div className={`space-y-6 transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <h4 className="text-xl font-semibold text-base-content mb-4">Liens Rapides</h4>
+            <h4 className="text-xl font-semibold text-base-content mb-4">Quick Links</h4>
             <ul className="space-y-3">
               <li>
                 <Link href="#hero" className="text-base-content/80 hover:text-primary transition-colors duration-300 text-sm">
-                  Accueil
+                  Home
                 </Link>
               </li>
               <li>
                 <Link href="#about" className="text-base-content/80 hover:text-primary transition-colors duration-300 text-sm">
-                  À Propos
+                  About
                 </Link>
               </li>
               <li>
                 <Link href="#activities" className="text-base-content/80 hover:text-primary transition-colors duration-300 text-sm">
-                  Activités
+                  Activities
                 </Link>
               </li>
               <li>
                 <Link href="#bureau" className="text-base-content/80 hover:text-primary transition-colors duration-300 text-sm">
-                  Notre Bureau
+                  Our Board
                 </Link>
               </li>
               <li>
@@ -160,22 +160,22 @@ export default function Footer() {
 
           {/* Services */}
           <div className={`space-y-6 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <h4 className="text-xl font-semibold text-base-content mb-4">Nos Services</h4>
+            <h4 className="text-xl font-semibold text-base-content mb-4">Our Services</h4>
             <ul className="space-y-3">
               <li>
-                <span className="text-base-content/80 text-sm">Formation Technique</span>
+                <span className="text-base-content/80 text-sm">Technical Training</span>
               </li>
               <li>
                 <span className="text-base-content/80 text-sm">Workshops & Hackathons</span>
               </li>
               <li>
-                <span className="text-base-content/80 text-sm">Projets Collaboratifs</span>
+                <span className="text-base-content/80 text-sm">Collaborative Projects</span>
               </li>
               <li>
-                <span className="text-base-content/80 text-sm">Mentorat Professionnel</span>
+                <span className="text-base-content/80 text-sm">Professional Mentoring</span>
               </li>
               <li>
-                <span className="text-base-content/80 text-sm">Événements Tech</span>
+                <span className="text-base-content/80 text-sm">Tech Events</span>
               </li>
             </ul>
           </div>
@@ -190,21 +190,21 @@ export default function Footer() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
                 <div>
-                  <p className="text-base-content/80 text-sm">ENSA Khouribga</p>
-                  <p className="text-base-content/60 text-xs">Khouribga, Maroc</p>
+                  <p className="text-base-content/80 text-sm">FSTE </p>
+                  <p className="text-base-content/60 text-xs">Errachidia, Maroc</p>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
                 <svg className="w-5 h-5 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
-                <p className="text-base-content/80 text-sm">contact@artware.ma</p>
+                <p className="text-base-content/80 text-sm">artware.club@gmail.com</p>
               </div>
               <div className="flex items-center space-x-3">
                 <svg className="w-5 h-5 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
-                <p className="text-base-content/80 text-sm">+212 655-0108</p>
+                <p className="text-base-content/80 text-sm">+212 688 784 609</p>
               </div>
             </div>
           </div>
@@ -216,18 +216,18 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-center md:text-left">
               <p className="text-base-content/60 text-sm">
-                © 2025 ArtWare Club. Tous droits réservés.
+                © 2025 ArtWare Club. All rights reserved.
               </p>
             </div>
             <div className="flex space-x-6">
               <Link href="#" className="text-base-content/60 hover:text-primary text-sm transition-colors duration-300">
-                Politique de Confidentialité
+                Privacy Policy
               </Link>
               <Link href="#" className="text-base-content/60 hover:text-primary text-sm transition-colors duration-300">
-                Conditions d&apos;Utilisation
+                Terms of Use
               </Link>
               <Link href="#" className="text-base-content/60 hover:text-primary text-sm transition-colors duration-300">
-                Mentions Légales
+                Legal Notice
               </Link>
             </div>
           </div>

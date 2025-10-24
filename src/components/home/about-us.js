@@ -1,86 +1,106 @@
 "use client";
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 export default function AboutUs() {
-	const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
 
-	useEffect(() => {
-		// Check initial theme
-		const checkTheme = () => {
-			const htmlElement = document.documentElement;
-			const currentTheme = htmlElement.getAttribute('data-theme');
-			setIsDarkTheme(currentTheme === 'synthwave');
-		};
+  useEffect(() => {
+    const checkTheme = () => {
+      const htmlElement = document.documentElement;
+      const currentTheme = htmlElement.getAttribute('data-theme');
+      setIsDarkTheme(currentTheme === 'synthwave');
+    };
+    checkTheme();
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme']
+    });
+    return () => observer.disconnect();
+  }, []);
 
-		checkTheme();
+  return (
+    <section id="about-us" className="w-full bg-base-100 py-16 flex justify-center">
+      <div className="max-w-7xl w-full px-4 md:px-8">
+        {/* Header - Fade in from top */}
+        <motion.div 
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: -30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            About Us, <span className="text-primary">Our Story & Vision</span>
+          </h2>
+          <p className="text-lg text-base-content/70 max-w-2xl mx-auto">
+            Discover the story of ARTWARE, a passionate community dedicated to technological innovation and academic excellence
+          </p>
+        </motion.div>
 
-		// Watch for theme changes
-		const observer = new MutationObserver(checkTheme);
-		observer.observe(document.documentElement, {
-			attributes: true,
-			attributeFilter: ['data-theme']
-		});
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          {/* Left: Text Card - Slide in from left */}
+          <motion.div 
+            className="bg-base-100 rounded-2xl shadow p-8 flex flex-col gap-6"
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <h3 className="text-4xl md:text-5xl font-bold leading-tight text-base-content">
+              More than a club, a family.
+            </h3>
+            <p className="text-base-content/80 text-lg">
+              Artware is a club founded by engineering students specializing in Software Engineering and Artificial Intelligence (ILIA). It is open to all students from the Faculty of Science and Technology as well as the Multidisciplinary Faculty of Errachidia.<br/><br/>
+              The goal of Artware is to develop and strengthen members' skills in IT fields such as development, coding, and creativity. To achieve this, the club offers an enriching experience through events, training sessions, competitions, and hackathons, fostering collaborative learning and innovation. <br/><br/>Additionally, Artware is committed to solidarity activities and fun, friendly events aimed at improving students' academic life and experience, while strengthening the spirit of community and sharing.
+            </p>
+          </motion.div>
 
-		return () => observer.disconnect();
-	}, []);
-	return (
-		<section id="about-us" className="w-full bg-base-100 py-16 flex justify-center">
-			<div className="max-w-7xl w-full px-4 md:px-8">
-				{/* Header */}
-				<div className="text-center mb-16">
-					<h2 className="text-4xl md:text-5xl font-bold mb-4">
-						À Propos de Nous, <span className="text-primary">Notre Histoire & Vision</span>
-					</h2>
-					<p className="text-lg text-base-content/70 max-w-2xl mx-auto">
-						Découvrez l&apos;histoire d&apos;ARTWARE, une communauté passionnée dédiée à l&apos;innovation technologique et à l&apos;excellence académique
-					</p>
-				</div>
-				
-				<div className="grid md:grid-cols-2 gap-8 items-center">
-					{/* Left: Text Card */}
-					<div className="bg-base-100 rounded-2xl shadow p-8 flex flex-col gap-6">
-					
-						
-						<h3 className="text-4xl md:text-5xl font-bold leading-tight text-base-content">
-							More than a club, a family.
-						</h3>
-			<p className="text-base-content/80 text-lg">
-Artware est un club fondé par les étudiants du cycle d’ingénieur en Ingénierie Logicielle et Intelligence Artificielle (ILIA). Il est ouvert à l’ensemble des étudiants de la Faculté des Sciences et Techniques ainsi que de la Faculté Polydisciplinaire d’Errachidia.<br/><br/>
+          {/* Right: Image - Slide in from right */}
+          <motion.div 
+            className="flex flex-col gap-6"
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <div className="rounded-2xl overflow-hidden shadow aspect-[4/3] bg-base-200 flex items-center justify-center">
+              <Image
+                src="/covers/cover-1.jpg"
+                alt="About Us"
+                width={480}
+                height={360}
+                className="object-cover w-full h-full"
+                priority
+              />
+            </div>
 
-L’objectif du club Artware est de développer et renforcer les compétences de ses membres dans les domaines de l’informatique tels que le développement, le coding et la créativité. Pour atteindre cet objectif, le club propose une expérience enrichissante à travers des événements, formations, compétitions et hackathons, favorisant ainsi l’apprentissage collaboratif et l’innovation. <br/><br/>En parallèle, Artware s’engage également dans des activités solidaires et des événements ludiques et conviviaux visant à améliorer la vie et l’expérience académique des étudiants, tout en renforçant l’esprit de communauté et de partage.</p>
-					</div>
-					{/* Right: Image */}
-					<div className="flex flex-col gap-6">
-						<div className="rounded-2xl overflow-hidden shadow aspect-[4/3] bg-base-200 flex items-center justify-center">
-							<Image
-								src="/covers/cover-1.jpg"
-								alt="About Us"
-								width={480}
-								height={360}
-								className="object-cover w-full h-full"
-								priority
-							/>
-						</div>
-						{/* Stats Cards */}
-						<div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-2">
-							
-							<div className=" rounded-xl shadow p-4 flex flex-col items-center">
-								<span className="text-2xl font-bold text-base-content">4</span>
-								<span className="text-base text-base-content/70">Cells</span>
-							</div>
-							<div className=" rounded-xl shadow p-4 flex flex-col items-center">
-								<span className="text-2xl font-bold text-base-content">45+</span>
-								<span className="text-base text-base-content/70">Members</span>
-							</div>
-							<div className=" rounded-xl shadow p-4 flex flex-col items-center">
-								<span className="text-2xl font-bold text-base-content">∞</span>
-								<span className="text-base text-base-content/70">Memories</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-	);
+            {/* Stats Cards - Stagger animation */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-2">
+              {[
+                { value: "4", label: "Cells" },
+                { value: "45+", label: "Members" },
+                { value: "∞", label: "Memories" }
+              ].map((stat, index) => (
+                <motion.div
+                  key={index}
+                  className="rounded-xl shadow p-4 flex flex-col items-center"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <span className="text-2xl font-bold text-base-content">{stat.value}</span>
+                  <span className="text-base text-base-content/70">{stat.label}</span>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
 }

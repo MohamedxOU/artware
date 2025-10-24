@@ -4,31 +4,32 @@ import Image from "next/image";
 
 const activities = [
 	{
-		title: "Formations & Ateliers",
+		title: "Training & Workshops",
 		image: "/activities/activity.jpg",
-		description: "Nous créons des applications web et mobiles innovantes avec les dernières technologies. Nos experts développent des solutions sur mesure pour optimiser votre présence digitale et améliorer l'expérience utilisateur.",
+		description: "We create innovative web and mobile applications using the latest technologies. Our experts develop customized solutions to enhance your digital presence and improve user experience.",
 	},
 	{
-		title: "Evenements & Conférences",
+		title: "Events & Conferences",
 		image: "/activities/activity.jpg",
-		description: "Explorez le potentiel de l'IA avec nos solutions personnalisées. Nous développons des modèles de machine learning et des systèmes intelligents pour automatiser vos processus métier.",
+		description: "Explore the potential of AI with our tailored solutions. We build machine learning models and intelligent systems to automate your business processes.",
 	},
 	{
 		title: "Competitions & Hackathons",
 		image: "/activities/activity.jpg",
-		description: "Perfectionnez vos compétences algorithmiques et participez aux compétitions internationales. Nous organisons des séances d'entraînement et des workshops pour tous les niveaux.",
+		description: "Improve your algorithmic skills and take part in international competitions. We organize training sessions and workshops for all skill levels.",
 	},
 	{
-		title: "Communauté & Networking",
+		title: "Community & Networking",
 		image: "/activities/activity.jpg",
-		description: "Rejoignez notre communauté dynamique à travers nos événements tech, hackathons et workshops. Apprenez, partagez et créez des liens avec d'autres passionnés de technologie.",
+		description: "Join our vibrant community through tech events, hackathons, and workshops. Learn, share, and connect with other technology enthusiasts.",
 	},
 	{
-		title: "Solidarité & Engagement Social",
+		title: "Solidarity & Social Engagement",
 		image: "/activities/activity.jpg",
-		description: "Bénéficiez de notre programme de mentorat et de formations techniques. Nos experts vous accompagnent dans votre parcours d'apprentissage et votre développement professionnel.",
+		description: "Take advantage of our mentoring program and technical training sessions. Our experts guide you throughout your learning journey and professional development.",
 	},
 ];
+
 
 export default function Activities() {
 	const [selected, setSelected] = useState(0);
@@ -37,19 +38,12 @@ export default function Activities() {
 		<section id="activities" className="w-full py-16 bg-base-200 allow-horizontal-scroll">
 			<div className="max-w-7xl mx-auto px-6">
 				{/* Header */}
-				<div className="text-left mb-12">
-					<span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-base-200 text-base-content/70 text-sm font-medium mb-6">
-						Nos Activities
-					</span>
+				<div className="text-center mb-12">
+					
 					<h2 className="text-4xl md:text-5xl font-bold text-base-content">
-						Plusieurs activities pour enrechir votre <br />
-						<span className="text-primary">Vie académique</span>
+						Multiple activities to enrich your <br />
+						<span className="text-primary">Academic Life</span>
 					</h2>
-					{/* <p className="text-lg text-base-content/70 mt-4 max-w-2xl">
-						Nous vous donnons les outils pour prendre le contrôle de votre bien-être technologique. 
-						Nous visons à briser les stigmates entourant l&apos;apprentissage tech, rendant la formation 
-						accessible, soutenante et transformatrice pour tous ceux qui la recherchent.
-					</p> */}
 				</div>
 
 				{/* Main Content Layout */}

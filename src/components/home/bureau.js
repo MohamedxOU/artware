@@ -6,63 +6,75 @@ const bureauMembers = [
   {
     id: 1,
     name: "Salim Laghrib",
-    position: "Président",
-    image: "/bureau/Salim.png",
-    description: "Leader passionné avec une vision claire pour l'avenir du club. Il guide l'équipe vers l'excellence et l'innovation dans tous nos projets technologiques."
+    position: "President",
+    image: "/bureau/salim.png",
+    description: "A passionate leader with a clear vision for the club’s future. He guides the team toward excellence and innovation in all our technological projects."
   },
   {
     id: 2,
     name: "Mona Filali",
-    position: "Vice-Président",
-    image: "/bureau/Mona.png",
-    description: "Expert en développement web et mobile, il supervise les projets techniques et assure la qualité de nos solutions innovantes."
+    position: "Vice President",
+    image: "/bureau/mona.png",
+    description: "An expert in web and mobile development, she oversees our technical projects and ensures the quality and creativity of our innovative solutions."
   },
   {
     id: 3,
     name: "Hamza Baadi",
-    position: "RH",
-    image: "/bureau/Hamza.png",
-    description: "Spécialiste en intelligence artificielle, elle coordonne les activités du club et gère les relations avec nos partenaires académiques."
+    position: "HR Manager",
+    image: "/bureau/hamza.png",
+    description: "Specialized in artificial intelligence, he coordinates the club’s internal activities and manages relationships with academic and industry partners."
   },
   {
     id: 4,
     name: "Houda Jabal",
     position: "Event Manager",
-    image: "/bureau/Houda.png",
-    description: "Organisatrice talentueuse qui crée des événements mémorables et développe notre communauté tech dynamique et inclusive."
+    image: "/bureau/houda.png",
+    description: "A talented organizer who creates memorable events and fosters an inclusive, vibrant, and collaborative tech community."
   },
   {
     id: 5,
-    name: "Assia Labane",
-    position: "Secrétaire Générale",
-    image: "/bureau/Assia.png",
-    description: "Gestionnaire financier rigoureux qui assure la pérennité économique du club et optimise nos ressources pour maximiser notre impact."
+    name: "Mohammed Ellouzati",
+    position: "General Secretary",
+    image: "/bureau/med.png",
+    description: "A meticulous organizer who ensures smooth communication within the club and manages documentation, schedules, and coordination among departments."
   },
-
   {
     id: 6,
-    name: "Badreddyn Ballouk",
-    position: "Trésorier",
-    image: "/bureau/Badr.png",
-    description: "Gestionnaire financier rigoureux qui assure la pérennité économique du club et optimise nos ressources pour maximiser notre impact."
-  },
-
-  {
-    id: 7,
     name: "Omaima Larhzal",
     position: "Media Manager",
-    image: "/bureau/Oumaima.png",
-    description: "Gestionnaire financier rigoureux qui assure la pérennité économique du club et optimise nos ressources pour maximiser notre impact."
+    image: "/bureau/oumima.png",
+    description: "Creative and passionate about digital media, she manages our visual identity and social media presence, ensuring the club’s image stays inspiring and dynamic."
   },
-
+  {
+    id: 7,
+    name: "Ichraq Lhazmir",
+    position: "Treasurer",
+    image: "/bureau/ichraq.png",
+    description: "A responsible and detail-oriented financial manager. She ensures transparent management of resources and supports the club’s sustainable growth."
+  },
   {
     id: 8,
     name: "Yassine El Aouni",
     position: "Design Manager",
-    image: "/bureau/Yassine.png",
-    description: "Gestionnaire financier rigoureux qui assure la pérennité économique du club et optimise nos ressources pour maximiser notre impact."
+    image: "/bureau/yassin.png",
+    description: "A creative mind who designs visual concepts that bring our projects and events to life. He ensures every design reflects the spirit of innovation of our club."
+  },
+  {
+    id: 9,
+    name: "Ayoub",
+    position: "Head of Coding & Competitive Programming",
+    image: "/bureau/ayoub.png",
+    description: "A problem-solving enthusiast who leads our coding and algorithmic training sessions, preparing members for programming contests and hackathons."
+  },
+  {
+    id: 10,
+    name: "Mohamed",
+    position: "Head of Development",
+    image: "/bureau/ouch.png",
+    description: "A skilled developer passionate about building impactful software solutions. He leads the development team and mentors members in real-world tech projects."
   }
 ];
+
 
 export default function Bureau() {
   const [isVisible, setIsVisible] = useState(false);
@@ -305,7 +317,7 @@ export default function Bureau() {
         {/* Additional Info */}
         <div className={`text-center mt-8 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <p className="text-base-content/60 text-sm">
-            Une équipe unie par la passion de la technologie et l&apos;ambition de créer l&apos;avenir
+            A team united by a passion for technology and the ambition to shape the future.
           </p>
         </div>
       </div>

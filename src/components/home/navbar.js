@@ -6,11 +6,11 @@ import { useRouter } from "next/navigation";
 import { useAuthStore, useUIStore, useThemeStore } from "@/stores";
 
 const navLinks = [
-  { href: "#about-us", label: "Présentation" },
-  { href: "#activities", label: "Activités" },
-  { href: "#cells", label: "Cellules" },
-  { href: "#gallery", label: "Galerie" },
-  { href: "#bureau", label: "Bureau" },
+  { href: "#about-us", label: "About" },
+  { href: "#activities", label: "Activities" },
+  { href: "#cells", label: "Cells" },
+  { href: "#gallery", label: "Gallery" },
+  { href: "#bureau", label: "Board" },
   { href: "#contact", label: "Contact" }
 ];
 
@@ -49,7 +49,7 @@ export default function Navbar() {
 
   // Logout handler
   const handleLogout = async () => {
-    const confirmed = window.confirm('Êtes-vous sûr de vouloir vous déconnecter ?');
+    const confirmed = window.confirm('Are you sure you want to logout?');
     if (!confirmed) return;
 
     try {
@@ -65,7 +65,7 @@ export default function Navbar() {
         } else {
           addNotification({
             type: 'success',
-            message: 'Déconnexion réussie. À bientôt !',
+            message: 'Logout successful. See you soon!',
             duration: 3000
           });
         }
@@ -80,7 +80,7 @@ export default function Navbar() {
       console.error('Logout error:', error);
       addNotification({
         type: 'error',
-        message: 'Erreur lors de la déconnexion',
+        message: 'Logout error',
         duration: 5000
       });
     }
@@ -392,7 +392,7 @@ export default function Navbar() {
                     disabled={authLoading}
                     className="btn btn-error w-full"
                   >
-                    {authLoading ? 'Déconnexion...' : 'Logout'}
+                    {authLoading ? 'Logging out...' : 'Logout'}
                   </button>
                 </div>
               ) : (

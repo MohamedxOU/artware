@@ -44,10 +44,10 @@ export default function Gallery() {
 
   // Helper function to categorize images based on their number
   function getImageCategory(imageNumber) {
-    if (imageNumber <= 8) return "Formations";
-    if (imageNumber <= 16) return "Événements académiques";
-    if (imageNumber <= 24) return "Événements solidaires";
-    if (imageNumber <= 32) return "Activités fun";
+    if (imageNumber <= 8) return "Training";
+    if (imageNumber <= 16) return "Academic Events";
+    if (imageNumber <= 24) return "Solidarity Events";
+    if (imageNumber <= 32) return "Fun Activities";
     return "Hackathons";
   }
 
@@ -123,10 +123,10 @@ export default function Gallery() {
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       }`}>
         <h2 className="text-4xl md:text-5xl font-bold mb-4">
-          Notre <span className="text-primary">Galerie</span>
+          Our <span className="text-primary">Gallery</span>
         </h2>
         <p className="text-lg text-base-content/70 max-w-2xl mx-auto mb-6">
-          Découvrez nos événements marquants et l&apos;esprit créatif qui anime notre communauté
+          Discover our memorable events and the creative spirit that drives our community
         </p>
       </div>
 
@@ -202,7 +202,7 @@ export default function Gallery() {
             onClick={() => router.push('/gallery')}
             className="cursor-target group inline-flex items-center px-8 py-4 bg-primary hover:bg-primary/90 text-primary-content font-semibold rounded-2xl transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
           >
-            <span className="mr-3">Voir toute la galerie</span>
+            <span className="mr-3">View Full Gallery</span>
             <svg 
               className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300" 
               fill="none" 
