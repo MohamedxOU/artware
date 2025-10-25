@@ -230,8 +230,8 @@ export default function Cells() {
                         src={cell.image}
                         alt={cell.title}
                         width={600}
-                        height={460}
-                        className="w-full h-[460px] object-cover transition-transform duration-700 group-hover:scale-110"
+                        height={430}
+                        className="w-full h-[430px] object-cover transition-transform duration-700 group-hover:scale-110"
                       />
                     </div>
                   </div>

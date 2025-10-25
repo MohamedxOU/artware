@@ -12,7 +12,7 @@ export default function LiquidEther({
   BFECC = true,
   resolution = 0.5,
   isBounce = false,
-  colors = ['#5227FF', '#FF9FFC', '#B19EEF'],
+  colors = ['#5227FF', '#FF9FFC', '#1a33c2ff'],
   style = {},
   className = '',
   autoDemo = true,
@@ -63,7 +63,17 @@ export default function LiquidEther({
       return tex;
     }
 
-    const paletteTex = makePaletteTexture(colors);
+    // Sanitize colors: convert 8-digit #RRGGBBAA to 6-digit #RRGGBB (THREE.Color ignores alpha in strings)
+    const sanitizedColors = Array.isArray(colors)
+      ? colors.map(c => {
+          if (typeof c === 'string') {
+            const m = c.match(/^#([0-9a-fA-F]{8})$/);
+            if (m) return '#' + m[1].slice(0, 6);
+          }
+          return c;
+        })
+      : colors;
+    const paletteTex = makePaletteTexture(sanitizedColors);
     const bgVec4 = new THREE.Vector4(0, 0, 0, 0); // always transparent
 
     class CommonClass {

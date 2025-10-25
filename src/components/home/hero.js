@@ -24,8 +24,10 @@ export default function Hero() {
 
   const t = useTranslations('HomePage');
 
-  // Curated LiquidEther colors (always dark hero): violet + fuchsia + electric blue
-  const liquidEtherColors = ['#7C3AED', '#467cefff', '#971ccfff'];
+  // Curated LiquidEther colors to match the dark navy→purple background
+  // Close-to-blue with a subtle violet accent for harmony
+  // Use 6-digit HEX (THREE.Color doesn't parse 8-digit #RRGGBBAA)
+  const liquidEtherColors = ['#0B3B9C', '#3B82F6', '#8B5CF6'];
 
   // Theme-aware text color
   const textColor = isDarkTheme ? "text-white" : "text-base-content";
@@ -46,10 +48,11 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className={`relative overflow-hidden ${isDarkTheme ? 'bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900' : 'bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50'}`}
+      className="relative overflow-hidden bg-gradient-to-b from-[#0a0a1f] via-[#2d1555] to-[#0a0a1f]"
       style={{ height: "100vh" }}
     >
      
+      {/* LiquidEther Background */}
       <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 0 }}>
         <LiquidEther
           colors={liquidEtherColors}
@@ -69,36 +72,21 @@ export default function Hero() {
           autoRampDuration={0.6}
         />
       </div>
-
-      {/* Animated gradient orbs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className={`absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl opacity-20 animate-pulse ${isDarkTheme ? 'bg-purple-600' : 'bg-purple-400'}`}></div>
-        <div className={`absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-3xl opacity-20 animate-pulse delay-1000 ${isDarkTheme ? 'bg-pink-600' : 'bg-pink-400'}`}></div>
-      </div>
       
       {/* Hero Content Overlay */}
-      <div className="absolute inset-0 z-10 flex flex-col justify-center items-center px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto w-full">
-          <div className="text-center space-y-8 lg:space-y-12">
+      <div className="absolute inset-0 z-10 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto w-full">
+          <div className="text-center space-y-6 lg:space-y-8">
             
-            {/* Logo Section */}
-            <div
-              className={`transition-all duration-1000 delay-100 ${
-                showImage ? "opacity-100 scale-100" : "opacity-0 scale-90"
-              }`}
-            >
-             
-            </div>
-
             {/* Main Title */}
             <div
-              className={`transition-all duration-1000 delay-200 ${
+              className={`transition-all duration-1000 delay-100 ${
                 showText ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
               }`}
             >
-              <h1 className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold ${textColor} mb-4 leading-tight`}>
+              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6 leading-tight tracking-tight">
                 Welcome to{" "}
-                <span className={`inline-block px-4 py-2 rounded-2xl ${isDarkTheme ? 'bg-gradient-to-r from-purple-600 to-pink-600' : 'bg-gradient-to-r from-purple-500 to-pink-500'} text-white shadow-lg`}>
+                <span className="inline-block bg-gradient-to-r from-purple-500 via-fuchsia-500 to-purple-500 bg-clip-text text-transparent">
                   ARTWARE
                 </span>
               </h1>
@@ -106,15 +94,15 @@ export default function Hero() {
 
             {/* Subtitle with Rotating Text */}
             <div
-              className={`transition-all duration-1000 delay-400 ${
+              className={`transition-all duration-1000 delay-200 ${
                 showText ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
               }`}
             >
-              <p className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold ${textColor} flex flex-wrap items-center justify-center gap-3`}>
+              <p className="text-xl sm:text-2xl md:text-3xl font-medium text-gray-300 flex flex-wrap items-center justify-center gap-3">
                 <span>Where We</span>
                 <RotatingText
                   texts={['Learn', 'Practice', 'Innovate', 'Socialize', 'Create', 'Connect']}
-                  mainClassName={`px-4 sm:px-6 md:px-8 py-2 sm:py-3 md:py-4 rounded-xl ${isDarkTheme ? 'bg-purple-500/20 border-2 border-purple-500 text-purple-300' : 'bg-purple-200 border-2 border-purple-400 text-purple-800'} font-bold shadow-lg`}
+                  mainClassName="px-6 py-2 rounded-lg bg-white/5 backdrop-blur-sm border border-white/10 text-white font-semibold"
                   staggerFrom={"last"}
                   initial={{ y: "100%" }}
                   animate={{ y: 0 }}
@@ -129,35 +117,28 @@ export default function Hero() {
 
             {/* Description */}
             <div
-              className={`transition-all duration-1000 delay-500 ${
+              className={`transition-all duration-1000 delay-300 ${
                 showText ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
               }`}
             >
-              <p className={`text-base sm:text-lg md:text-xl max-w-3xl mx-auto ${isDarkTheme ? 'text-gray-300' : 'text-gray-700'}`}>
-                Join our vibrant tech community dedicated to innovation, creativity, and collaborative learning. 
-                Build your skills, create amazing projects, and connect with passionate developers.
+              <p className="text-base sm:text-lg md:text-xl max-w-2xl mx-auto text-gray-400 leading-relaxed">
+                Join our vibrant tech community dedicated to innovation, creativity, and collaborative learning.
               </p>
             </div>
-             
             {/* CTA Buttons */}
             <div
-              className={`flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 transition-all duration-1000 delay-700 ${
+              className={`flex flex-col sm:flex-row items-center justify-center gap-4 transition-all duration-1000 delay-400 ${
                 showText ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
               }`}
             >
               <Link href="/register">
-                <button className={`cursor-target group relative overflow-hidden font-bold px-10 sm:px-14 py-5 sm:py-6 text-base sm:text-lg rounded-2xl transition-all duration-300 hover:scale-105 shadow-2xl ${
-                  isDarkTheme
-                    ? "bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 text-white hover:shadow-purple-500/50"
-                    : "bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 text-white hover:shadow-purple-400/50"
-                }`}>
-                  <span className="relative z-10 flex items-center gap-2">
+                <button className="group relative px-8 py-4 text-base font-semibold rounded-xl bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/50">
+                  <span className="flex items-center gap-2">
                     Get Started
                     <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                     </svg>
                   </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-pink-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 </button>
               </Link>
               <button 
@@ -166,11 +147,7 @@ export default function Hero() {
                     behavior: 'smooth' 
                   });
                 }}
-                className={`cursor-target group font-bold px-10 sm:px-14 py-5 sm:py-6 text-base sm:text-lg rounded-2xl transition-all duration-300 hover:scale-105 border-2 backdrop-blur-sm ${
-                  isDarkTheme 
-                    ? "border-purple-500 text-purple-300 bg-purple-500/10 hover:bg-purple-500/20 hover:border-purple-400 hover:shadow-lg hover:shadow-purple-500/30" 
-                    : "border-purple-500 text-purple-700 bg-purple-100 hover:bg-purple-200 hover:border-purple-600 hover:shadow-lg hover:shadow-purple-400/30"
-                }`}
+                className="group px-8 py-4 text-base font-semibold rounded-xl border border-white/20 text-white bg-white/5 backdrop-blur-sm transition-all duration-300 hover:bg-white/10 hover:border-white/30"
               >
                 <span className="flex items-center gap-2">
                   Discover More
