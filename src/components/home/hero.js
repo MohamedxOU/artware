@@ -24,10 +24,10 @@ export default function Hero() {
 
   const t = useTranslations('HomePage');
 
-  // Curated LiquidEther colors to match the dark navy→purple background
-  // Close-to-blue with a subtle violet accent for harmony
+  // Curated LiquidEther colors: near-white tints that glow on dark purple
+  // Soft lavender and cool blue-whites for subtle, elegant highlights
   // Use 6-digit HEX (THREE.Color doesn't parse 8-digit #RRGGBBAA)
-  const liquidEtherColors = ['#0B3B9C', '#3B82F6', '#8B5CF6'];
+  const liquidEtherColors = ['#F4F1FF', '#EDE9FE', '#E0E7FF'];
 
   // Theme-aware text color
   const textColor = isDarkTheme ? "text-white" : "text-base-content";
