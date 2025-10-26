@@ -64,13 +64,13 @@ export default function Contact() {
                 </span>
               </div>
               <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-base-content leading-tight">
-                Let's Start a{' '}
+                Let&apos;s Start a{' '}
                 <span className="text-primary">
                   Conversation
                 </span>
               </h2>
               <p className="text-lg md:text-xl text-base-content/70 leading-relaxed max-w-lg">
-                Have a question or want to join our club? Fill out the form and we'll get back to you as soon as possible.
+                Have a question or want to join our club? Fill out the form and we&apos;ll get back to you as soon as possible.
               </p>
             </div>
           </div>
