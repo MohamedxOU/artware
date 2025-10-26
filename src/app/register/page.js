@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import AuthNavbar from "@/components/auth/auth-navbar";
@@ -9,6 +10,7 @@ import { useGuestRoute } from "@/hooks/useAuth";
 import TargetCursor from "@/components/TargetCursor";
 
 function RegisterContent() {
+  const router = useRouter();
   // Route protection - redirect authenticated users
   const { isLoading: authCheckLoading } = useGuestRoute();
   
@@ -110,10 +112,10 @@ function RegisterContent() {
     
     const result = await register(apiData);
     if (result.success) {
-      // Show success dialog
+      // Show success dialog (English)
       showSuccessDialog(
-        'Votre compte a été créé avec succès. Veuillez attendre l\'approbation de l\'administrateur pour pouvoir vous connecter. 📧 Vérifiez votre email pour plus d\'informations.',
-        'Inscription réussie!'
+        "Your account has been created successfully. Please wait for the administrator to approve your account before you can sign in. 📧 Check your email for more information.",
+        "Registration Successful!"
       );
       
       // Reset form
@@ -487,23 +489,23 @@ function RegisterContent() {
             </div>
             
             {/* Success Message */}
-            <h3 className="text-2xl font-bold text-base-content mb-3">Inscription réussie!</h3>
+            <h3 className="text-2xl font-bold text-base-content mb-3">Registration Successful!</h3>
             <div className="text-base-content/70 mb-6 space-y-2">
-              <p className="font-medium">Votre compte a été créé avec succès.</p>
+              <p className="font-medium">Your account has been created successfully.</p>
               <p className="text-sm">
-                Veuillez attendre l&apos;approbation de l&apos;administrateur pour pouvoir vous connecter.
+                Please wait for the administrator to approve your account before you can sign in.
               </p>
               <p className="text-sm font-medium text-primary">
-                📧 Vérifiez votre email pour plus d&apos;informations.
+                📧 Check your email for more information.
               </p>
             </div>
             
             {/* OK Button */}
             <button
-              onClick={() => hideSuccessDialog()}
+              onClick={() => { hideSuccessDialog(); router.push('/'); }}
               className="cursor-target w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl"
             >
-              Compris
+              I understand
             </button>
           </div>
         </div>
