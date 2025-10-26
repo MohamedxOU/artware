@@ -110,3 +110,30 @@ export const quitCell = async (cellId) => {
     }
 };
 
+
+
+//get cell events
+
+export const getCellEvents = async (cellName) => {
+    try {
+        const response = await fetch(`${API_BASE}/api/cellules/${cellName}/events`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${getAuthToken()}`
+            }
+        });
+        if (response.ok) {
+            return response.json();
+        }
+        else {
+            const contentType = response.headers.get('content-type');
+            const errorMessage = contentType === 'application/json'
+                ? (await response.json()).error || 'Unknown error'
+                : 'Network error';
+            throw new Error(errorMessage);
+        }
+    } catch (error) {
+        console.error('Failed to fetch cell events:', error);
+        throw error;
+    }
+};

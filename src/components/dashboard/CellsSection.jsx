@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { getAllCells, getUserCells, joinCell, quitCell } from '@/api/cells';
+import { getAllCells, getUserCells, joinCell, quitCell, getCellEvents } from '@/api/cells';
 import useAuthStore from '@/stores/authStore';
 
 export default function CellsSection({ user }) {
@@ -15,6 +15,9 @@ export default function CellsSection({ user }) {
   const [error, setError] = useState(null);
   const [joiningCell, setJoiningCell] = useState(null); // Track which cell is being joined
   const [quittingCell, setQuittingCell] = useState(null); // Track which cell is being quit
+  const [selectedCell, setSelectedCell] = useState(null); // Track selected cell for events modal
+  const [cellEvents, setCellEvents] = useState([]); // Store events for selected cell
+  const [loadingEvents, setLoadingEvents] = useState(false); // Loading state for events
 
   // Add debugging
   useEffect(() => {
@@ -137,6 +140,32 @@ export default function CellsSection({ user }) {
     } finally {
       setQuittingCell(null);
     }
+  };
+
+  // Handle showing events for a cell
+  const handleShowEvents = async (cellName) => {
+    try {
+      setLoadingEvents(true);
+      setSelectedCell(cellName);
+      console.log(`Fetching events for cell: ${cellName}`);
+      
+      const response = await getCellEvents(cellName);
+      console.log('Cell events response:', response);
+      
+      setCellEvents(response.events || []);
+    } catch (error) {
+      console.error('Failed to fetch cell events:', error);
+      alert(`Erreur lors du chargement des événements: ${error.message}`);
+      setSelectedCell(null);
+    } finally {
+      setLoadingEvents(false);
+    }
+  };
+
+  // Close events modal
+  const closeEventsModal = () => {
+    setSelectedCell(null);
+    setCellEvents([]);
   };
 
   // Helper function to assign colors cyclically
@@ -351,38 +380,52 @@ export default function CellsSection({ user }) {
                   {cell.domain}
                 </p>
 
-                {/* Action Button */}
-                {cell.isMember ? (
+                {/* Action Buttons */}
+                <div className="space-y-2">
+                  {/* Show Events Button */}
                   <button
-                    onClick={() => handleQuitCell(cell.id, cell.name)}
-                    disabled={quittingCell === cell.id}
-                    className="cursor-target w-full py-3 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white rounded-xl font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={() => handleShowEvents(cell.abbreviation)}
+                    className="cursor-target w-full py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2"
                   >
-                    {quittingCell === cell.id ? (
-                      <div className="flex items-center justify-center gap-2">
-                        <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
-                        <span>Sortie en cours...</span>
-                      </div>
-                    ) : (
-                      'Quitter la cellule'
-                    )}
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    Voir les événements
                   </button>
-                ) : (
-                  <button
-                    onClick={() => handleJoinCell(cell.id, cell.name)}
-                    disabled={joiningCell === cell.id}
-                    className="cursor-target w-full py-3 bg-white/90 hover:bg-white text-gray-900 rounded-xl font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur-md shadow-lg"
-                  >
-                    {joiningCell === cell.id ? (
-                      <div className="flex items-center justify-center gap-2">
-                        <div className="animate-spin w-4 h-4 border-2 border-gray-900 border-t-transparent rounded-full"></div>
-                        <span>Adhésion...</span>
-                      </div>
-                    ) : (
-                      'Rejoindre la cellule'
-                    )}
-                  </button>
-                )}
+
+                  {/* Join/Quit Button */}
+                  {cell.isMember ? (
+                    <button
+                      onClick={() => handleQuitCell(cell.id, cell.name)}
+                      disabled={quittingCell === cell.id}
+                      className="cursor-target w-full py-3 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white rounded-xl font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {quittingCell === cell.id ? (
+                        <div className="flex items-center justify-center gap-2">
+                          <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
+                          <span>Sortie en cours...</span>
+                        </div>
+                      ) : (
+                        'Quitter la cellule'
+                      )}
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleJoinCell(cell.id, cell.name)}
+                      disabled={joiningCell === cell.id}
+                      className="cursor-target w-full py-3 bg-white/90 hover:bg-white text-gray-900 rounded-xl font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur-md shadow-lg"
+                    >
+                      {joiningCell === cell.id ? (
+                        <div className="flex items-center justify-center gap-2">
+                          <div className="animate-spin w-4 h-4 border-2 border-gray-900 border-t-transparent rounded-full"></div>
+                          <span>Adhésion...</span>
+                        </div>
+                      ) : (
+                        'Rejoindre la cellule'
+                      )}
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -404,6 +447,170 @@ export default function CellsSection({ user }) {
               : "Aucune cellule disponible pour le moment."
             }
           </p>
+        </div>
+      )}
+
+      {/* Events Modal */}
+      {selectedCell && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-base-100 rounded-2xl max-w-4xl w-full max-h-[80vh] overflow-hidden shadow-2xl">
+            {/* Modal Header */}
+            <div className="bg-primary/10 border-b border-base-300/30 p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold text-base-content mb-1">
+                    Événements - {selectedCell}
+                  </h2>
+                  <p className="text-base-content/60 text-sm">
+                    {cellEvents.length} événement{cellEvents.length !== 1 ? 's' : ''} trouvé{cellEvents.length !== 1 ? 's' : ''}
+                  </p>
+                </div>
+                <button
+                  onClick={closeEventsModal}
+                  className="btn btn-circle btn-ghost hover:bg-base-300/50"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6 overflow-y-auto max-h-[calc(80vh-120px)]">
+              {loadingEvents ? (
+                <div className="flex flex-col items-center justify-center py-12">
+                  <div className="animate-spin w-12 h-12 border-4 border-primary border-t-transparent rounded-full mb-4"></div>
+                  <p className="text-base-content/60">Chargement des événements...</p>
+                </div>
+              ) : cellEvents.length === 0 ? (
+                <div className="text-center py-12">
+                  <div className="w-20 h-20 bg-base-content/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-10 h-10 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-semibold text-base-content mb-2">Aucun événement</h3>
+                  <p className="text-base-content/60">
+                    Cette cellule n'a pas d'événements programmés pour le moment.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {cellEvents.map((event, index) => (
+                    <div
+                      key={event.id || index}
+                      className="border border-base-300/50 rounded-xl p-5 hover:shadow-lg transition-shadow duration-200 bg-base-100"
+                    >
+                      <div className="flex items-start gap-4">
+                        {/* Event Icon/Image */}
+                        {event.image_url ? (
+                          <div className="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden">
+                            <img 
+                              src={event.image_url} 
+                              alt={event.title}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        ) : (
+                          <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                            <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                          </div>
+                        )}
+
+                        {/* Event Details */}
+                        <div className="flex-1">
+                          <div className="flex items-start justify-between gap-2 mb-2">
+                            <h3 className="text-lg font-bold text-base-content">
+                              {event.title || 'Sans titre'}
+                            </h3>
+                            {/* Type Badge */}
+                            {event.type && (
+                              <span className="px-2.5 py-1 bg-primary/10 text-primary rounded-md text-xs font-medium capitalize">
+                                {event.type === 'training' ? 'Formation' : 
+                                 event.type === 'workshop' ? 'Atelier' : 
+                                 event.type === 'competition' ? 'Compétition' : 
+                                 event.type}
+                              </span>
+                            )}
+                          </div>
+                          
+                          {event.description && (
+                            <p className="text-base-content/70 text-sm mb-3">
+                              {event.description}
+                            </p>
+                          )}
+
+                          {/* Responsable */}
+                          {event.responsable && (
+                            <div className="flex items-center gap-1.5 text-base-content/60 text-sm mb-2">
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                              </svg>
+                              <span>Responsable: {event.responsable}</span>
+                            </div>
+                          )}
+
+                          <div className="flex flex-wrap gap-3 text-sm">
+                            {/* Date */}
+                            {event.date && (
+                              <div className="flex items-center gap-1.5 text-base-content/60">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                <span>{new Date(event.date).toLocaleDateString('fr-FR', { 
+                                  day: 'numeric', 
+                                  month: 'long', 
+                                  year: 'numeric' 
+                                })}</span>
+                              </div>
+                            )}
+
+                            {/* Time */}
+                            {(event.time_start || event.time_end) && (
+                              <div className="flex items-center gap-1.5 text-base-content/60">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span>
+                                  {event.time_start && event.time_start.substring(0, 5)}
+                                  {event.time_start && event.time_end && ' - '}
+                                  {event.time_end && event.time_end.substring(0, 5)}
+                                </span>
+                              </div>
+                            )}
+
+                            {/* Location */}
+                            {event.location && (
+                              <div className="flex items-center gap-1.5 text-base-content/60">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                <span>{event.location}</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="border-t border-base-300/30 p-4 bg-base-200/50">
+              <button
+                onClick={closeEventsModal}
+                className="btn btn-primary w-full sm:w-auto sm:ml-auto sm:block"
+              >
+                Fermer
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
