@@ -208,7 +208,7 @@ export default function EventsSection() {
 
     try {
       setActionLoading(eventId);
-      await registerForEvent(user.user_id, eventId);
+      await registerForEvent(eventId, user.user_id);
       
       // Refresh registered events first
       const registeredResponse = await getUserRegistredEvents(user.user_id);
@@ -250,7 +250,7 @@ export default function EventsSection() {
         closeConfirm();
         try {
           setActionLoading(eventId);
-          await unregisterFromEvent(user.user_id, eventId);
+          await unregisterFromEvent(eventId, user.user_id);
           
           // Refresh registered events first
           const registeredResponse = await getUserRegistredEvents(user.user_id);
