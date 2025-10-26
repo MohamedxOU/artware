@@ -94,7 +94,8 @@ export default function LiquidEther({
       }
       init(container) {
         this.container = container;
-        this.pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+  // Cap DPR for performance to reduce GPU workload on high-DPI screens
+  this.pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
         this.resize();
         this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         this.renderer.autoClear = false;
@@ -149,18 +150,19 @@ export default function LiquidEther({
       }
       init(container) {
         this.container = container;
-        container.addEventListener('mousemove', this._onMouseMove, false);
-        container.addEventListener('touchstart', this._onTouchStart, false);
-        container.addEventListener('touchmove', this._onTouchMove, false);
+  container.addEventListener('mousemove', this._onMouseMove, false);
+  // Mark touch listeners as passive to avoid blocking scroll on touch devices
+  container.addEventListener('touchstart', this._onTouchStart, { passive: true });
+  container.addEventListener('touchmove', this._onTouchMove, { passive: true });
         container.addEventListener('mouseenter', this._onMouseEnter, false);
         container.addEventListener('mouseleave', this._onMouseLeave, false);
         container.addEventListener('touchend', this._onTouchEnd, false);
       }
       dispose() {
         if (!this.container) return;
-        this.container.removeEventListener('mousemove', this._onMouseMove, false);
-        this.container.removeEventListener('touchstart', this._onTouchStart, false);
-        this.container.removeEventListener('touchmove', this._onTouchMove, false);
+  this.container.removeEventListener('mousemove', this._onMouseMove, false);
+  try { this.container.removeEventListener('touchstart', this._onTouchStart, { passive: true }); } catch(e){ this.container.removeEventListener('touchstart', this._onTouchStart, false); }
+  try { this.container.removeEventListener('touchmove', this._onTouchMove, { passive: true }); } catch(e){ this.container.removeEventListener('touchmove', this._onTouchMove, false); }
         this.container.removeEventListener('mouseenter', this._onMouseEnter, false);
         this.container.removeEventListener('mouseleave', this._onMouseLeave, false);
         this.container.removeEventListener('touchend', this._onTouchEnd, false);

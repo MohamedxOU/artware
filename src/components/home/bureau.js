@@ -175,10 +175,10 @@ export default function Bureau() {
         {/* Header */}
         <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Notre Bureau, <span className="text-primary">Les Piliers du Succès</span>
+            Our team, <span className="text-primary">The Pillars of Success</span>
           </h2>
           <p className="text-lg text-base-content/70 max-w-2xl mx-auto italic">
-            Rencontrez l&apos;équipe dirigeante passionnée qui transforme notre vision en réalité
+            Meet the passionate leadership team that transforms our vision into reality
           </p>
         </div>
 
@@ -238,6 +238,10 @@ export default function Bureau() {
                       src={member.image}
                       alt={member.name}
                       fill
+                      priority={isCenter}
+                      loading={isCenter ? 'eager' : 'lazy'}
+                      quality={70}
+                      sizes="(max-width: 768px) 80vw, (max-width: 1280px) 50vw, 320px"
                       className={`object-cover transition-all duration-700 ${
                         isCenter ? 'group-hover:scale-105' : 'group-hover:scale-110'
                       }`}

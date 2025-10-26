@@ -13,14 +13,18 @@ const TargetCursor = ({ targetSelector = '.cursor-target', spinDuration = 2, hid
     parallaxStrength: 0.00005
   }), []);
 
+  // Use gsap.quickTo to avoid creating a new tween on every mousemove
+  const quickX = useRef(null);
+  const quickY = useRef(null);
+
   const moveCursor = useCallback((x, y) => {
     if (!cursorRef.current) return;
-    gsap.to(cursorRef.current, {
-      x,
-      y,
-      duration: 0.1,
-      ease: 'power3.out'
-    });
+    if (!quickX.current || !quickY.current) {
+      quickX.current = gsap.quickTo(cursorRef.current, 'x', { duration: 0.06, ease: 'power3.out' });
+      quickY.current = gsap.quickTo(cursorRef.current, 'y', { duration: 0.06, ease: 'power3.out' });
+    }
+    quickX.current(x);
+    quickY.current(y);
   }, []);
 
   // Mobile detection effect
@@ -88,8 +92,8 @@ const TargetCursor = ({ targetSelector = '.cursor-target', spinDuration = 2, hid
 
     createSpinTimeline();
 
-    const moveHandler = e => moveCursor(e.clientX, e.clientY);
-    window.addEventListener('mousemove', moveHandler);
+  const moveHandler = e => moveCursor(e.clientX, e.clientY);
+  window.addEventListener('mousemove', moveHandler);
 
     const scrollHandler = () => {
       if (!activeTarget || !cursorRef.current) return;
@@ -109,9 +113,7 @@ const TargetCursor = ({ targetSelector = '.cursor-target', spinDuration = 2, hid
       }
     };
 
-    window.addEventListener('scroll', scrollHandler, { passive: true });
-
-    window.addEventListener('mousemove', moveHandler);
+  window.addEventListener('scroll', scrollHandler, { passive: true });
     const mouseDownHandler = () => {
       if (!dotRef.current) return;
       gsap.to(dotRef.current, { scale: 0.7, duration: 0.3 });
