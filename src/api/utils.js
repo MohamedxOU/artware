@@ -1,7 +1,12 @@
 // API utility functions for authenticated requests
 import { getAuthToken, removeAuthToken } from '@/utils/cookies';
 
-export const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3500';
+// Prefer same-origin proxy in the browser to avoid CORS. On the server, use the absolute base URL.
+const rawBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3500';
+export const API_BASE =
+  typeof window !== 'undefined' && rawBase.startsWith('http')
+    ? '/api'
+    : rawBase;
 
 // Get authentication headers with access token
 export const getAuthHeaders = () => {

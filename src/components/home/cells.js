@@ -7,7 +7,7 @@ const cells = [
     id: 1,
     category: "Development",
     title: "Web & Mobile Development",
-    subtitle: "30 Projects",
+    subtitle: "2 Projects",
     description: "We create innovative web and mobile applications with the latest technologies to optimize your digital presence.",
     responsable: "Oucharrou Mohamed",
     activities: ["HTML/CSS","JavaScript","Java","Flutter", ],
@@ -18,11 +18,11 @@ const cells = [
   {
     id: 2,
     category: "Artificial Intelligence",
-    title: "AI & Machine Learning",
+    title: "AI & Data Science",
     subtitle: "1 Models",
     description: "We develop AI solutions to automate your processes and improve your business performance.",
     responsable: "Laghrib salim",
-    activities: ["Machine Learning", "Computer Vision", "NLP", "TensorFlow"],
+    activities: ["Machine Learning", "Computer Vision", "NLP", "data science"],
     gradient: "bg-gradient-to-br from-yellow-400 to-orange-500",
     buttonText: "Learn more →",
     image: "/cells/ia.png"

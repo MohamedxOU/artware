@@ -56,17 +56,17 @@ export default function Hero() {
       <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 0 }}>
         <LiquidEther
           colors={liquidEtherColors}
-          mouseForce={20}
-          cursorSize={110}
+          mouseForce={18}
+          cursorSize={100}
           isViscous={false}
           viscous={30}
           iterationsViscous={32}
           iterationsPoisson={32}
-          resolution={0.5}
+          resolution={0.4}
           isBounce={false}
           autoDemo={true}
-          autoSpeed={0.45}
-          autoIntensity={2.0}
+          autoSpeed={0.4}
+          autoIntensity={1.8}
           takeoverDuration={0.25}
           autoResumeDelay={3000}
           autoRampDuration={0.6}

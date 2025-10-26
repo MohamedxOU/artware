@@ -4,7 +4,11 @@ import { getAuthToken } from '@/utils/cookies';
 //login api with retry logic
 export async function login(email, password) {
   try {
-    const response = await fetch(`${API_BASE}/login`, {
+    const url = `${API_BASE}/login`;
+    if (typeof window !== 'undefined') {
+      console.log('[auth.login] API_BASE:', API_BASE, 'URL:', url);
+    }
+    const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include", 
@@ -121,7 +125,11 @@ export const refreshToken = async () => {
 //register api
 
 export const register = async (formData) => {
-    const response = await fetch(`${API_BASE}/register`, {
+    const url = `${API_BASE}/register`;
+    if (typeof window !== 'undefined') {
+      console.log('[auth.register] API_BASE:', API_BASE, 'URL:', url);
+    }
+    const response = await fetch(url, {
       method: 'POST',
       credentials: 'include',
       body: formData,

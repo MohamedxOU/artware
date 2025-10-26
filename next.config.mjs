@@ -40,6 +40,17 @@ const nextConfig = {
             // },
         ],
     },
+    async rewrites() {
+        // Proxy API requests to the backend to avoid browser CORS
+        const apiBase = process.env.NEXT_PUBLIC_API_URL;
+        if (!apiBase) return [];
+        return [
+            {
+                source: '/api/:path*',
+                destination: `${apiBase}/:path*`,
+            },
+        ];
+    },
 };
  
 export default withNextIntl(nextConfig);

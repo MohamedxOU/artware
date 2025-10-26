@@ -5,27 +5,27 @@ import Image from "next/image";
 const activities = [
 	{
 		title: "Training & Workshops",
-		image: "/activities/activity.jpg",
+		image: "/activities/form.jpg",
 		description: "We create innovative web and mobile applications using the latest technologies. Our experts develop customized solutions to enhance your digital presence and improve user experience.",
 	},
 	{
 		title: "Events & Conferences",
-		image: "/activities/activity.jpg",
+		image: "/activities/conf.jpg",
 		description: "Explore the potential of AI with our tailored solutions. We build machine learning models and intelligent systems to automate your business processes.",
 	},
 	{
 		title: "Competitions & Hackathons",
-		image: "/activities/activity.jpg",
+		image: "/activities/hack.jpg",
 		description: "Improve your algorithmic skills and take part in international competitions. We organize training sessions and workshops for all skill levels.",
 	},
 	{
 		title: "Community & Networking",
-		image: "/activities/activity.jpg",
+		image: "/activities/netw.png",
 		description: "Join our vibrant community through tech events, hackathons, and workshops. Learn, share, and connect with other technology enthusiasts.",
 	},
 	{
 		title: "Solidarity & Social Engagement",
-		image: "/activities/activity.jpg",
+		image: "/activities/soli.jpg",
 		description: "Take advantage of our mentoring program and technical training sessions. Our experts guide you throughout your learning journey and professional development.",
 	},
 ];
@@ -58,7 +58,7 @@ export default function Activities() {
 										src={activities[selected].image}
 										alt={activities[selected].title}
 										width={600}
-										height={400}
+										height={600}
 										className="w-full h-full object-cover"
 									/>
 								</div>
@@ -81,7 +81,7 @@ export default function Activities() {
 										key={activity.title}
 										className={`flex-shrink-0 px-4 py-3 rounded-xl transition-all duration-300 text-sm font-semibold whitespace-nowrap ${
 											selected === idx
-												? 'bg-primary text-primary-content shadow-lg'
+												? 'bg-primary text-white shadow-lg'
 												: 'text-base-content/70 hover:bg-base-300/50 hover:text-base-content bg-base-100'
 										}`}
 										onClick={() => setSelected(idx)}
@@ -103,7 +103,7 @@ export default function Activities() {
 										key={activity.title}
 										className={`w-full text-left px-6 py-4 rounded-xl transition-all duration-300 ${
 											selected === idx
-												? 'bg-primary text-primary-content shadow-lg'
+												? 'bg-primary text-white shadow-lg'
 												: 'text-base-content/70 hover:bg-base-300/50 hover:text-base-content'
 										}`}
 										onClick={() => setSelected(idx)}

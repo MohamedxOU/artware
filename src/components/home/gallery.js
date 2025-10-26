@@ -135,7 +135,7 @@ export default function Gallery() {
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       }`}>
         {/* Custom Masonry Layout with Natural Aspect Ratios */}
-        <div className="columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4 mb-8">
+        <div className="columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4 mb-8" style={{contentVisibility: 'auto', containIntrinsicSize: '1000px'}}>
           {items.map((item, index) => {
             return (
               <div
@@ -150,7 +150,10 @@ export default function Gallery() {
                   width={400}
                   height={item.height}
                   className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-110"
-                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                  quality={70}
+                  priority={index < 6}
+                  loading={index < 6 ? 'eager' : 'lazy'}
                 />
                 
                 {/* Overlay */}
@@ -195,24 +198,6 @@ export default function Gallery() {
             </button>
           </div>
         )}
-
-        {/* Visit Full Gallery Button */}
-        <div className="text-center">
-          <button
-            onClick={() => router.push('/gallery')}
-            className="cursor-target group inline-flex items-center px-8 py-4 bg-primary hover:bg-primary/90 text-primary-content font-semibold rounded-2xl transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
-          >
-            <span className="mr-3">View Full Gallery</span>
-            <svg 
-              className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </button>
-        </div>
       </div>
 
       {/* Image Modal/Lightbox */}

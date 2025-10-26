@@ -10,7 +10,7 @@ const navLinks = [
   { href: "#activities", label: "Activities" },
   { href: "#cells", label: "Cells" },
   { href: "#gallery", label: "Gallery" },
-  { href: "#bureau", label: "Board" },
+  { href: "#bureau", label: "Team" },
   { href: "#contact", label: "Contact" }
 ];
 
@@ -249,8 +249,8 @@ export default function Navbar() {
               <Link 
                 href="/login" 
                 className={`cursor-target btn btn-sm ml-2 transition-all duration-300 ${
-                  isScrolled ? "btn-primary" : "btn-outline text-white border-white hover:bg-white hover:text-primary"
-                }`}
+                  isScrolled ? "btn-primary" : "btn-outline border-white hover:bg-white hover:text-primary"
+                } ${!isScrolled ? "text-white" : "text-white"}`}
               >
                 Login
               </Link>
