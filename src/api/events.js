@@ -158,3 +158,29 @@ export const getQrCode = async (userId) => {
         throw error;
     }
 };
+
+
+
+//get docs of an event
+export const getEventDocs = async (eventId) => {
+    try {
+        const response = await fetch(`${API_BASE}/api/events/${eventId}/docs`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${getAuthToken()}`
+            }
+        });
+        if (response.ok) {
+            return response.json();
+        } else {
+            const contentType = response.headers.get('content-type');
+            const errorMessage = contentType === 'application/json'
+                ? (await response.json()).error || 'Unknown error'
+                : 'Unknown error';
+            throw new Error(errorMessage);
+        }
+    } catch (error) {
+        console.error('Failed to fetch event documents:', error);
+        throw error;
+    }
+};
