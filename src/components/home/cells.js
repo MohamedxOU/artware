@@ -87,10 +87,10 @@ export default function Cells() {
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-base-content">
             Our Cells, <span className="text-primary">Your Key to Tech Success</span>
           </h2>
-          <p className="text-lg text-gray-700 max-w-2xl mx-auto">
+          <p className="text-lg text-base-content/70 max-w-2xl mx-auto">
             Discover our opportunities, develop your skills, and secure your technological future with us
           </p>
         </div>

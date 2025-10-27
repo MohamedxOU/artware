@@ -69,7 +69,7 @@ export default function Contact() {
                   Conversation
                 </span>
               </h2>
-              <p className="text-lg md:text-xl text-base-content/70 leading-relaxed max-w-lg">
+              <p className="text-foreground text-lg md:text-xl text-base-content/70 leading-relaxed max-w-lg">
                 Have a question or want to join our club? Fill out the form and we&apos;ll get back to you as soon as possible.
               </p>
             </div>
