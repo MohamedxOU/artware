@@ -503,9 +503,13 @@ export default function EventsSection() {
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {filteredEvents.map((event) => (
-                <div key={event.id} className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300">
+                <div 
+                  key={event.id} 
+                  onClick={() => window.open(`/event/${event.id}`, '_blank')}
+                  className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer"
+                >
                   <div className="flex flex-col lg:flex-row">
-                    {/* Left side - Profile/Event Image */}
+                    {/* Event Image */}
                     <div className="w-full lg:w-1/3 relative h-48 lg:h-auto lg:min-h-[280px]">
                       {event.image ? (
                         <Image
@@ -585,25 +589,42 @@ export default function EventsSection() {
 
                       {/* Action Button */}
                       <div className="mt-auto space-y-2">
-                        {/* Show Documents Button - Available for all tabs */}
-                        <button 
-                          onClick={() => handleShowDocuments(event.id, event.title)}
-                          className="cursor-target w-full py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors duration-200 flex items-center justify-center gap-2"
-                        >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                          </svg>
-                          Voir les documents
-                        </button>
-
                         {activeTab === 'upcoming' && (
                           <>
                             <button 
-                              onClick={() => handleRegisterEvent(event.id)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleRegisterEvent(event.id);
+                              }}
                               disabled={actionLoading === event.id}
-                              className="cursor-target w-full py-3 border-2 border-pink-500 text-pink-500 rounded-lg font-medium hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                              className="cursor-target w-full py-3 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                             >
-                              {actionLoading === event.id ? 'Inscription...' : 'S\'inscrire à l\'événement'}
+                              {actionLoading === event.id ? (
+                                <>
+                                  <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
+                                  Inscription...
+                                </>
+                              ) : (
+                                <>
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                  </svg>
+                                  S'inscrire à l'événement
+                                </>
+                              )}
+                            </button>
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                window.open(`/event/${event.id}`, '_blank');
+                              }}
+                              className="cursor-target w-full py-2.5 border-2 border-pink-500 text-pink-500 rounded-lg font-medium hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-colors duration-200 flex items-center justify-center gap-2"
+                            >
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                              </svg>
+                              Voir les détails
                             </button>
                             <p className="text-xs text-gray-400 text-center mt-2 italic">
                               *Places limitées, inscription obligatoire
@@ -612,17 +633,45 @@ export default function EventsSection() {
                         )}
                         
                         {activeTab === 'registered' && (
-                          <button 
-                            onClick={() => handleUnregisterEvent(event.id)}
-                            disabled={actionLoading === event.id}
-                            className="cursor-target w-full py-3 border-2 border-red-500 text-red-500 rounded-lg font-medium hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                          >
-                            {actionLoading === event.id ? 'Annulation...' : 'Annuler l\'inscription'}
-                          </button>
+                          <>
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleUnregisterEvent(event.id);
+                              }}
+                              disabled={actionLoading === event.id}
+                              className="cursor-target w-full py-3 border-2 border-red-500 text-red-500 rounded-lg font-medium hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              {actionLoading === event.id ? 'Annulation...' : 'Annuler l\'inscription'}
+                            </button>
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                window.open(`/event/${event.id}`, '_blank');
+                              }}
+                              className="cursor-target w-full py-2.5 border-2 border-pink-500 text-pink-500 rounded-lg font-medium hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-colors duration-200 flex items-center justify-center gap-2"
+                            >
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                              </svg>
+                              Voir les détails
+                            </button>
+                          </>
                         )}
                         
                         {activeTab === 'attended' && (
-                          <button className="cursor-target w-full py-3 border-2 border-pink-500 text-pink-500 rounded-lg font-medium hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-colors duration-200">
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              window.open(`/event/${event.id}`, '_blank');
+                            }}
+                            className="cursor-target w-full py-3 border-2 border-pink-500 text-pink-500 rounded-lg font-medium hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-colors duration-200 flex items-center justify-center gap-2"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
                             Voir les détails
                           </button>
                         )}
