@@ -49,7 +49,7 @@ export default function EventsSection() {
       title: event.title,
       date: formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1),
       location: event.location,
-      price: "Gratuit",
+      price: "Free",
       image: event.image_url,
       attendees: Math.floor(Math.random() * 50) + 15,
       category: event.cellule_name || event.type,
@@ -263,7 +263,7 @@ export default function EventsSection() {
   // Handle event registration
   const handleRegisterEvent = async (eventId) => {
     if (!user?.user_id) {
-      showNotification('error', 'Erreur', 'Vous devez être connecté pour vous inscrire');
+      showNotification('error', 'Error', 'You must be logged in to register');
       return;
     }
 
@@ -291,10 +291,10 @@ export default function EventsSection() {
         .map(event => transformEvent(event));
       setUpcomingEvents(upcoming);
       
-      showNotification('success', 'Succès', 'Inscription réussie! Votre place est confirmée.');
+      showNotification('success', 'Success', 'Registration successful! Your spot is confirmed.');
     } catch (err) {
       console.error('Failed to register for event:', err);
-      showNotification('error', 'Erreur', 'Échec de l\'inscription: ' + err.message);
+      showNotification('error', 'Error', 'Registration failed: ' + err.message);
     } finally {
       setActionLoading(null);
     }
@@ -305,8 +305,8 @@ export default function EventsSection() {
     if (!user?.user_id) return;
 
     showConfirm(
-      'Annuler l\'inscription',
-      'Êtes-vous sûr de vouloir annuler votre inscription à cet événement?',
+      'Cancel Registration',
+      'Are you sure you want to cancel your registration for this event?',
       async () => {
         closeConfirm();
         try {
@@ -333,10 +333,10 @@ export default function EventsSection() {
             .map(event => transformEvent(event));
           setUpcomingEvents(upcoming);
           
-          showNotification('success', 'Annulation réussie', 'Votre inscription a été annulée avec succès');
+          showNotification('success', 'Cancellation Successful', 'Your registration has been cancelled successfully');
         } catch (err) {
           console.error('Failed to unregister from event:', err);
-          showNotification('error', 'Erreur', 'Échec de l\'annulation: ' + err.message);
+          showNotification('error', 'Error', 'Cancellation failed: ' + err.message);
         } finally {
           setActionLoading(null);
         }
@@ -350,7 +350,7 @@ export default function EventsSection() {
       <div className="w-full max-w-7xl mx-auto relative min-h-full">
         <div className="backdrop-blur-sm bg-base-100/80 rounded-2xl p-8 text-center border border-base-300/20 shadow-sm relative z-10">
           <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p className="text-base-content/60">Chargement des événements...</p>
+          <p className="text-base-content/60">Loading events...</p>
         </div>
       </div>
     );
@@ -366,13 +366,13 @@ export default function EventsSection() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
           </div>
-          <h3 className="text-xl font-semibold text-base-content mb-2">Erreur de chargement</h3>
+          <h3 className="text-xl font-semibold text-base-content mb-2">Loading Error</h3>
           <p className="text-base-content/60 mb-4">{error}</p>
           <button 
             onClick={() => window.location.reload()} 
             className="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-content rounded-lg text-sm font-medium transition-colors"
           >
-            Réessayer
+            Retry
           </button>
         </div>
       </div>
@@ -395,7 +395,7 @@ export default function EventsSection() {
           </div>
           <div>
             <h3 className="text-xl lg:text-2xl font-bold text-blue-700 dark:text-blue-300">{stats.totalEvents}</h3>
-            <p className="text-blue-600 dark:text-blue-400 text-xs lg:text-sm font-medium">Total des événements</p>
+            <p className="text-blue-600 dark:text-blue-400 text-xs lg:text-sm font-medium">Total Events</p>
           </div>
         </div>
 
@@ -409,7 +409,7 @@ export default function EventsSection() {
           </div>
           <div>
             <h3 className="text-xl lg:text-2xl font-bold text-purple-700 dark:text-purple-300">{stats.registeredEvents}</h3>
-            <p className="text-purple-600 dark:text-purple-400 text-xs lg:text-sm font-medium">Événements inscrits</p>
+            <p className="text-purple-600 dark:text-purple-400 text-xs lg:text-sm font-medium">Registered Events</p>
           </div>
         </div>
 
@@ -423,7 +423,7 @@ export default function EventsSection() {
           </div>
           <div>
             <h3 className="text-xl lg:text-2xl font-bold text-green-700 dark:text-green-300">{stats.upcomingEvents}</h3>
-            <p className="text-green-600 dark:text-green-400 text-xs lg:text-sm font-medium">Événements à venir</p>
+            <p className="text-green-600 dark:text-green-400 text-xs lg:text-sm font-medium">Upcoming Events</p>
           </div>
         </div>
 
@@ -437,7 +437,7 @@ export default function EventsSection() {
           </div>
           <div>
             <h3 className="text-xl lg:text-2xl font-bold text-orange-700 dark:text-orange-300">{stats.attendedEvents}</h3>
-            <p className="text-orange-600 dark:text-orange-400 text-xs lg:text-sm font-medium">Événements assistés</p>
+            <p className="text-orange-600 dark:text-orange-400 text-xs lg:text-sm font-medium">Events Attended</p>
           </div>
         </div>
       </div>
@@ -455,7 +455,7 @@ export default function EventsSection() {
                   : 'border-transparent text-base-content/70 hover:text-base-content hover:bg-base-200'
               }`}
             >
-              À venir
+              Upcoming
             </button>
             <button
               onClick={() => setActiveTab('registered')}
@@ -465,7 +465,7 @@ export default function EventsSection() {
                   : 'border-transparent text-base-content/70 hover:text-base-content hover:bg-base-200'
               }`}
             >
-              Mes inscriptions
+              My Registrations
             </button>
             <button
               onClick={() => setActiveTab('attended')}
@@ -475,7 +475,7 @@ export default function EventsSection() {
                   : 'border-transparent text-base-content/70 hover:text-base-content hover:bg-base-200'
               }`}
             >
-              Événements assistés
+              Events Attended
             </button>
           </div>
         </div>
@@ -490,14 +490,14 @@ export default function EventsSection() {
                 </svg>
               </div>
               <h3 className="text-lg font-medium text-base-content mb-2">
-                {activeTab === 'upcoming' && 'Aucun événement à venir'}
-                {activeTab === 'registered' && 'Aucune inscription'}
-                {activeTab === 'attended' && 'Aucun événement suivi'}
+                {activeTab === 'upcoming' && 'No upcoming events'}
+                {activeTab === 'registered' && 'No registrations'}
+                {activeTab === 'attended' && 'No events attended'}
               </h3>
               <p className="text-base-content/60">
-                {activeTab === 'upcoming' && 'Les prochains événements apparaîtront ici.'}
-                {activeTab === 'registered' && 'Les événements auxquels vous êtes inscrit apparaîtront ici.'}
-                {activeTab === 'attended' && 'Les événements auxquels vous avez participé apparaîtront ici.'}
+                {activeTab === 'upcoming' && 'Upcoming events will appear here.'}
+                {activeTab === 'registered' && 'Events you are registered for will appear here.'}
+                {activeTab === 'attended' && 'Events you have attended will appear here.'}
               </p>
             </div>
           ) : (
@@ -547,8 +547,8 @@ export default function EventsSection() {
                         </h3>
                         <p className="text-gray-600 dark:text-gray-400 text-sm">
                           {event.eventType === 'workshop' ? 'Workshop' : 
-                           event.eventType === 'conference' ? 'Conférence' :
-                           event.eventType === 'hackathon' ? 'Hackathon' : 'Événement'}
+                           event.eventType === 'conference' ? 'Conference' :
+                           event.eventType === 'hackathon' ? 'Hackathon' : 'Event'}
                         </p>
                       </div>
 
@@ -602,14 +602,14 @@ export default function EventsSection() {
                               {actionLoading === event.id ? (
                                 <>
                                   <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
-                                  Inscription...
+                                  Registering...
                                 </>
                               ) : (
                                 <>
                                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                   </svg>
-                                  S'inscrire à l'événement
+                                  Register for Event
                                 </>
                               )}
                             </button>
@@ -624,10 +624,10 @@ export default function EventsSection() {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                               </svg>
-                              Voir les détails
+                              View Details
                             </button>
                             <p className="text-xs text-gray-400 text-center mt-2 italic">
-                              *Places limitées, inscription obligatoire
+                              *Limited spots, registration required
                             </p>
                           </>
                         )}
@@ -642,7 +642,7 @@ export default function EventsSection() {
                               disabled={actionLoading === event.id}
                               className="cursor-target w-full py-3 border-2 border-red-500 text-red-500 rounded-lg font-medium hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                              {actionLoading === event.id ? 'Annulation...' : 'Annuler l\'inscription'}
+                              {actionLoading === event.id ? 'Cancelling...' : 'Cancel Registration'}
                             </button>
                             <button 
                               onClick={(e) => {
@@ -655,7 +655,7 @@ export default function EventsSection() {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                               </svg>
-                              Voir les détails
+                              View Details
                             </button>
                           </>
                         )}
@@ -672,7 +672,7 @@ export default function EventsSection() {
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                             </svg>
-                            Voir les détails
+                            View Details
                           </button>
                         )}
                       </div>
@@ -773,13 +773,13 @@ export default function EventsSection() {
                 onClick={closeConfirm}
                 className="flex-1 py-3 px-4 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
               >
-                Annuler
+                Cancel
               </button>
               <button
                 onClick={confirmModal.onConfirm}
                 className="flex-1 py-3 px-4 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg font-semibold hover:from-red-600 hover:to-red-700 transition-all duration-200"
               >
-                Confirmer
+                Confirm
               </button>
             </div>
           </div>
@@ -798,7 +798,7 @@ export default function EventsSection() {
                     Documents - {selectedEvent.title}
                   </h2>
                   <p className="text-gray-600 dark:text-gray-400 text-sm">
-                    {eventDocs.length} document{eventDocs.length !== 1 ? 's' : ''} disponible{eventDocs.length !== 1 ? 's' : ''}
+                    {eventDocs.length} document{eventDocs.length !== 1 ? 's' : ''} available
                   </p>
                 </div>
                 <button
@@ -817,7 +817,7 @@ export default function EventsSection() {
               {loadingDocs ? (
                 <div className="flex flex-col items-center justify-center py-12">
                   <div className="animate-spin w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full mb-4"></div>
-                  <p className="text-gray-600 dark:text-gray-400">Chargement des documents...</p>
+                  <p className="text-gray-600 dark:text-gray-400">Loading documents...</p>
                 </div>
               ) : eventDocs.length === 0 ? (
                 <div className="text-center py-12">
@@ -826,9 +826,9 @@ export default function EventsSection() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Aucun document</h3>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No documents</h3>
                   <p className="text-gray-600 dark:text-gray-400">
-                    Cet événement n'a pas de documents disponibles pour le moment.
+                    This event has no documents available at the moment.
                   </p>
                 </div>
               ) : (
@@ -891,7 +891,7 @@ export default function EventsSection() {
                 onClick={closeDocumentsModal}
                 className="w-full sm:w-auto sm:ml-auto sm:block px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition-colors"
               >
-                Fermer
+                Close
               </button>
             </div>
           </div>

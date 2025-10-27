@@ -1,11 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
+import { requestResetPassword } from "@/api/auth";
 
 export default function ForgotPasswordModal({ isOpen, onClose }) {
   const [showModal, setShowModal] = useState(false);
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (isOpen) {
@@ -14,6 +16,7 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
       setEmail("");
       setIsSuccess(false);
       setIsLoading(false);
+      setError("");
     } else {
       setShowModal(false);
     }
@@ -30,18 +33,25 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
     if (!email) return;
 
     setIsLoading(true);
+    setError("");
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      const response = await requestResetPassword(email);
+      // Backend returns: { "message": "If this email exists, a reset link was sent." }
       setIsSuccess(true);
-    }, 2000);
+    } catch (err) {
+      console.error('Password reset request error:', err);
+      setError(err.message || 'Failed to send reset link. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleClose = () => {
     setEmail("");
     setIsSuccess(false);
     setIsLoading(false);
+    setError("");
     onClose();
   };
 
@@ -91,6 +101,13 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
 
               {/* Form */}
               <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Error Message */}
+                {error && (
+                  <div className="bg-error/10 border border-error/20 text-error px-4 py-3 rounded-xl text-sm">
+                    {error}
+                  </div>
+                )}
+
                 <div>
                   <label className="block text-sm font-medium text-base-content/70 mb-2">
                     Adresse email
@@ -151,7 +168,7 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
               </h3>
               
               <p className="text-base-content/70 text-sm mb-6 leading-relaxed">
-                Nous avons envoyé un lien de réinitialisation à <br />
+                If this email exists, a reset link was sent to <br />
                 <span className="font-medium text-base-content">{email}</span>
               </p>
 

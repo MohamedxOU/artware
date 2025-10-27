@@ -60,16 +60,16 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
             id: event.id,
             title: event.title,
             subtitle: event.type === 'workshop' ? 'Workshop' : 
-                     event.type === 'conference' ? 'Conférence' :
+                     event.type === 'conference' ? 'Conference' :
                      event.type === 'hackathon' ? 'Hackathon' :
-                     event.type === 'training' ? 'Formation' : 'Événement',
+                     event.type === 'training' ? 'Training' : 'Event',
             date: new Date(event.date).toLocaleDateString('fr-FR', { 
               day: 'numeric', 
               month: 'short', 
               year: 'numeric' 
             }),
             time: event.time_start || '',
-            location: event.location || 'À définir',
+            location: event.location || 'To be determined',
             icon: event.type === 'workshop' ? '🎓' :
                   event.type === 'conference' ? '🎤' :
                   event.type === 'hackathon' ? '💻' :
@@ -114,10 +114,10 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
 
   // Mock data matching the dashboard image
   const overviewStats = [
-    { label: "Événements participés", value: 18, color: "text-orange-500", bgColor: "bg-orange-50 dark:bg-orange-900/20" },
-    { label: "Événements à venir", value: 97, color: "text-green-500", bgColor: "bg-green-50 dark:bg-green-900/20" },
-    { label: "Cellules rejointes", value: 4, color: "text-blue-500", bgColor: "bg-blue-50 dark:bg-blue-900/20" },
-    { label: "Certificats", value: 245, color: "text-pink-500", bgColor: "bg-pink-50 dark:bg-pink-900/20" },
+    { label: "Events Attended", value: 18, color: "text-orange-500", bgColor: "bg-orange-50 dark:bg-orange-900/20" },
+    { label: "Upcoming Events", value: 97, color: "text-green-500", bgColor: "bg-green-50 dark:bg-green-900/20" },
+    { label: "Cells Joined", value: 4, color: "text-blue-500", bgColor: "bg-blue-50 dark:bg-blue-900/20" },
+    { label: "Certificates", value: 245, color: "text-pink-500", bgColor: "bg-pink-50 dark:bg-pink-900/20" },
   ];
 
   // Helper function to format announcement date
@@ -129,15 +129,15 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
     const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
 
     if (diffInHours < 1) {
-      return "À l'instant";
+      return "Just now";
     } else if (diffInHours < 24) {
-      return `Il y a ${diffInHours}h`;
+      return `${diffInHours}h ago`;
     } else if (diffInDays === 1) {
-      return "Hier";
+      return "Yesterday";
     } else if (diffInDays < 7) {
-      return `Il y a ${diffInDays}j`;
+      return `${diffInDays}d ago`;
     } else {
-      return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+      return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
     }
   };
 
@@ -177,7 +177,7 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
       {/* QR Code Section */}
       {user && (
         <div className="mb-8">
-          <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Mon QR Code</h2>
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">My QR Code</h2>
           <div className="bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-2xl p-6 border border-purple-200 dark:border-purple-700 shadow-lg">
             <div className="flex flex-col lg:flex-row items-center gap-6">
               {/* QR Code Display */}
@@ -211,7 +211,7 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
                       <svg className="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1-1.968-1-2.732 0L3.732 16c-.77 1.333.192 3 1.732 3z" />
                       </svg>
-                      <p className="text-xs text-gray-500">Indisponible</p>
+                      <p className="text-xs text-gray-500">Unavailable</p>
                     </div>
                   </div>
                 )}
@@ -220,23 +220,23 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
               {/* QR Code Info */}
               <div className="flex-1 text-center lg:text-left">
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                  Votre QR Code d'Accès
+                  Your Access QR Code
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  Présentez ce QR code à l'entrée des événements pour confirmer votre présence.
+                  Present this QR code at the event entrance to confirm your attendance.
                 </p>
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center justify-center lg:justify-start gap-2 text-sm text-gray-600 dark:text-gray-400">
                     <svg className="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span>Utilisable pour tous les événements</span>
+                    <span>Valid for all events</span>
                   </div>
                   <div className="flex items-center justify-center lg:justify-start gap-2 text-sm text-gray-600 dark:text-gray-400">
                     <svg className="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                     </svg>
-                    <span>Code unique et sécurisé</span>
+                    <span>Unique and secure code</span>
                   </div>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
@@ -248,7 +248,7 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                     </svg>
-                    Télécharger le QR Code
+                    Download QR Code
                   </button>
                   <button
                     onClick={() => setShowQrModal(true)}
@@ -258,7 +258,7 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
                     </svg>
-                    Voir en grand
+                    View Full Size
                   </button>
                 </div>
               </div>
@@ -271,10 +271,10 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
       <div>
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Annonces</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Announcements</h2>
               {announcements.length > 0 && (
                 <span className="bg-red-500 text-white px-4 py-1.5 rounded-full text-xs font-bold">
-                  {announcements.length} NOUVELLE{announcements.length > 1 ? 'S' : ''}
+                  {announcements.length} NEW
                 </span>
               )}
             </div>
@@ -282,7 +282,7 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
             {isLoadingAnnouncements ? (
               <div className="bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-sm border border-gray-100 dark:border-gray-700 text-center">
                 <div className="animate-spin w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
-                <p className="text-gray-500 dark:text-gray-400">Chargement des annonces...</p>
+                <p className="text-gray-500 dark:text-gray-400">Loading announcements...</p>
               </div>
             ) : announcements.length > 0 ? (
               <div className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
@@ -313,11 +313,11 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
                             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <span>Publié {formatAnnouncementDate(announcement.published_at)}</span>
+                            <span>Published {formatAnnouncementDate(announcement.published_at)}</span>
                           </div>
                           {announcement.url && (
                             <span className="text-blue-500 hover:text-blue-600 text-sm font-medium flex items-center">
-                              En savoir plus
+                              Learn more
                               <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                               </svg>
@@ -336,8 +336,8 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
                   </svg>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Aucune annonce</h3>
-                <p className="text-gray-500 dark:text-gray-400">Il n'y a pas d'annonces pour le moment.</p>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No announcements</h3>
+                <p className="text-gray-500 dark:text-gray-400">There are no announcements at the moment.</p>
               </div>
             )}
           </div>
@@ -345,14 +345,14 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
           {/* Upcoming Events */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Événements à venir</h2>
+              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Upcoming Events</h2>
               
             </div>
             
             {isLoadingEvents ? (
               <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-gray-700 text-center">
                 <div className="animate-spin w-8 h-8 border-4 border-pink-500 border-t-transparent rounded-full mx-auto mb-4"></div>
-                <p className="text-gray-500 dark:text-gray-400">Chargement des événements...</p>
+                <p className="text-gray-500 dark:text-gray-400">Loading events...</p>
               </div>
             ) : upcomingEvents.length > 0 ? (
               <div className="space-y-6">
@@ -438,8 +438,8 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Aucun événement à venir</h3>
-                <p className="text-gray-500 dark:text-gray-400">Les prochains événements apparaîtront ici.</p>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No upcoming events</h3>
+                <p className="text-gray-500 dark:text-gray-400">Upcoming events will appear here.</p>
               </div>
             )}
           </div>
@@ -452,7 +452,7 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
             {/* Modal Header */}
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Votre QR Code d'Accès
+                Your Access QR Code
               </h2>
               <button
                 onClick={() => setShowQrModal(false)}
@@ -496,15 +496,15 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
               <ul className="text-sm text-purple-800 dark:text-purple-300 space-y-1">
                 <li className="flex items-start gap-2">
                   <span className="text-purple-500 mt-0.5">•</span>
-                  <span>Présentez ce QR code à l'entrée de chaque événement</span>
+                  <span>Present this QR code at the entrance of each event</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-purple-500 mt-0.5">•</span>
-                  <span>Le code sera scanné pour confirmer votre présence</span>
+                  <span>The code will be scanned to confirm your attendance</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-purple-500 mt-0.5">•</span>
-                  <span>Téléchargez-le ou faites une capture d'écran pour un accès hors ligne</span>
+                  <span>Download it or take a screenshot for offline access</span>
                 </li>
               </ul>
             </div>
@@ -518,13 +518,13 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
-                Télécharger
+                Download
               </button>
               <button
                 onClick={() => setShowQrModal(false)}
                 className="flex-1 px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
               >
-                Fermer
+                Close
               </button>
             </div>
           </div>

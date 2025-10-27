@@ -91,7 +91,8 @@ export default function DocumentsSection() {
                   type: getFileTypeFromPath(doc.file_path),
                   created_at: doc.created_at,
                   event_id: doc.event_id,
-                  eventName: event.title
+                  eventName: event.title,
+                  source: 'attended' // Mark as from attended event
                 });
               }
             });
@@ -132,7 +133,8 @@ export default function DocumentsSection() {
                     type: getFileTypeFromPath(doc.file_path),
                     created_at: doc.created_at,
                     event_id: doc.event_id,
-                    eventName: event.title
+                    eventName: event.title,
+                    source: 'registered' // Mark as from registered event
                   });
                 }
               });
@@ -188,7 +190,7 @@ export default function DocumentsSection() {
       'image': { value: 'image', label: 'Images', count: 0 },
       'word': { value: 'word', label: 'Word', count: 0 },
       'powerpoint': { value: 'powerpoint', label: 'PowerPoint', count: 0 },
-      'other': { value: 'other', label: 'Autres', count: 0 }
+      'other': { value: 'other', label: 'Others', count: 0 }
     };
 
     documents.forEach(doc => {
@@ -201,7 +203,7 @@ export default function DocumentsSection() {
     });
 
     return [
-      { value: 'all', label: 'Tous les types', count: documents.length },
+      { value: 'all', label: 'All types', count: documents.length },
       ...Object.values(typeGroups).filter(group => group.count > 0)
     ];
   }, [documents]);
@@ -231,7 +233,7 @@ export default function DocumentsSection() {
       <div className="w-full max-w-7xl mx-auto relative min-h-full">
         <div className="backdrop-blur-sm bg-base-100/80 rounded-2xl p-8 text-center border border-base-300/20 shadow-sm relative z-10">
           <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p className="text-base-content/60">Chargement des documents...</p>
+          <p className="text-base-content/60">Loading documents...</p>
         </div>
       </div>
     );
@@ -247,13 +249,13 @@ export default function DocumentsSection() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
           </div>
-          <h3 className="text-xl font-semibold text-base-content mb-2">Erreur de chargement</h3>
+          <h3 className="text-xl font-semibold text-base-content mb-2">Loading Error</h3>
           <p className="text-base-content/60 mb-4">{error}</p>
           <button 
             onClick={() => window.location.reload()} 
             className="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-content rounded-lg text-sm font-medium transition-colors"
           >
-            Réessayer
+            Retry
           </button>
         </div>
       </div>
@@ -314,7 +316,7 @@ export default function DocumentsSection() {
             </svg>
             <input
               type="text"
-              placeholder="Rechercher des documents..."
+              placeholder="Search documents..."
               className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -327,7 +329,11 @@ export default function DocumentsSection() {
       {recommendedDocuments.length > 0 && (
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Recommandés</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+              {recommendedDocuments[0]?.source === 'attended' 
+                ? 'Events you have attended'
+                : 'Events you are registered for'}
+            </h2>
             
           </div>
 
@@ -341,6 +347,33 @@ export default function DocumentsSection() {
               >
                 {/* Document Card - Same design as main documents */}
                 <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-200 group-hover:border-blue-300 w-40">
+                  {/* Source Badge */}
+                  {doc.source && (
+                    <div className="mb-2">
+                      <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+                        doc.source === 'attended' 
+                          ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                          : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                      }`}>
+                        {doc.source === 'attended' ? (
+                          <>
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Attended
+                          </>
+                        ) : (
+                          <>
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                            Registered
+                          </>
+                        )}
+                      </span>
+                    </div>
+                  )}
+
                   {/* Document Icon */}
                   <div className="flex justify-center mb-3">
                     <div className="w-12 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center relative">
@@ -381,7 +414,7 @@ export default function DocumentsSection() {
       {/* All Documents Section */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Tous les documents</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">All Documents</h2>
           <span className="text-sm text-gray-500 dark:text-gray-400">
             {filteredAndSortedDocuments.length} document{filteredAndSortedDocuments.length !== 1 ? 's' : ''}
           </span>
@@ -444,9 +477,9 @@ export default function DocumentsSection() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Aucun document trouvé</h3>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No documents found</h3>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Aucun document ne correspond à vos critères de recherche.
+              No documents match your search criteria.
             </p>
             <button
               onClick={() => {
@@ -454,7 +487,7 @@ export default function DocumentsSection() {
               }}
               className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-colors"
             >
-              Réinitialiser la recherche
+              Reset search
             </button>
           </div>
         )}

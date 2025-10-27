@@ -21,7 +21,7 @@ function LoginContent() {
   
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
-
+ 
   useEffect(() => {
     setTimeout(() => setShowCard(true), 300);
   }, [setShowCard]);
