@@ -134,7 +134,7 @@ export default function EventDetailPage() {
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin w-16 h-16 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Chargement de l'événement...</p>
+          <p className="text-gray-600 dark:text-gray-400">Chargement de l&apos;événement...</p>
         </div>
       </div>
     );
@@ -243,7 +243,7 @@ export default function EventDetailPage() {
                     </div>
                     {event.time_start && (
                       <div className="text-sm text-gray-600 dark:text-gray-400">
-                        {event.time_start}{event.time_end && ` - ${event.time_end}`}
+                        {event.time_start.substring(0, 5)}{event.time_end && ` - ${event.time_end.substring(0, 5)}`}
                       </div>
                     )}
                   </div>
@@ -314,7 +314,7 @@ export default function EventDetailPage() {
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                         </svg>
-                        Annuler l'inscription
+                        Annuler l&apos;inscription
                       </>
                     )}
                   </button>
@@ -334,7 +334,7 @@ export default function EventDetailPage() {
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
-                        S'inscrire à l'événement
+                        S&apos;inscrire à l&apos;événement
                       </>
                     )}
                   </button>

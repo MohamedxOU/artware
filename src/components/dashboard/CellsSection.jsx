@@ -500,7 +500,8 @@ export default function CellsSection({ user }) {
                   {cellEvents.map((event, index) => (
                     <div
                       key={event.id || index}
-                      className="border border-base-300/50 rounded-xl p-5 hover:shadow-lg transition-shadow duration-200 bg-base-100"
+                      onClick={() => event.id && window.open(`/event/${event.id}`, '_blank')}
+                      className="border border-base-300/50 rounded-xl p-5 hover:shadow-lg transition-shadow duration-200 bg-base-100 cursor-pointer hover:border-primary/50"
                     >
                       <div className="flex items-start gap-4">
                         {/* Event Icon/Image */}

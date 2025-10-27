@@ -579,9 +579,9 @@ export default function EventsSection() {
                           <div className="text-lg font-bold text-pink-500">
                             {event.date}
                           </div>
-                          {event.timeStart && (
+                          {(event.timeStart || event.timeEnd) && (
                             <div className="text-sm text-gray-600 dark:text-gray-400">
-                              {event.timeStart}{event.timeEnd && ` - ${event.timeEnd}`}
+                              {event.timeStart ? event.timeStart.substring(0, 5) : ''}{event.timeEnd && event.timeStart && ` - `}{event.timeEnd ? event.timeEnd.substring(0, 5) : ''}
                             </div>
                           )}
                         </div>

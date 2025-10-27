@@ -137,8 +137,8 @@ export const registerForEvent = async (eventId, userId) => {
 //unregister user from event
 export const unregisterFromEvent = async (eventId, userId) => {
     try {
-        const response = await fetch(`${API_BASE}/api/events/${eventId}/unregister`, {
-            method: "POST",
+        const response = await fetch(`${API_BASE}/api/events/${eventId}/register`, {
+            method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${getAuthToken()}`
