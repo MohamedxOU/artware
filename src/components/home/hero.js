@@ -132,7 +132,7 @@ export default function Hero() {
               }`}
             >
               <Link href="/register">
-                <button className="group relative px-8 py-4 text-base font-semibold rounded-xl bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/50">
+                <button className="group cursor-target relative px-8 py-4 text-base font-semibold rounded-xl bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/50">
                   <span className="flex items-center gap-2">
                     Get Started
                     <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -147,7 +147,7 @@ export default function Hero() {
                     behavior: 'smooth' 
                   });
                 }}
-                className="group px-8 py-4 text-base font-semibold rounded-xl border border-white/20 text-white bg-white/5 backdrop-blur-sm transition-all duration-300 hover:bg-white/10 hover:border-white/30"
+                className="cursor-target px-8 py-4 text-base font-semibold rounded-xl border border-white/20 text-white bg-white/5 backdrop-blur-sm transition-all duration-300 hover:bg-white/10 hover:border-white/30 btn-outline border-white hover:bg-white hover:text-primary "
               >
                 <span className="flex items-center gap-2">
                   Discover More
