@@ -275,11 +275,11 @@ export default function Cells() {
                     </div>
 
                     {/* CTA Button */}
-                    <div className="pt-4">
+                    {/* <div className="pt-4">
                       <button className="bg-primary text-white px-8 py-4 rounded-full font-semibold hover:bg-primary/90 transition-all duration-300 hover:scale-105 shadow-lg">
                         {cell.buttonText}
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               )}
