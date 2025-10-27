@@ -16,7 +16,7 @@ export default function DocumentsSection() {
 
   // Fetch documents from API
   useEffect(() => {
-    const fetchDocuments = async () => {
+    const fetchDocuments = async () => { 
       try {
         setIsLoading(true);
         setError(null);
@@ -169,8 +169,8 @@ export default function DocumentsSection() {
 
   // Helper function to handle file download
   const handleDownload = (doc) => {
-    const downloadUrl = `http://localhost:3500/${doc.file_path}`;
-    window.open(downloadUrl, '_blank');
+    // Use the file_path directly as it's already a full URL from Supabase
+    window.open(doc.file_path, '_blank');
   };
 
   // Helper function to generate random rating (since not in API)
@@ -323,58 +323,60 @@ export default function DocumentsSection() {
         </div>
       </div>
 
-      {/* Recommended Section */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Recommandés</h2>
-          
-        </div>
+      {/* Recommended Section - Only show if there are recommended documents */}
+      {recommendedDocuments.length > 0 && (
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Recommandés</h2>
+            
+          </div>
 
-        {/* Recommended Documents Horizontal Scroll */}
-        <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
-          {recommendedDocuments.map((doc) => (
-            <div
-              key={doc.id}
-              className="flex-shrink-0 cursor-pointer group cursor-target"
-              onClick={() => handleDownload(doc)}
-            >
-              {/* Document Card - Same design as main documents */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-200 group-hover:border-blue-300 w-40">
-                {/* Document Icon */}
-                <div className="flex justify-center mb-3">
-                  <div className="w-12 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center relative">
-                    {/* File type badge - Default to PDF for recommended */}
-                    <div className="absolute -top-2 -right-2 px-2 py-1 rounded text-xs font-bold text-white bg-red-500">
-                      {doc.type === 'Word' ? 'DOC' : doc.type === 'Image' ? 'IMG' : doc.type || 'PDF'}
+          {/* Recommended Documents Horizontal Scroll */}
+          <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+            {recommendedDocuments.map((doc) => (
+              <div
+                key={doc.id}
+                className="flex-shrink-0 cursor-pointer group cursor-target"
+                onClick={() => handleDownload(doc)}
+              >
+                {/* Document Card - Same design as main documents */}
+                <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-200 group-hover:border-blue-300 w-40">
+                  {/* Document Icon */}
+                  <div className="flex justify-center mb-3">
+                    <div className="w-12 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center relative">
+                      {/* File type badge - Default to PDF for recommended */}
+                      <div className="absolute -top-2 -right-2 px-2 py-1 rounded text-xs font-bold text-white bg-red-500">
+                        {doc.type === 'Word' ? 'DOC' : doc.type === 'Image' ? 'IMG' : doc.type || 'PDF'}
+                      </div>
+                      
+                      {/* Document icon */}
+                      <svg className="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
+                      </svg>
                     </div>
-                    
-                    {/* Document icon */}
-                    <svg className="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
-                    </svg>
+                  </div>
+                  
+                  {/* Document Info */}
+                  <div className="text-center">
+                    <h4 className="font-medium text-gray-900 dark:text-white text-sm mb-1 line-clamp-2">
+                      {doc.title}
+                    </h4>
+                    {doc.eventName ? (
+                      <p className="text-gray-500 dark:text-gray-400 text-xs line-clamp-1">
+                        {doc.eventName}
+                      </p>
+                    ) : (
+                      <p className="text-gray-500 dark:text-gray-400 text-xs">
+                        {formatDate(doc.created_at)}
+                      </p>
+                    )}
                   </div>
                 </div>
-                
-                {/* Document Info */}
-                <div className="text-center">
-                  <h4 className="font-medium text-gray-900 dark:text-white text-sm mb-1 line-clamp-2">
-                    {doc.title}
-                  </h4>
-                  {doc.eventName ? (
-                    <p className="text-gray-500 dark:text-gray-400 text-xs line-clamp-1">
-                      {doc.eventName}
-                    </p>
-                  ) : (
-                    <p className="text-gray-500 dark:text-gray-400 text-xs">
-                      {formatDate(doc.created_at)}
-                    </p>
-                  )}
-                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* All Documents Section */}
       <div className="mb-8">

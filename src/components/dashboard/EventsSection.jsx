@@ -1,13 +1,13 @@
 "use client";
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { getAllEvents, getUserRegistredEvents, getUserAttendedEvents, registerForEvent, unregisterFromEvent } from '@/api/events';
+import { getAllEvents, getUserRegistredEvents, getUserAttendedEvents, registerForEvent, unregisterFromEvent, getEventDocs } from '@/api/events';
 import useAuthStore from '@/stores/authStore';
 
 // Mock data for demonstration
 
 
-
+ 
 
 export default function EventsSection() {
   const [activeTab, setActiveTab] = useState('upcoming');
@@ -20,6 +20,9 @@ export default function EventsSection() {
   const [actionLoading, setActionLoading] = useState(null); // Track which event is being processed
   const [notification, setNotification] = useState({ show: false, type: '', message: '', title: '' });
   const [confirmModal, setConfirmModal] = useState({ show: false, title: '', message: '', onConfirm: null });
+  const [selectedEvent, setSelectedEvent] = useState(null); // Track selected event for documents modal
+  const [eventDocs, setEventDocs] = useState([]); // Store documents for selected event
+  const [loadingDocs, setLoadingDocs] = useState(false); // Loading state for documents
   const [stats, setStats] = useState({
     totalEvents: 0,
     upcomingEvents: 0,
@@ -197,6 +200,64 @@ export default function EventsSection() {
   // Close confirm modal
   const closeConfirm = () => {
     setConfirmModal({ show: false, title: '', message: '', onConfirm: null });
+  };
+
+  // Handle showing documents for an event
+  const handleShowDocuments = async (eventId, eventTitle) => {
+    try {
+      setLoadingDocs(true);
+      setSelectedEvent({ id: eventId, title: eventTitle });
+      console.log(`Fetching documents for event: ${eventId}`);
+      
+      const response = await getEventDocs(eventId);
+      console.log('Event documents response:', response);
+      
+      // Use 'events' field from the response, not 'documents'
+      setEventDocs(response.events || []);
+    } catch (error) {
+      console.error('Failed to fetch event documents:', error);
+      // Don't show error notification, just set empty docs to show "no documents" message
+      setEventDocs([]);
+    } finally {
+      setLoadingDocs(false);
+    }
+  };
+
+  // Close documents modal
+  const closeDocumentsModal = () => {
+    setSelectedEvent(null);
+    setEventDocs([]);
+  };
+
+  // Helper function to get file type from file path
+  const getFileTypeFromPath = (filePath) => {
+    const extension = filePath.split('.').pop().toUpperCase();
+    switch (extension) {
+      case 'PDF': return 'PDF';
+      case 'PNG': 
+      case 'JPG': 
+      case 'JPEG': return 'Image';
+      case 'DOC': 
+      case 'DOCX': return 'Word';
+      case 'PPT': 
+      case 'PPTX': return 'PowerPoint';
+      default: return 'Document';
+    }
+  };
+
+  // Helper function to handle file download
+  const handleDownload = (doc) => {
+    // Use the file_path directly as it's already a full URL from Supabase
+    window.open(doc.file_path, '_blank');
+  };
+
+  // Helper function to format date
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('fr-FR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   };
 
   // Handle event registration
@@ -523,7 +584,18 @@ export default function EventsSection() {
                       </div>
 
                       {/* Action Button */}
-                      <div className="mt-auto">
+                      <div className="mt-auto space-y-2">
+                        {/* Show Documents Button - Available for all tabs */}
+                        <button 
+                          onClick={() => handleShowDocuments(event.id, event.title)}
+                          className="cursor-target w-full py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors duration-200 flex items-center justify-center gap-2"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                          Voir les documents
+                        </button>
+
                         {activeTab === 'upcoming' && (
                           <>
                             <button 
@@ -659,6 +731,118 @@ export default function EventsSection() {
                 className="flex-1 py-3 px-4 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg font-semibold hover:from-red-600 hover:to-red-700 transition-all duration-200"
               >
                 Confirmer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Documents Modal */}
+      {selectedEvent && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl max-w-4xl w-full max-h-[80vh] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
+            {/* Modal Header */}
+            <div className="bg-blue-50 dark:bg-blue-900/30 border-b border-gray-200 dark:border-gray-700 p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+                    Documents - {selectedEvent.title}
+                  </h2>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">
+                    {eventDocs.length} document{eventDocs.length !== 1 ? 's' : ''} disponible{eventDocs.length !== 1 ? 's' : ''}
+                  </p>
+                </div>
+                <button
+                  onClick={closeDocumentsModal}
+                  className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full transition-colors"
+                >
+                  <svg className="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6 overflow-y-auto max-h-[calc(80vh-180px)]">
+              {loadingDocs ? (
+                <div className="flex flex-col items-center justify-center py-12">
+                  <div className="animate-spin w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full mb-4"></div>
+                  <p className="text-gray-600 dark:text-gray-400">Chargement des documents...</p>
+                </div>
+              ) : eventDocs.length === 0 ? (
+                <div className="text-center py-12">
+                  <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Aucun document</h3>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Cet événement n'a pas de documents disponibles pour le moment.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {eventDocs.map((doc, index) => {
+                    const fileType = getFileTypeFromPath(doc.file_path);
+                    return (
+                      <div
+                        key={doc.id || index}
+                        className="cursor-pointer group cursor-target"
+                        onClick={() => handleDownload(doc)}
+                      >
+                        {/* Document Card */}
+                        <div className="bg-white dark:bg-gray-700 rounded-lg p-4 border border-gray-200 dark:border-gray-600 hover:shadow-lg transition-all duration-200 group-hover:border-blue-300">
+                          {/* Document Icon */}
+                          <div className="flex justify-center mb-3">
+                            <div className="w-12 h-16 bg-gray-100 dark:bg-gray-600 rounded-lg flex items-center justify-center relative">
+                              {/* File type badge */}
+                              <div className={`absolute -top-2 -right-2 px-2 py-1 rounded text-xs font-bold text-white ${
+                                fileType === 'PDF' 
+                                  ? 'bg-red-500' 
+                                  : fileType === 'Image'
+                                  ? 'bg-green-500'
+                                  : fileType === 'Word'
+                                  ? 'bg-blue-500'
+                                  : fileType === 'PowerPoint'
+                                  ? 'bg-orange-500'
+                                  : 'bg-gray-500'
+                              }`}>
+                                {fileType === 'Word' ? 'DOC' : fileType === 'Image' ? 'IMG' : fileType}
+                              </div>
+                              
+                              {/* Document icon */}
+                              <svg className="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
+                              </svg>
+                            </div>
+                          </div>
+                          
+                          {/* Document Info */}
+                          <div className="text-center">
+                            <h4 className="font-medium text-gray-900 dark:text-white text-sm mb-1 line-clamp-2">
+                              {doc.title}
+                            </h4>
+                            <p className="text-gray-500 dark:text-gray-400 text-xs">
+                              {formatDate(doc.created_at)}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-900/50">
+              <button
+                onClick={closeDocumentsModal}
+                className="w-full sm:w-auto sm:ml-auto sm:block px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition-colors"
+              >
+                Fermer
               </button>
             </div>
           </div>
