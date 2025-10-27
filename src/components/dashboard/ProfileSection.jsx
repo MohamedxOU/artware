@@ -246,7 +246,7 @@ export default function ProfileSection({ user }) {
               User Role
             </label>
             <div className="text-base font-medium text-gray-900 dark:text-white">
-              {user?.role || 'Member'}
+              {user?.role_id === 1 ? 'Member' : user?.role_id === 2 ? 'Admin' : user?.role_id === 3 ? 'President' : 'Member'}
             </div>
           </div>
         </div>
