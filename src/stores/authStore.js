@@ -25,15 +25,6 @@ const useAuthStore = create(
           if (result && result.accessToken && result.user) {
             const { accessToken, user } = result;
             
-            // Check if user is active
-            if (user.hasOwnProperty('is_active') && !user.is_active) {
-              set({ 
-                isLoading: false, 
-                error: 'Your account has been deactivated. Please contact admin.'
-              });
-              return { success: false, error: 'Your account has been deactivated. Please contact admin.' };
-            }
-
             // Check if user status is allowed
             if (user.status && user.status !== 'allowed') {
               set({ 
