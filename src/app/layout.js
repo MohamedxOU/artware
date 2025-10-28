@@ -11,36 +11,55 @@ export default function RootLayout({ children }) {
     <html lang={locale} suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <meta name="theme-color" content="#ff6b35" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#1a103d" media="(prefers-color-scheme: dark)" />
+        
+        {/* Critical Theme Script - Must run before any rendering */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
                 try {
                   const stored = localStorage.getItem('theme-storage');
-                  if (stored) {
-                    const { state } = JSON.parse(stored);
-                    const theme = state.theme || 'acid';
-                    const darkThemes = ['synthwave', 'halloween', 'forest', 'black', 'luxury', 'dracula', 'night', 'coffee', 'business'];
-                    const isDark = darkThemes.includes(theme);
-                    
-                    document.documentElement.setAttribute('data-theme', theme);
-                    document.documentElement.className = isDark ? 'dark' : 'light';
-                  } else {
-                    // Fallback to default theme
-                    document.documentElement.setAttribute('data-theme', 'acid');
-                    document.documentElement.className = 'light';
-                  }
+                  const theme = stored ? JSON.parse(stored).state?.theme : 'acid';
+                  const darkThemes = ['synthwave', 'halloween', 'forest', 'black', 'luxury', 'dracula', 'night', 'coffee', 'business'];
+                  const isDark = darkThemes.includes(theme);
+                  const html = document.documentElement;
+                  
+                  html.setAttribute('data-theme', theme || 'acid');
+                  html.className = isDark ? 'dark' : 'light';
+                  html.style.colorScheme = isDark ? 'dark' : 'light';
                 } catch (e) {
-                  // Fallback to default theme on error
                   document.documentElement.setAttribute('data-theme', 'acid');
                   document.documentElement.className = 'light';
+                  document.documentElement.style.colorScheme = 'light';
                 }
               })();
             `,
           }}
         />
+        
+        {/* Force theme colors immediately */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            html[data-theme="synthwave"] {
+              color-scheme: dark;
+            }
+            html[data-theme="synthwave"] body {
+              background-color: #1a103d !important;
+              color: #f9f7fd !important;
+            }
+            html[data-theme="acid"],
+            html[data-theme="light"] {
+              color-scheme: light;
+            }
+            html[data-theme="acid"] body,
+            html[data-theme="light"] body {
+              background-color: #ffffff !important;
+              color: #1f2937 !important;
+            }
+          `
+        }} />
       </head>
       <body className="w-full min-w-0 overflow-x-hidden">
           <NextIntlClientProvider>
