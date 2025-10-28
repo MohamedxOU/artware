@@ -22,6 +22,26 @@ export default function Gallery() {
     return 12; // Default for SSR
   };
  
+  // Helper component: try .jpg first, then fallback to .jpeg on error
+  const ImageWithFallback = ({ src, fallbackSrc, alt, ...props }) => {
+    const [currentSrc, setCurrentSrc] = useState(src);
+    const [triedFallback, setTriedFallback] = useState(false);
+
+    return (
+      <Image
+        {...props}
+        src={currentSrc}
+        alt={alt}
+        onError={() => {
+          if (!triedFallback && fallbackSrc && currentSrc !== fallbackSrc) {
+            setTriedFallback(true);
+            setCurrentSrc(fallbackSrc);
+          }
+        }}
+      />
+    );
+  };
+
   // Generate items from gallery folder (images 1-40)
   const allItems = Array.from({ length: 40 }, (_, index) => {
     const imageNumber = index + 1;
@@ -31,8 +51,10 @@ export default function Gallery() {
     
     return {
       id: imageNumber.toString(),
-      img: `/gallery/${imageNumber}.jpg`, // Assuming images are in jpg format
-      url: `/gallery/${imageNumber}.jpg`, // Link to full image
+      img: `/gallery/${imageNumber}.jpg`, // default (kept for backward compatibility)
+      imgJpg: `/gallery/${imageNumber}.jpg`,
+      imgJpeg: `/gallery/${imageNumber}.jpeg`,
+      url: `/gallery/${imageNumber}.jpg`, // legacy link
       height: randomHeight,
       title: `Gallery Image ${imageNumber}`,
       category: getImageCategory(imageNumber)
@@ -143,9 +165,10 @@ export default function Gallery() {
                 className="break-inside-avoid mb-4 group cursor-pointer relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] hover:z-10"
                 onClick={() => setSelectedImage(item)}
               >
-                {/* Image with natural aspect ratio */}
-                <Image
-                  src={item.img}
+                {/* Image with natural aspect ratio and extension fallback (.jpg -> .jpeg) */}
+                <ImageWithFallback
+                  src={item.imgJpg}
+                  fallbackSrc={item.imgJpeg}
                   alt={item.title}
                   width={400}
                   height={item.height}
@@ -219,8 +242,9 @@ export default function Gallery() {
 
             {/* Image */}
             <div className="relative">
-              <Image
-                src={selectedImage.img}
+              <ImageWithFallback
+                src={selectedImage.imgJpg || selectedImage.img}
+                fallbackSrc={selectedImage.imgJpeg}
                 alt={selectedImage.title}
                 width={800}
                 height={600}
