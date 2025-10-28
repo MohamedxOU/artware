@@ -40,13 +40,17 @@ const useThemeStore = create(
       },
 
       initializeTheme: () => {
-        if (typeof document !== 'undefined') {
+        if (typeof window !== 'undefined') {
           const { theme } = get();
           const isDark = DARK_THEMES.includes(theme);
           
-          // Set theme attributes
-          document.documentElement.setAttribute('data-theme', theme);
-          document.documentElement.className = isDark ? 'dark' : 'light';
+          // Ensure theme attributes are set (they should already be set by the script in layout.js)
+          // But we double-check here to be safe
+          const currentTheme = document.documentElement.getAttribute('data-theme');
+          if (!currentTheme || currentTheme !== theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            document.documentElement.className = isDark ? 'dark' : 'light';
+          }
           
           // Update state to reflect initialization
           set({ 
