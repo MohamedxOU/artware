@@ -158,7 +158,7 @@ export const requestResetPassword = async (email) => {
       body: JSON.stringify({ email }),
     });
     
-    if (response.ok) {
+    if (response.ok) { 
       return response.json();
     } else {
       const contentType = response.headers.get('content-type');

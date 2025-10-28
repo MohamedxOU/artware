@@ -78,7 +78,7 @@ export default function AboutUs() {
             </div>
 
             {/* Stats Cards - Stagger animation */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-2">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
               {[
                 { value: "4", label: "Cells" },
                 { value: "45+", label: "Members" },

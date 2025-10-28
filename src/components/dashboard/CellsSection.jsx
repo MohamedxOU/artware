@@ -95,10 +95,10 @@ export default function CellsSection({ user }) {
       }
       
       console.log(`✅ Successfully joined cell ${cellId}`);
-      alert(`Vous avez rejoint la cellule "${cellName}" avec succès !`);
+      alert(`You have successfully joined the cell "${cellName}"!`);
     } catch (error) {
       console.error('Failed to join cell:', error);
-      alert(`Erreur lors de l'adhésion à la cellule: ${error.message}`);
+      alert(`Error joining cell: ${error.message}`);
     } finally {
       setJoiningCell(null);
     }
@@ -133,10 +133,10 @@ export default function CellsSection({ user }) {
       );
       
       console.log(`✅ Successfully quit cell ${cellId}`);
-      alert(`Vous avez quitté la cellule "${cellName}" avec succès !`);
+      alert(`You have successfully left the cell "${cellName}"!`);
     } catch (error) {
       console.error('Failed to quit cell:', error);
-      alert(`Erreur lors de la sortie de la cellule: ${error.message}`);
+      alert(`Error leaving cell: ${error.message}`);
     } finally {
       setQuittingCell(null);
     }
@@ -155,7 +155,7 @@ export default function CellsSection({ user }) {
       setCellEvents(response.events || []);
     } catch (error) {
       console.error('Failed to fetch cell events:', error);
-      alert(`Erreur lors du chargement des événements: ${error.message}`);
+      alert(`Error loading events: ${error.message}`);
       setSelectedCell(null);
     } finally {
       setLoadingEvents(false);
@@ -237,7 +237,7 @@ export default function CellsSection({ user }) {
       <div className="w-full max-w-7xl mx-auto relative min-h-full">
         <div className="backdrop-blur-sm bg-base-100/70 rounded-2xl p-8 text-center border border-base-300/30 shadow-sm relative z-10">
           <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p className="text-base-content/60">Chargement des cellules...</p>
+          <p className="text-base-content/60">Loading cells...</p>
         </div>
       </div>
     );
@@ -253,13 +253,13 @@ export default function CellsSection({ user }) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
           </div>
-          <h3 className="text-xl font-semibold text-base-content mb-2">Erreur de chargement</h3>
+          <h3 className="text-xl font-semibold text-base-content mb-2">Loading Error</h3>
           <p className="text-base-content/60 mb-4">{error}</p>
           <button 
             onClick={() => window.location.reload()} 
             className="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-content rounded-lg text-sm font-medium transition-colors"
           >
-            Réessayer
+            Retry
           </button>
         </div>
       </div>
@@ -273,15 +273,15 @@ export default function CellsSection({ user }) {
         <div className="backdrop-blur-sm bg-base-100/70 rounded-2xl p-4 lg:p-6 border border-base-300/30 shadow-sm">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-2xl lg:text-3xl font-bold text-base-content mb-2">Cellules</h1>
+              <h1 className="text-2xl lg:text-3xl font-bold text-base-content mb-2">Cells</h1>
               <p className="text-base-content/60">
-                Découvrez et rejoignez les différentes cellules techniques du club
+                Discover and join the club's various technical cells
               </p>
             </div>
             
             {/* Filter Toggle */}
             <div className="flex items-center gap-3">
-              <span className="text-sm text-base-content/70">Mes cellules uniquement</span>
+              <span className="text-sm text-base-content/70">My cells only</span>
               <input
                 type="checkbox"
                 className="toggle toggle-primary"
@@ -295,13 +295,13 @@ export default function CellsSection({ user }) {
           <div className="flex gap-6 mt-4 pt-4 border-t border-base-300/30">
             <div className="text-center">
               <div className="text-2xl font-bold text-primary">{allCells.length}</div>
-              <div className="text-xs text-base-content/60">Cellules disponibles</div>
+              <div className="text-xs text-base-content/60">Available cells</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-green-600">
                 {allCells.filter(cell => cell.isMember).length}
               </div>
-              <div className="text-xs text-base-content/60">Mes cellules</div>
+              <div className="text-xs text-base-content/60">My cells</div>
             </div>
           </div>
         </div>
@@ -342,7 +342,7 @@ export default function CellsSection({ user }) {
                     <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    Membre
+                    Member
                   </div>
                 )}
               </div>
@@ -390,7 +390,7 @@ export default function CellsSection({ user }) {
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    Voir les événements
+                    View events
                   </button>
 
                   {/* Join/Quit Button */}
@@ -403,10 +403,10 @@ export default function CellsSection({ user }) {
                       {quittingCell === cell.id ? (
                         <div className="flex items-center justify-center gap-2">
                           <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
-                          <span>Sortie en cours...</span>
+                          <span>Leaving...</span>
                         </div>
                       ) : (
-                        'Quitter la cellule'
+                        'Leave cell'
                       )}
                     </button>
                   ) : (
@@ -418,10 +418,10 @@ export default function CellsSection({ user }) {
                       {joiningCell === cell.id ? (
                         <div className="flex items-center justify-center gap-2">
                           <div className="animate-spin w-4 h-4 border-2 border-gray-900 border-t-transparent rounded-full"></div>
-                          <span>Adhésion...</span>
+                          <span>Joining...</span>
                         </div>
                       ) : (
-                        'Rejoindre la cellule'
+                        'Join cell'
                       )}
                     </button>
                   )}
@@ -440,11 +440,11 @@ export default function CellsSection({ user }) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
           </div>
-          <h3 className="text-xl font-semibold text-base-content mb-2">Aucune cellule trouvée</h3>
+          <h3 className="text-xl font-semibold text-base-content mb-2">No cells found</h3>
           <p className="text-base-content/60">
             {filterJoined 
-              ? "Vous n'avez rejoint aucune cellule pour le moment. Explorez les cellules disponibles !" 
-              : "Aucune cellule disponible pour le moment."
+              ? "You haven't joined any cells yet. Explore the available cells!" 
+              : "No cells available at the moment."
             }
           </p>
         </div>
@@ -459,10 +459,10 @@ export default function CellsSection({ user }) {
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-2xl font-bold text-base-content mb-1">
-                    Événements - {selectedCell}
+                    Events - {selectedCell}
                   </h2>
                   <p className="text-base-content/60 text-sm">
-                    {cellEvents.length} événement{cellEvents.length !== 1 ? 's' : ''} trouvé{cellEvents.length !== 1 ? 's' : ''}
+                    {cellEvents.length} event{cellEvents.length !== 1 ? 's' : ''} found
                   </p>
                 </div>
                 <button
@@ -481,7 +481,7 @@ export default function CellsSection({ user }) {
               {loadingEvents ? (
                 <div className="flex flex-col items-center justify-center py-12">
                   <div className="animate-spin w-12 h-12 border-4 border-primary border-t-transparent rounded-full mb-4"></div>
-                  <p className="text-base-content/60">Chargement des événements...</p>
+                  <p className="text-base-content/60">Loading events...</p>
                 </div>
               ) : cellEvents.length === 0 ? (
                 <div className="text-center py-12">
@@ -490,9 +490,9 @@ export default function CellsSection({ user }) {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                   </div>
-                  <h3 className="text-xl font-semibold text-base-content mb-2">Aucun événement</h3>
+                  <h3 className="text-xl font-semibold text-base-content mb-2">No events</h3>
                   <p className="text-base-content/60">
-                    Cette cellule n'a pas d'événements programmés pour le moment.
+                    This cell has no scheduled events at the moment.
                   </p>
                 </div>
               ) : (
@@ -500,7 +500,8 @@ export default function CellsSection({ user }) {
                   {cellEvents.map((event, index) => (
                     <div
                       key={event.id || index}
-                      className="border border-base-300/50 rounded-xl p-5 hover:shadow-lg transition-shadow duration-200 bg-base-100"
+                      onClick={() => event.id && window.open(`/event/${event.id}`, '_blank')}
+                      className="border border-base-300/50 rounded-xl p-5 hover:shadow-lg transition-shadow duration-200 bg-base-100 cursor-pointer hover:border-primary/50"
                     >
                       <div className="flex items-start gap-4">
                         {/* Event Icon/Image */}
@@ -524,14 +525,14 @@ export default function CellsSection({ user }) {
                         <div className="flex-1">
                           <div className="flex items-start justify-between gap-2 mb-2">
                             <h3 className="text-lg font-bold text-base-content">
-                              {event.title || 'Sans titre'}
+                              {event.title || 'Untitled'}
                             </h3>
                             {/* Type Badge */}
                             {event.type && (
                               <span className="px-2.5 py-1 bg-primary/10 text-primary rounded-md text-xs font-medium capitalize">
-                                {event.type === 'training' ? 'Formation' : 
-                                 event.type === 'workshop' ? 'Atelier' : 
-                                 event.type === 'competition' ? 'Compétition' : 
+                                {event.type === 'training' ? 'Training' : 
+                                 event.type === 'workshop' ? 'Workshop' : 
+                                 event.type === 'competition' ? 'Competition' : 
                                  event.type}
                               </span>
                             )}
@@ -549,7 +550,7 @@ export default function CellsSection({ user }) {
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                               </svg>
-                              <span>Responsable: {event.responsable}</span>
+                              <span>Organizer: {event.responsable}</span>
                             </div>
                           )}
 
@@ -607,7 +608,7 @@ export default function CellsSection({ user }) {
                 onClick={closeEventsModal}
                 className="btn btn-primary w-full sm:w-auto sm:ml-auto sm:block"
               >
-                Fermer
+                Close
               </button>
             </div>
           </div>

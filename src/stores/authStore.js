@@ -25,15 +25,6 @@ const useAuthStore = create(
           if (result && result.accessToken && result.user) {
             const { accessToken, user } = result;
             
-            // Check if user is active
-            if (user.hasOwnProperty('is_active') && !user.is_active) {
-              set({ 
-                isLoading: false, 
-                error: 'Your account has been deactivated. Please contact admin.'
-              });
-              return { success: false, error: 'Your account has been deactivated. Please contact admin.' };
-            }
-
             // Check if user status is allowed
             if (user.status && user.status !== 'allowed') {
               set({ 
@@ -163,8 +154,38 @@ const useAuthStore = create(
         set({ isLoading: true });
         
         try {
+          // Get current state to check if we have persisted user data
+          const currentState = get();
+          
           // Check if we have an access token in cookie
           const token = getAuthToken();
+          
+          // If we have a token and persisted user data, keep them logged in
+          if (token && currentState.user) {
+            console.log('Token and user data found, keeping user logged in');
+            set({ 
+              user: currentState.user,
+              isAuthenticated: true,
+              isLoading: false,
+              error: null
+            });
+            return;
+          }
+          
+          // If we have persisted user data but no token, log them out
+          if (!token && currentState.user) {
+            console.log('No token found, logging user out');
+            removeAuthToken();
+            set({ 
+              user: null,
+              isAuthenticated: false,
+              isLoading: false,
+              error: null
+            });
+            return;
+          }
+          
+          // If no token and no user, just set unauthenticated state
           if (!token) {
             set({ 
               user: null,
@@ -175,36 +196,33 @@ const useAuthStore = create(
             return;
           }
 
-          // Real API auth check using refresh token
-          const result = await authAPI.refreshToken();
+          // We have a token but no user data (shouldn't happen normally)
+          // Try to keep the token but mark as unauthenticated until login
+          console.warn('Token exists but no user data in store');
+          set({ 
+            user: null,
+            isAuthenticated: false,
+            isLoading: false,
+            error: null
+          });
+        } catch (error) {
+          console.error('CheckAuth error:', error);
           
-          // Backend only returns { accessToken }, not user data
-          if (result && result.accessToken) {
-            // Update the stored token in cookie
-            setAuthToken(result.accessToken);
-            
-            // Get current user from store (it should still be there from login)
-            const currentState = get();
-            if (currentState.user) {
-              // Keep existing user data and update auth status
-              set({ 
-                user: currentState.user,
-                isAuthenticated: true,
-                isLoading: false,
-                error: null
-              });
-            } else {
-              // No user data in store, need to re-login
-              removeAuthToken();
-              set({ 
-                user: null,
-                isAuthenticated: false,
-                isLoading: false,
-                error: null
-              });
-            }
+          // Get current state
+          const currentState = get();
+          
+          // If we have valid persisted data and token, keep user logged in
+          const token = getAuthToken();
+          if (token && currentState.user && currentState.isAuthenticated) {
+            console.log('Error during auth check, but token exists - keeping user logged in');
+            set({ 
+              user: currentState.user,
+              isAuthenticated: true,
+              isLoading: false,
+              error: null
+            });
           } else {
-            // Invalid token or refresh failed, clear it
+            // No valid session, clear everything
             removeAuthToken();
             set({ 
               user: null,
@@ -213,16 +231,6 @@ const useAuthStore = create(
               error: null
             });
           }
-        } catch (error) {
-          // Silently handle auth check failures (like CORS issues)
-          // Clear token if there's an error
-          removeAuthToken();
-          set({ 
-            user: null,
-            isAuthenticated: false,
-            isLoading: false,
-            error: null
-          });
         }
       },
 

@@ -29,6 +29,34 @@ export const getAllEvents = async () => {
 };
 
 
+//get event by id
+export const getEventById = async (eventId) => {
+    try {
+        const response = await fetch(`${API_BASE}/api/events/${eventId}`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${getAuthToken()}`
+            }
+        });
+        if (response.ok) {
+            return response.json();
+        }
+        else {
+            const contentType = response.headers.get('content-type');
+            const errorMessage = contentType === 'application/json'
+                ? (await response.json()).error || 'Unknown error'
+                : 'Unknown error';
+            throw new Error(errorMessage);
+        }
+    } catch (error) {
+        console.error('Failed to fetch event by ID:', error);
+        throw error;
+    }
+};
+
+
+
+
 //get all events user is registred to
 export const getUserRegistredEvents = async (userId) => {
     try {
@@ -109,8 +137,8 @@ export const registerForEvent = async (eventId, userId) => {
 //unregister user from event
 export const unregisterFromEvent = async (eventId, userId) => {
     try {
-        const response = await fetch(`${API_BASE}/api/events/${eventId}/unregister`, {
-            method: "POST",
+        const response = await fetch(`${API_BASE}/api/events/${eventId}/register`, {
+            method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${getAuthToken()}`
