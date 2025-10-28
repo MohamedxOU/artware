@@ -118,7 +118,7 @@ export default function Cells() {
             {/* Navigation Arrows */}
             <button 
               onClick={() => setActiveTab(activeTab > 0 ? activeTab - 1 : cells.length - 1)}
-              className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-base-100 hover:bg-base-200 border border-base-300 p-3 rounded-full shadow-lg transition-all duration-300"
+              className="cursor-target absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-base-100 hover:bg-base-200 border border-base-300 p-3 rounded-full shadow-lg transition-all duration-300"
             >
               <svg className="w-5 h-5 text-base-content" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -127,7 +127,7 @@ export default function Cells() {
             
             <button 
               onClick={() => setActiveTab(activeTab < cells.length - 1 ? activeTab + 1 : 0)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-base-100 hover:bg-base-200 border border-base-300 p-3 rounded-full shadow-lg transition-all duration-300"
+              className="cursor-target absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-base-100 hover:bg-base-200 border border-base-300 p-3 rounded-full shadow-lg transition-all duration-300"
             >
               <svg className="w-5 h-5 text-base-content" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

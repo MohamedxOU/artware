@@ -182,7 +182,7 @@ function LoginContent() {
               <button
                 type="button"
                 onClick={() => openModal('forgotPasswordModal')}
-                className="text-base-content/60 hover:text-primary text-sm underline"
+                className="cursor-target text-base-content/60 hover:text-primary text-sm underline"
               >
                 Having trouble in sign in?
               </button>

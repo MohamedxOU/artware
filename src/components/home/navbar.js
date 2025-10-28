@@ -198,7 +198,7 @@ export default function Navbar() {
                 <li>
                   <button
                     className={
-                      theme === "acid" ? "active text-primary flex items-center gap-2" : "flex items-center gap-2"
+                      theme === "acid" ? "cursor-target active text-primary flex items-center gap-2" : "cursor-target flex items-center gap-2"
                     }
                     onClick={() => handleTheme("acid")}
                   >
@@ -211,7 +211,7 @@ export default function Navbar() {
                 <li>
                   <button
                     className={
-                      theme === "synthwave" ? "active text-primary flex items-center gap-2" : "flex items-center gap-2"
+                      theme === "synthwave" ? "cursor-target active text-primary flex items-center gap-2" : "cursor-target flex items-center gap-2"
                     }
                     onClick={() => handleTheme("synthwave")}
                   >
@@ -281,7 +281,7 @@ export default function Navbar() {
                 <li>
                   <button
                     className={
-                      theme === "acid" ? "active text-primary flex items-center gap-2" : "flex items-center gap-2"
+                      theme === "acid" ? "cursor-target active text-primary flex items-center gap-2" : "cursor-target flex items-center gap-2"
                     }
                     onClick={() => handleTheme("acid")}
                   >
@@ -294,7 +294,7 @@ export default function Navbar() {
                 <li>
                   <button
                     className={
-                      theme === "synthwave" ? "active text-primary flex items-center gap-2" : "flex items-center gap-2"
+                      theme === "synthwave" ? "cursor-target active text-primary flex items-center gap-2" : "cursor-target flex items-center gap-2"
                     }
                     onClick={() => handleTheme("synthwave")}
                   >
@@ -310,7 +310,7 @@ export default function Navbar() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`btn btn-circle btn-sm transition-all duration-300 ${
+              className={`cursor-target btn btn-circle btn-sm transition-all duration-300 ${
                 isScrolled ? "btn-ghost" : "btn-ghost text-white hover:bg-white/20"
               }`}
               aria-label="Menu"
@@ -349,7 +349,7 @@ export default function Navbar() {
               <h2 className="text-xl font-semibold text-base-content">Menu</h2>
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="btn btn-circle btn-sm btn-ghost"
+                className="cursor-target btn btn-circle btn-sm btn-ghost"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-5 w-5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -379,7 +379,7 @@ export default function Navbar() {
                 <div className="space-y-2">
                   <Link 
                     href="/dashboard" 
-                    className="btn btn-secondary w-full"
+                    className="cursor-target btn btn-secondary w-full"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Dashboard
@@ -390,7 +390,7 @@ export default function Navbar() {
                       handleLogout();
                     }}
                     disabled={authLoading}
-                    className="btn btn-error w-full"
+                    className="cursor-target btn btn-error w-full"
                   >
                     {authLoading ? 'Logging out...' : 'Logout'}
                   </button>
@@ -398,7 +398,7 @@ export default function Navbar() {
               ) : (
                 <Link 
                   href="/login" 
-                  className="btn btn-primary w-full"
+                  className="cursor-target btn btn-primary w-full"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Login
