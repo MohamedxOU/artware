@@ -221,7 +221,7 @@ export default function Navbar() {
           {/* Desktop Right Controls */}
           <div className="hidden md:flex items-center gap-2">
             {/* Theme Switcher */}
-            <div className="dropdown dropdown-end">
+            {/* <div className="dropdown dropdown-end">
               <label 
                 tabIndex={0} 
                 className="btn btn-circle transition-all duration-300"
@@ -275,7 +275,7 @@ export default function Navbar() {
                   </button>
                 </li>
               </ul>
-            </div>
+            </div> */}
 
             {/* Auth Buttons */}
             {isAuthenticated && user ? (
@@ -364,7 +364,7 @@ export default function Navbar() {
           {/* Mobile Right Controls */}
           <div className="flex md:hidden items-center gap-2">
             {/* Mobile Theme Switcher */}
-            <div className="dropdown dropdown-end">
+            {/* <div className="dropdown dropdown-end">
               <label 
                 tabIndex={0} 
                 className="btn btn-circle btn-sm transition-all duration-300"
@@ -418,7 +418,7 @@ export default function Navbar() {
                   </button>
                 </li>
               </ul>
-            </div>
+            </div> */}
 
             {/* Mobile Menu Button */}
             <button

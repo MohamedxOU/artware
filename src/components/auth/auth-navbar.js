@@ -70,7 +70,7 @@ export default function AuthNavbar() {
         <div className="flex items-center gap-4">
           
           {/* Theme Switcher */}
-          <div className="dropdown dropdown-end">
+          {/* <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-circle btn-sm btn-ghost transition-all duration-300">
               {isDarkTheme ? (
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-4 w-4">
@@ -113,7 +113,7 @@ export default function AuthNavbar() {
                 </button>
               </li>
             </ul>
-          </div>
+          </div> */}
 
           {/* Language Picker */}
           {/* <select
