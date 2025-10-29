@@ -86,7 +86,7 @@ export default function Hero() {
             >
               <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6 leading-tight tracking-tight">
                 Welcome to{" "}
-                <span className="inline-block bg-gradient-to-r from-[oklch(65%_0.241_354.308)] via-[oklch(82%_0.111_230.318)] to-[oklch(65%_0.241_354.308)] bg-clip-text text-transparent">
+                <span className="inline-block bg-gradient-to-r from-purple-500 via-fuchsia-500 to-purple-500 bg-clip-text text-transparent">
                   ARTWARE
                 </span>
               </h1>
@@ -132,8 +132,8 @@ export default function Hero() {
               }`}
             >
               <Link href="/register">
-                <button className="group cursor-target relative px-8 py-4 text-base font-semibold rounded-xl text-white transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/50"
-                  style={{ background: 'linear-gradient(to right, oklch(65% 0.241 354.308), oklch(82% 0.111 230.318))' }}
+                <button className="group cursor-target relative px-8 py-4 text-base font-semibold rounded-xl bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/50"
+                  
                 >
                   <span className="flex items-center gap-2">
                     Get Started
