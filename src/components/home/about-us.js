@@ -52,7 +52,7 @@ export default function AboutUs() {
             <h3 className="text-4xl md:text-5xl font-bold leading-tight text-base-content">
               More than a club, a family.
             </h3>
-            <p className="text-base-content/80 text-lg">
+            <p className="text-base-content/90 text-lg">
               Artware is a club founded by engineering students specializing in Software Engineering and Artificial Intelligence (ILIA). It is open to all students from the Faculty of Science and Technology as well as the Multidisciplinary Faculty of Errachidia.<br/><br/>
               The goal of Artware is to develop and strengthen members&apos; skills in IT fields such as development, coding, and creativity. To achieve this, the club offers an enriching experience through events, training sessions, competitions, and hackathons, fostering collaborative learning and innovation. <br/><br/>Additionally, Artware is committed to solidarity activities and fun, friendly events aimed at improving students&apos; academic life and experience, while strengthening the spirit of community and sharing.
             </p>
