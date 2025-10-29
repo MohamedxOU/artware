@@ -1,8 +1,21 @@
 "use client";
-import { useThemeStore } from '@/stores';
+import { useTheme } from 'next-themes';
+import { useState, useEffect } from 'react';
 
 export default function FloatingThemeSwitcher() {
-  const { isDarkMode, toggleTheme } = useThemeStore();
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
+  const isDarkMode = theme === 'synthwave';
+  const toggleTheme = () => {
+    setTheme(isDarkMode ? 'acid' : 'synthwave');
+  };
 
   return (
     <button

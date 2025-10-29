@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { useThemeStore } from '@/stores';
+import { useTheme } from 'next-themes';
 
 const navItems = [
   {
@@ -54,7 +54,7 @@ export default function DashboardSidebar({
   className = ""
 }) {
   const [isMounted, setIsMounted] = useState(false);
-  const { isDarkMode, isInitialized } = useThemeStore();
+  const { theme } = useTheme();
 
   useEffect(() => {
     setIsMounted(true);
@@ -73,17 +73,18 @@ export default function DashboardSidebar({
 
   // Determine logo source based on theme
   const getLogoSource = () => {
-    if (!isMounted || !isInitialized) {
+    if (!isMounted) {
       return "/logos/ArtwareLogo.png";
     }
     
+    const isDarkMode = theme === 'synthwave';
     return isDarkMode ? "/logos/ArtwareLogo-darkMode.png" : "/logos/ArtwareLogo.png";
   };
 
   return (
-    <div className={`w-64 h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 flex flex-col ${className}`}>
+    <div className={`w-64 h-screen bg-base-100 border-r border-base-300 flex flex-col ${className}`}>
       {/* Logo Section */}
-      <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 lg:border-b-0">
+      <div className="p-4 sm:p-6 border-b border-base-300 lg:border-b-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <Image 
@@ -99,7 +100,7 @@ export default function DashboardSidebar({
           {/* Close button for mobile */}
           <button
             onClick={() => setMobileMenuOpen && setMobileMenuOpen(false)}
-            className="lg:hidden p-1.5 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+            className="lg:hidden p-1.5 text-base-content/60 hover:text-base-content hover:bg-base-200 rounded-lg transition-colors"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -112,7 +113,7 @@ export default function DashboardSidebar({
       <div className="flex-1 overflow-y-auto">
         <div className="p-4">
           <div className="mb-6">
-            <h3 className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-3">
+            <h3 className="text-xs font-medium text-base-content/50 uppercase tracking-wide mb-3">
               OVERVIEW
             </h3>
             <nav className="space-y-1">
@@ -128,11 +129,11 @@ export default function DashboardSidebar({
                   }}
                   className={`w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
                     activeSection === item.id 
-                      ? 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-400 border-l-4 border-purple-500' 
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+                      ? 'bg-primary/10 text-primary border-l-4 border-primary' 
+                      : 'text-base-content/70 hover:bg-base-200'
                   }`}
                 >
-                  <span className={`mr-3 ${activeSection === item.id ? 'text-purple-600 dark:text-purple-400' : 'text-gray-400'}`}>
+                  <span className={`mr-3 ${activeSection === item.id ? 'text-primary' : 'text-base-content/50'}`}>
                     {item.icon}
                   </span>
                   {item.label}
@@ -144,7 +145,7 @@ export default function DashboardSidebar({
       </div>
 
       {/* Profile Section */}
-      <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+      <div className="p-4 border-t border-base-300">
         <button
           onClick={() => {
             setActiveSection('profile');
@@ -155,11 +156,11 @@ export default function DashboardSidebar({
           }}
           className={`w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 mb-2 ${
             activeSection === 'profile'
-              ? 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-400 border-l-4 border-purple-500'
-              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+              ? 'bg-primary/10 text-primary border-l-4 border-primary'
+              : 'text-base-content/70 hover:bg-base-200'
           }`}
         >
-          <svg className={`w-5 h-5 mr-3 ${activeSection === 'profile' ? 'text-purple-600 dark:text-purple-400' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+          <svg className={`w-5 h-5 mr-3 ${activeSection === 'profile' ? 'text-primary' : 'text-base-content/50'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
           </svg>
           Profile
@@ -168,9 +169,9 @@ export default function DashboardSidebar({
         <button
           onClick={handleLogout}
           disabled={isLoading}
-          className="w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200"
+          className="w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-error hover:bg-error/10 transition-all duration-200"
         >
-          <svg className="w-5 h-5 mr-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+          <svg className="w-5 h-5 mr-3 text-error" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
           </svg>
           {isLoading ? 'Logging out...' : 'Logout'}

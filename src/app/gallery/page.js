@@ -10,7 +10,7 @@ import {
   useTexture,
   Html
 } from '@react-three/drei';
-import { useThemeStore } from '@/stores';
+import { useTheme } from 'next-themes';
 import * as THREE from 'three';
 import Link from 'next/link';
 
@@ -367,7 +367,7 @@ export default function GalleryPage() {
   const [isPointerLocked, setIsPointerLocked] = useState(false);
   const [has3DError, setHas3DError] = useState(false);
   
-  const { theme, isDarkMode, setTheme: setGlobalTheme, isInitialized } = useThemeStore();
+  const { theme, setTheme } = useTheme();
 
   // Set mounted state
   useEffect(() => {
@@ -390,16 +390,17 @@ export default function GalleryPage() {
 
   // Determine logo source based on theme
   const getLogoSource = () => {
-    if (!isMounted || !isInitialized) {
+    if (!isMounted) {
       return "/logos/ArtwareLogo.png";
     }
     
+    const isDarkMode = theme === 'synthwave';
     return isDarkMode ? "/logos/ArtwareLogo-darkMode.png" : "/logos/ArtwareLogo.png";
   };
 
   // Theme switcher handler
   const handleTheme = (t) => {
-    setGlobalTheme(t);
+    setTheme(t);
   };
 
   // Handle 3D errors

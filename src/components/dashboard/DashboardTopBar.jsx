@@ -22,14 +22,14 @@ export default function DashboardAppBar({
   };
 
   return (
-    <header className={`bg-white dark:bg-gray-900 shadow-sm ${className}`}>
+    <header className={`bg-base-100 shadow-sm border-b border-base-300 ${className}`}>
       <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
         {/* Left - Mobile Menu Button and Section Title */}
         <div className="flex items-center space-x-3">
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen && setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-1.5 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+            className="lg:hidden p-1.5 text-base-content/60 hover:text-base-content hover:bg-base-200 rounded-lg transition-colors"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -37,7 +37,7 @@ export default function DashboardAppBar({
           </button>
           
           {/* Section Title */}
-          <h1 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-900 dark:text-white truncate">
+          <h1 className="text-lg sm:text-xl lg:text-2xl font-semibold text-base-content truncate">
             {getSectionTitle(activeSection)}
           </h1>
         </div>
@@ -45,7 +45,7 @@ export default function DashboardAppBar({
         {/* Right - User Info */}
         <div className="flex items-center space-x-2 sm:space-x-3">
           {user?.profile_image_url ? (
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden ring-2 ring-primary/20">
               <Image 
                 src={user.profile_image_url} 
                 alt={`${user.first_name} ${user.last_name}`}
@@ -56,18 +56,18 @@ export default function DashboardAppBar({
               />
             </div>
           ) : (
-            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
-              <span className="text-white text-xs sm:text-sm font-medium">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center ring-2 ring-primary/20">
+              <span className="text-primary-content text-xs sm:text-sm font-medium">
                 {user?.first_name?.[0]}{user?.last_name?.[0]}
               </span>
             </div>
           )}
           
           <div className="hidden md:block text-left">
-            <div className="text-sm font-medium text-gray-900 dark:text-white truncate max-w-32 lg:max-w-none">
+            <div className="text-sm font-medium text-base-content truncate max-w-32 lg:max-w-none">
               {user?.first_name} {user?.last_name}
             </div>
-            <div className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-32 lg:max-w-none">
+            <div className="text-xs text-base-content/60 truncate max-w-32 lg:max-w-none">
               {user?.email}
             </div>
           </div>

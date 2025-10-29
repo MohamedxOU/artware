@@ -298,7 +298,7 @@ export default function CellsSection({ user }) {
               <div className="text-xs text-base-content/60">Available cells</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">
+              <div className="text-2xl font-bold text-success">
                 {allCells.filter(cell => cell.isMember).length}
               </div>
               <div className="text-xs text-base-content/60">My cells</div>
@@ -327,8 +327,8 @@ export default function CellsSection({ user }) {
                   <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/80"></div>
                 </>
               ) : (
-                <div className="w-full h-full bg-gradient-to-br from-blue-500 via-purple-600 to-pink-600">
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60"></div>
+                <div className="w-full h-full bg-gradient-to-br from-primary via-secondary to-accent">
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/80"></div>
                 </div>
               )}
             </div>
@@ -506,7 +506,7 @@ export default function CellsSection({ user }) {
                       <div className="flex items-start gap-4">
                         {/* Event Icon/Image */}
                         {event.image_url ? (
-                          <div className="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden">
+                          <div className="shrink-0 w-20 h-20 rounded-lg overflow-hidden">
                             <img 
                               src={event.image_url} 
                               alt={event.title}
@@ -514,7 +514,7 @@ export default function CellsSection({ user }) {
                             />
                           </div>
                         ) : (
-                          <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                          <div className="shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
                             <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>

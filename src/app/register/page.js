@@ -5,7 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import AuthNavbar from "@/components/auth/auth-navbar";
 import TermsModal from "@/components/modals/termsModal";
-import { useAuthStore, useThemeStore, useUIStore } from "@/stores";
+import { useAuthStore, useUIStore } from "@/stores";
+import { useTheme } from "next-themes";
 import { useGuestRoute } from "@/hooks/useAuth";
 import TargetCursor from "@/components/TargetCursor";
 
@@ -16,7 +17,7 @@ function RegisterContent() {
   
   // Zustand stores
   const { register, isLoading, error, clearError } = useAuthStore();
-  const { isDarkMode } = useThemeStore();
+  const { theme } = useTheme();
   const { 
     modals, 
     forms, 
@@ -135,6 +136,8 @@ function RegisterContent() {
       setProfilePreview(null);
     }
   };
+
+  const isDarkMode = theme === 'synthwave';
 
   return (
     <div className={`relative min-h-screen bg-base-300 overflow-hidden ${isDarkMode ? 'opacity-80' : 'opacity-100'}`}>

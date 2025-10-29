@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import AuthNavbar from "@/components/auth/auth-navbar";
 import ForgotPasswordModal from "@/components/modals/forgotPassword";
-import { useAuthStore, useThemeStore, useUIStore } from "@/stores";
+import { useAuthStore, useUIStore } from "@/stores";
+import { useTheme } from "next-themes";
 import { useGuestRoute } from "@/hooks/useAuth";
 import TargetCursor from "@/components/TargetCursor";
 
@@ -16,7 +17,7 @@ function LoginContent() {
   
   // Zustand stores
   const { login, isLoading, error, clearError } = useAuthStore();
-  const { isDarkMode } = useThemeStore();
+  const { theme } = useTheme();
   const { modals, forms, openModal, closeModal, setShowCard } = useUIStore();
   
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -63,6 +64,8 @@ function LoginContent() {
     }
     // Error handling is already done in the authStore
   };
+
+  const isDarkMode = theme === 'synthwave';
 
   return (
     <div className={`relative min-h-screen bg-base-300 overflow-hidden ${isDarkMode ? 'opacity-80' : 'opacity-100'}`}>

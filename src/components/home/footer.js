@@ -2,12 +2,19 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useThemeStore } from "@/stores";
+import { useTheme } from "next-themes";
 
 export default function Footer() {
   const [isVisible, setIsVisible] = useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);
-  const { theme, isDarkMode, isInitialized } = useThemeStore();
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isDarkMode = mounted && theme === 'synthwave';
 
   // Scroll detection for scroll-to-top button
   useEffect(() => {

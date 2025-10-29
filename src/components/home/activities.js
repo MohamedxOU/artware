@@ -101,7 +101,7 @@ export default function Activities() {
 								{activities.map((activity, idx) => (
 									<button
 										key={activity.title}
-										className={`cursor-target w/full text-left px-6 py-4 rounded-xl transition-all duration-300 ${
+										className={`cursor-target w-full text-left px-6 py-4 rounded-xl transition-all duration-300 ${
 											selected === idx
 												? 'bg-primary text-white shadow-lg'
 												: 'text-base-content/70 hover:bg-base-300/50 hover:text-base-content'
@@ -111,7 +111,7 @@ export default function Activities() {
 										<span className="font-semibold text-base">
 											{activity.title}
 										</span>
-									</button>
+									</button> 
 								))}
 							</div>
 						</div>

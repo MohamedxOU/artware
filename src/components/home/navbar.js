@@ -3,7 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuthStore, useUIStore, useThemeStore } from "@/stores";
+import { useTheme } from "next-themes";
+import { useAuthStore, useUIStore } from "@/stores";
 
 const navLinks = [
   { href: "#about-us", label: "About" },
@@ -18,7 +19,7 @@ export default function Navbar() {
   const router = useRouter();
   const { user, isAuthenticated, logout, isLoading: authLoading } = useAuthStore();
   const { addNotification } = useUIStore();
-  const { theme, isDarkMode, setTheme: setGlobalTheme, isInitialized } = useThemeStore();
+  const { theme, setTheme } = useTheme();
   
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -44,7 +45,7 @@ export default function Navbar() {
 
   // Theme switcher handler
   const handleTheme = (t) => {
-    setGlobalTheme(t);
+    setTheme(t);
   };
 
   // Logout handler
@@ -115,12 +116,13 @@ export default function Navbar() {
 
   // Determine logo source based on theme and scroll state
   const getLogoSource = () => {
-    if (!isMounted || !isInitialized) {
+    if (!isMounted) {
       // Return a default logo during SSR to avoid hydration mismatch
       return "/logos/ArtwareLogo.png";
     }
     
     // Use dark logo for dark themes
+    const isDarkMode = theme === 'synthwave';
     if (isDarkMode) {
       return "/logos/ArtwareLogo-darkMode.png";
     }

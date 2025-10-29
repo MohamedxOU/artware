@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { useAuthStore, useUIStore, useThemeStore } from '@/stores';
+import { useAuthStore, useUIStore } from '@/stores';
 import { useProtectedRoute } from '@/hooks/useAuth';
 import DashboardAppBar from '@/components/dashboard/DashboardAppBar';
 import FloatingThemeSwitcher from '@/components/dashboard/FloatingThemeSwitcher';

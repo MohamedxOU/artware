@@ -309,15 +309,15 @@ export default function DocumentsSection() {
     <div className="w-full max-w-7xl mx-auto relative min-h-full">
       {/* Search Bar - Keep at top as requested */}
       <div className="mb-6 relative z-10">
-        <div className="backdrop-blur-sm bg-white/90 dark:bg-gray-800/90 rounded-2xl p-4 border border-gray-200/50 dark:border-gray-700/50 shadow-sm">
+        <div className="backdrop-blur-sm bg-base-100/90 rounded-2xl p-4 border border-base-300 shadow-sm">
           <div className="relative max-w-md mx-auto">
-            <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
             <input
               type="text"
               placeholder="Search documents..."
-              className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-10 pr-4 py-3 bg-base-200 border border-base-300 rounded-xl text-base-content placeholder-base-content/50 focus:outline-none focus:ring-2 focus:ring-primary"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -329,7 +329,7 @@ export default function DocumentsSection() {
       {recommendedDocuments.length > 0 && (
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-2xl font-bold text-base-content">
               {recommendedDocuments[0]?.source === 'attended' 
                 ? 'Events you have attended'
                 : 'Events you are registered for'}
@@ -342,18 +342,18 @@ export default function DocumentsSection() {
             {recommendedDocuments.map((doc) => (
               <div
                 key={doc.id}
-                className="flex-shrink-0 cursor-pointer group cursor-target"
+                className="shrink-0 cursor-pointer group cursor-target"
                 onClick={() => handleDownload(doc)}
               >
                 {/* Document Card - Same design as main documents */}
-                <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-200 group-hover:border-blue-300 w-40">
+                <div className="bg-base-100 rounded-lg p-4 border border-base-300 hover:shadow-lg transition-all duration-200 group-hover:border-primary w-40">
                   {/* Source Badge */}
                   {doc.source && (
                     <div className="mb-2">
                       <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
                         doc.source === 'attended' 
-                          ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                          : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                          ? 'bg-success/20 text-success'
+                          : 'bg-info/20 text-info'
                       }`}>
                         {doc.source === 'attended' ? (
                           <>
@@ -376,14 +376,14 @@ export default function DocumentsSection() {
 
                   {/* Document Icon */}
                   <div className="flex justify-center mb-3">
-                    <div className="w-12 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center relative">
+                    <div className="w-12 h-16 bg-base-200 rounded-lg flex items-center justify-center relative">
                       {/* File type badge - Default to PDF for recommended */}
-                      <div className="absolute -top-2 -right-2 px-2 py-1 rounded text-xs font-bold text-white bg-red-500">
+                      <div className="absolute -top-2 -right-2 px-2 py-1 rounded text-xs font-bold text-white bg-error">
                         {doc.type === 'Word' ? 'DOC' : doc.type === 'Image' ? 'IMG' : doc.type || 'PDF'}
                       </div>
                       
                       {/* Document icon */}
-                      <svg className="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                      <svg className="w-8 h-8 text-base-content/40" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
                       </svg>
                     </div>
@@ -391,15 +391,15 @@ export default function DocumentsSection() {
                   
                   {/* Document Info */}
                   <div className="text-center">
-                    <h4 className="font-medium text-gray-900 dark:text-white text-sm mb-1 line-clamp-2">
+                    <h4 className="font-medium text-base-content text-sm mb-1 line-clamp-2">
                       {doc.title}
                     </h4>
                     {doc.eventName ? (
-                      <p className="text-gray-500 dark:text-gray-400 text-xs line-clamp-1">
+                      <p className="text-base-content/60 text-xs line-clamp-1">
                         {doc.eventName}
                       </p>
                     ) : (
-                      <p className="text-gray-500 dark:text-gray-400 text-xs">
+                      <p className="text-base-content/60 text-xs">
                         {formatDate(doc.created_at)}
                       </p>
                     )}
@@ -414,8 +414,8 @@ export default function DocumentsSection() {
       {/* All Documents Section */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">All Documents</h2>
-          <span className="text-sm text-gray-500 dark:text-gray-400">
+          <h2 className="text-2xl font-bold text-base-content">All Documents</h2>
+          <span className="text-sm text-base-content/60">
             {filteredAndSortedDocuments.length} document{filteredAndSortedDocuments.length !== 1 ? 's' : ''}
           </span>
         </div>
@@ -430,27 +430,27 @@ export default function DocumentsSection() {
                 onClick={() => handleDownload(doc)}
               >
                 {/* Document Card */}
-                <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-200 group-hover:border-blue-300">
+                <div className="bg-base-100 rounded-lg p-4 border border-base-300 hover:shadow-lg transition-all duration-200 group-hover:border-primary">
                   {/* Document Icon */}
                   <div className="flex justify-center mb-3">
-                    <div className="w-12 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center relative">
+                    <div className="w-12 h-16 bg-base-200 rounded-lg flex items-center justify-center relative">
                       {/* File type badge */}
                       <div className={`absolute -top-2 -right-2 px-2 py-1 rounded text-xs font-bold text-white ${
                         doc.type === 'PDF' 
-                          ? 'bg-red-500' 
+                          ? 'bg-error' 
                           : doc.type === 'Image'
-                          ? 'bg-green-500'
+                          ? 'bg-success'
                           : doc.type === 'Word'
-                          ? 'bg-blue-500'
+                          ? 'bg-info'
                           : doc.type === 'PowerPoint'
-                          ? 'bg-orange-500'
-                          : 'bg-gray-500'
+                          ? 'bg-warning'
+                          : 'bg-base-content'
                       }`}>
                         {doc.type === 'Word' ? 'DOC' : doc.type === 'Image' ? 'IMG' : doc.type}
                       </div>
                       
                       {/* Document icon */}
-                      <svg className="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                      <svg className="w-8 h-8 text-base-content/40" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
                       </svg>
                     </div>
@@ -458,10 +458,10 @@ export default function DocumentsSection() {
                   
                   {/* Document Info */}
                   <div className="text-center">
-                    <h4 className="font-medium text-gray-900 dark:text-white text-sm mb-1 line-clamp-2">
+                    <h4 className="font-medium text-base-content text-sm mb-1 line-clamp-2">
                       {doc.title}
                     </h4>
-                    <p className="text-gray-500 dark:text-gray-400 text-xs">
+                    <p className="text-base-content/60 text-xs">
                       {formatDate(doc.created_at)}
                     </p>
                   </div>
@@ -472,20 +472,20 @@ export default function DocumentsSection() {
         ) : (
           /* Empty State */
           <div className="text-center py-12">
-            <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-16 h-16 bg-base-200 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No documents found</h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
+            <h3 className="text-xl font-semibold text-base-content mb-2">No documents found</h3>
+            <p className="text-base-content/70 mb-4">
               No documents match your search criteria.
             </p>
             <button
               onClick={() => {
                 setSearchQuery('');
               }}
-              className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-colors"
+              className="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-content rounded-lg text-sm font-medium transition-colors"
             >
               Reset search
             </button>

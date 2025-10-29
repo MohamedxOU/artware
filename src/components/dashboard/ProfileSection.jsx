@@ -129,12 +129,12 @@ export default function ProfileSection({ user }) {
   return (
     <div className="w-full max-w-5xl mx-auto space-y-6">
       {/* Profile Header Card */}
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div className="bg-base-100 rounded-2xl shadow-sm border border-base-300 p-6">
         <div className="flex items-center gap-4">
           {/* Profile Avatar */}
           <div className="relative">
             {user?.profile_image_url ? (
-              <div className="w-20 h-20 rounded-full overflow-hidden ring-4 ring-gray-100 dark:ring-gray-700">
+              <div className="w-20 h-20 rounded-full overflow-hidden ring-4 ring-primary/20">
                 <Image 
                   src={user.profile_image_url} 
                   alt={`${user.first_name} ${user.last_name}`}
@@ -145,25 +145,25 @@ export default function ProfileSection({ user }) {
                 />
               </div>
             ) : (
-              <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center ring-4 ring-gray-100 dark:ring-gray-700">
-                <span className="text-white text-2xl font-bold">
+              <div className="w-20 h-20 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center ring-4 ring-primary/20">
+                <span className="text-primary-content text-2xl font-bold">
                   {user?.first_name?.[0]}{user?.last_name?.[0]}
                 </span>
               </div>
             )}
             {/* Status indicator */}
-            <div className="absolute bottom-1 right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></div>
+            <div className="absolute bottom-1 right-1 w-4 h-4 bg-success rounded-full border-2 border-base-100"></div>
           </div>
 
           {/* User Info */}
           <div className="flex-1">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="text-xl font-semibold text-base-content">
               {user?.first_name} {user?.last_name}
             </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-sm text-base-content/60">
               {user?.specialty?.replace('-', ' ') || 'Student'}
             </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-sm text-base-content/60">
               {user?.level || 'N/A'}
             </p>
           </div>
@@ -171,10 +171,10 @@ export default function ProfileSection({ user }) {
       </div>
 
       {/* Personal Information Card */}
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div className="bg-base-100 rounded-2xl shadow-sm border border-base-300 p-6">
         {/* Header with Edit Button */}
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <h3 className="text-lg font-semibold text-base-content">
             Personal Information
           </h3>
           <button 
@@ -192,60 +192,60 @@ export default function ProfileSection({ user }) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* First Name */}
           <div>
-            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
+            <label className="block text-xs font-medium text-base-content/60 mb-2">
               First Name
             </label>
-            <div className="text-base font-medium text-gray-900 dark:text-white">
+            <div className="text-base font-medium text-base-content">
               {user?.first_name || 'N/A'}
             </div>
           </div>
 
           {/* Last Name */}
           <div>
-            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
+            <label className="block text-xs font-medium text-base-content/60 mb-2">
               Last Name
             </label>
-            <div className="text-base font-medium text-gray-900 dark:text-white">
+            <div className="text-base font-medium text-base-content">
               {user?.last_name || 'N/A'}
             </div>
           </div>
 
           {/* Gender */}
           <div>
-            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
+            <label className="block text-xs font-medium text-base-content/60 mb-2">
               Gender
             </label>
-            <div className="text-base font-medium text-gray-900 dark:text-white capitalize">
+            <div className="text-base font-medium text-base-content capitalize">
               {user?.gender || 'N/A'}
             </div>
           </div>
 
           {/* Email Address */}
           <div>
-            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
+            <label className="block text-xs font-medium text-base-content/60 mb-2">
               Email Address
             </label>
-            <div className="text-base font-medium text-gray-900 dark:text-white">
+            <div className="text-base font-medium text-base-content">
               {user?.email || 'N/A'}
             </div>
           </div>
 
           {/* Phone Number */}
           <div>
-            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
+            <label className="block text-xs font-medium text-base-content/60 mb-2">
               Phone Number
             </label>
-            <div className="text-base font-medium text-gray-900 dark:text-white">
+            <div className="text-base font-medium text-base-content">
               {user?.phone_number || 'N/A'}
             </div>
           </div>
 
           {/* User Role */}
           <div>
-            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
+            <label className="block text-xs font-medium text-base-content/60 mb-2">
               User Role
             </label>
-            <div className="text-base font-medium text-gray-900 dark:text-white">
+            <div className="text-base font-medium text-base-content">
               {user?.role_id === 1 ? 'Member' : user?.role_id === 2 ? 'Admin' : user?.role_id === 3 ? 'President' : 'Member'}
             </div>
           </div>
@@ -253,13 +253,13 @@ export default function ProfileSection({ user }) {
       </div>
 
       {/* Social Links Card */}
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div className="bg-base-100 rounded-2xl shadow-sm border border-base-300 p-6">
         {/* Header */}
         <div className="mb-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+          <h3 className="text-lg font-semibold text-base-content mb-1">
             Contact & Social Links
           </h3>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className="text-sm text-base-content/60">
             Ways to connect with the club admins
           </p>
         </div>
@@ -268,14 +268,14 @@ export default function ProfileSection({ user }) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Facebook */}
           <div>
-            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
+            <label className="block text-xs font-medium text-base-content/60 mb-2">
               Facebook
             </label>
             <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-info" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
               </svg>
-              <div className="text-base font-medium text-gray-900 dark:text-white truncate underline">
+              <div className="text-base font-medium text-base-content truncate underline">
                 <a href="https://www.facebook.com/profile.php?id=61574231404463" target="_blank" rel="noopener noreferrer">Artware</a>
               </div>
             </div>
@@ -283,14 +283,14 @@ export default function ProfileSection({ user }) {
 
           {/* Instagram */}
           <div>
-            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
+            <label className="block text-xs font-medium text-base-content/60 mb-2">
               Instagram
             </label>
             <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-pink-600" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-secondary" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
               </svg>
-              <div className="text-base font-medium text-gray-900 dark:text-white truncate underline">
+              <div className="text-base font-medium text-base-content truncate underline">
                 <a href="https://www.instagram.com/artware.club/" target="_blank" rel="noopener noreferrer">artware.club</a>
               </div>
             </div>
@@ -298,14 +298,14 @@ export default function ProfileSection({ user }) {
 
           {/* LinkedIn */}
           <div>
-            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
+            <label className="block text-xs font-medium text-base-content/60 mb-2">
               LinkedIn
             </label>
             <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-blue-700" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
               </svg>
-              <div className="text-base font-medium text-gray-900 dark:text-white truncate underline">
+              <div className="text-base font-medium text-base-content truncate underline">
                 <a href="https://www.linkedin.com/company/artware-engineering-club/" target="_blank" rel="noopener noreferrer">Artware Engineering Club</a>
               </div>
             </div>
@@ -313,14 +313,14 @@ export default function ProfileSection({ user }) {
 
             {/* Email */}
           <div>
-            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
+            <label className="block text-xs font-medium text-base-content/60 mb-2">
               Email
             </label>
             <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-base-content/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
-              <div className="text-base font-medium text-gray-900 dark:text-white truncate underline">
+              <div className="text-base font-medium text-base-content truncate underline">
                <a href="mailto:artware.club@gmail.com" target="_blank" rel="noopener noreferrer">artware.club@gmail.com</a>
               </div>
             </div>
@@ -328,11 +328,11 @@ export default function ProfileSection({ user }) {
 
           {/* WhatsApp */}
           <div>
-            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
+            <label className="block text-xs font-medium text-base-content/60 mb-2">
               WhatsApp
             </label>
             <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-success" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
               </svg>
               <div className="text-base font-medium text-gray-900 dark:text-white truncate underline">
@@ -345,14 +345,14 @@ export default function ProfileSection({ user }) {
 
           {/* Phone */}
           <div>
-            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
+            <label className="block text-xs font-medium text-base-content/60 mb-2">
               Phone
             </label>
             <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-base-content/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
               </svg>
-              <div className="text-base font-medium text-gray-900 dark:text-white truncate underline">
+              <div className="text-base font-medium text-base-content truncate underline">
                 <a href="tel:+212688784609" target="_blank" rel="noopener noreferrer">06 88 78 46 09</a>
               </div>
             </div>
@@ -363,15 +363,15 @@ export default function ProfileSection({ user }) {
       {/* Edit Modal */}
       {isEditing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={handleCancel}>
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-base-100 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             {/* Modal Header */}
-            <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+            <div className="sticky top-0 bg-base-100 border-b border-base-300 px-6 py-4 flex items-center justify-between">
+              <h3 className="text-xl font-semibold text-base-content">
                 Edit Profile
               </h3>
               <button 
                 onClick={handleCancel}
-                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                className="text-base-content/40 hover:text-base-content/60 transition-colors"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -382,10 +382,10 @@ export default function ProfileSection({ user }) {
             {/* Modal Content */}
             <div className="p-6 space-y-6">
               {/* Profile Image Upload */}
-              <div className="flex flex-col items-center gap-4 pb-6 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex flex-col items-center gap-4 pb-6 border-b border-base-300">
                 <div className="relative">
                   {previewUrl ? (
-                    <div className="w-24 h-24 rounded-full overflow-hidden ring-4 ring-purple-100 dark:ring-purple-900/30">
+                    <div className="w-24 h-24 rounded-full overflow-hidden ring-4 ring-primary/20">
                       <img 
                         src={previewUrl} 
                         alt="Preview"
@@ -393,7 +393,7 @@ export default function ProfileSection({ user }) {
                       />
                     </div>
                   ) : editedUser.profile_image_url ? (
-                    <div className="w-24 h-24 rounded-full overflow-hidden ring-4 ring-purple-100 dark:ring-purple-900/30">
+                    <div className="w-24 h-24 rounded-full overflow-hidden ring-4 ring-primary/20">
                       <Image 
                         src={editedUser.profile_image_url} 
                         alt="Profile"
@@ -404,7 +404,7 @@ export default function ProfileSection({ user }) {
                       />
                     </div>
                   ) : (
-                    <div className="w-24 h-24 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center ring-4 ring-purple-100 dark:ring-purple-900/30">
+                    <div className="w-24 h-24 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center ring-4 ring-primary/20">
                       <span className="text-white text-3xl font-bold">
                         {editedUser.first_name?.[0]}{editedUser.last_name?.[0]}
                       </span>
@@ -421,12 +421,12 @@ export default function ProfileSection({ user }) {
                 <button 
                   type="button"
                   onClick={handleChangePhotoClick}
-                  className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors"
+                  className="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-content text-sm font-medium rounded-lg transition-colors"
                 >
                   {selectedFile ? 'Change Photo' : 'Upload Photo'}
                 </button>
                 {selectedFile && (
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-xs text-base-content/60">
                     Selected: {selectedFile.name}
                   </p>
                 )}
@@ -436,55 +436,55 @@ export default function ProfileSection({ user }) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* First Name */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-base-content mb-2">
                     First Name
                   </label>
                   <input
                     type="text"
                     value={editedUser.first_name}
                     onChange={(e) => handleInputChange('first_name', e.target.value)}
-                    className="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900 dark:text-white transition-colors"
+                    className="w-full px-4 py-2.5 bg-base-200 border border-base-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-base-content transition-colors"
                     placeholder="Enter first name"
                   />
                 </div>
 
                 {/* Last Name */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-base-content mb-2">
                     Last Name
                   </label>
                   <input
                     type="text"
                     value={editedUser.last_name}
                     onChange={(e) => handleInputChange('last_name', e.target.value)}
-                    className="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900 dark:text-white transition-colors"
+                    className="w-full px-4 py-2.5 bg-base-200 border border-base-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-base-content transition-colors"
                     placeholder="Enter last name"
                   />
                 </div>
 
                 {/* Phone Number */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-base-content mb-2">
                     Phone Number
                   </label>
                   <input
                     type="tel"
                     value={editedUser.phone_number}
                     onChange={(e) => handleInputChange('phone_number', e.target.value)}
-                    className="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900 dark:text-white transition-colors"
+                    className="w-full px-4 py-2.5 bg-base-200 border border-base-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-base-content transition-colors"
                     placeholder="Enter phone number"
                   />
                 </div>
 
                 {/* Gender */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-base-content mb-2">
                     Gender
                   </label>
                   <select
                     value={editedUser.gender}
                     onChange={(e) => handleInputChange('gender', e.target.value)}
-                    className="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900 dark:text-white transition-colors"
+                    className="w-full px-4 py-2.5 bg-base-200 border border-base-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-base-content transition-colors"
                   >
                     <option value="">Select gender</option>
                     <option value="male">Male</option>
@@ -497,22 +497,22 @@ export default function ProfileSection({ user }) {
 
             {/* Error Message */}
             {error && (
-              <div className="px-6 py-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-                <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+              <div className="px-6 py-3 bg-error/10 border border-error/30 rounded-lg">
+                <p className="text-sm text-error">{error}</p>
               </div>
             )}
 
             {/* Modal Footer */}
-            <div className="sticky bottom-0 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-700 px-6 py-4 flex justify-end gap-3">
+            <div className="sticky bottom-0 bg-base-200/50 border-t border-base-300 px-6 py-4 flex justify-end gap-3">
               <button
                 onClick={handleCancel}
-                className="px-6 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                className="px-6 py-2.5 text-sm font-medium text-base-content bg-base-100 border border-base-300 rounded-lg hover:bg-base-200 transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSave}
-                className="px-6 py-2.5 text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors"
+                className="px-6 py-2.5 text-sm font-medium text-primary-content bg-primary hover:bg-primary/90 rounded-lg transition-colors"
               >
                 Save Changes
               </button>
@@ -524,58 +524,58 @@ export default function ProfileSection({ user }) {
       {/* Confirmation Modal */}
       {showConfirmModal && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={handleCancelConfirm}>
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-base-100 rounded-2xl shadow-2xl max-w-md w-full" onClick={(e) => e.stopPropagation()}>
             {/* Modal Header */}
-            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <div className="px-6 py-4 border-b border-base-300">
+              <h3 className="text-lg font-semibold text-base-content">
                 Confirm Changes
               </h3>
             </div>
 
             {/* Modal Content */}
             <div className="p-6 space-y-4">
-              <p className="text-gray-700 dark:text-gray-300">
+              <p className="text-base-content">
                 Are you sure you want to save these changes to your profile?
               </p>
               
               {/* Show what's being changed */}
-              <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4 space-y-2 text-sm">
+              <div className="bg-base-200 rounded-lg p-4 space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-500 dark:text-gray-400">First Name:</span>
-                  <span className="font-medium text-gray-900 dark:text-white">{editedUser.first_name}</span>
+                  <span className="text-base-content/60">First Name:</span>
+                  <span className="font-medium text-base-content">{editedUser.first_name}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-500 dark:text-gray-400">Last Name:</span>
-                  <span className="font-medium text-gray-900 dark:text-white">{editedUser.last_name}</span>
+                  <span className="text-base-content/60">Last Name:</span>
+                  <span className="font-medium text-base-content">{editedUser.last_name}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-500 dark:text-gray-400">Phone:</span>
-                  <span className="font-medium text-gray-900 dark:text-white">{editedUser.phone_number || 'N/A'}</span>
+                  <span className="text-base-content/60">Phone:</span>
+                  <span className="font-medium text-base-content">{editedUser.phone_number || 'N/A'}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-500 dark:text-gray-400">Gender:</span>
-                  <span className="font-medium text-gray-900 dark:text-white capitalize">{editedUser.gender || 'N/A'}</span>
+                  <span className="text-base-content/60">Gender:</span>
+                  <span className="font-medium text-base-content capitalize">{editedUser.gender || 'N/A'}</span>
                 </div>
               </div>
             </div>
 
             {/* Modal Footer */}
-            <div className="px-6 py-4 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-3">
+            <div className="px-6 py-4 bg-base-200/50 border-t border-base-300 flex justify-end gap-3">
               <button
                 onClick={handleCancelConfirm}
                 disabled={isSaving}
-                className="px-6 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-2.5 text-sm font-medium text-base-content bg-base-100 border border-base-300 rounded-lg hover:bg-base-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Cancel
               </button>
               <button
                 onClick={handleConfirmSave}
                 disabled={isSaving}
-                className="px-6 py-2.5 text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                className="px-6 py-2.5 text-sm font-medium text-primary-content bg-primary hover:bg-primary/90 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 {isSaving ? (
                   <>
-                    <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>

@@ -2,11 +2,12 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import AuthNavbar from "@/components/auth/auth-navbar";
-import { useThemeStore } from "@/stores";
+import { useTheme } from "next-themes";
 import TargetCursor from "@/components/TargetCursor";
 
 export default function ResetPasswordPreviewPage() {
-  const { isDarkMode } = useThemeStore();
+  const { theme } = useTheme();
+  const isDarkMode = theme === 'synthwave';
   
   const [formData, setFormData] = useState({
     newPassword: "",
