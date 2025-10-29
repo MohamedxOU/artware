@@ -18,6 +18,23 @@ export default async function RootLayout({ children }) {
     <html lang={locale} data-theme={theme} suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        {/* Inline script to set theme as early as possible on the client.
+            This reads localStorage (next-themes storageKey 'theme-storage') and
+            falls back to the user's prefers-color-scheme. This prevents a flash
+            of the wrong theme on first paint (especially on deployments). */}
+        <script dangerouslySetInnerHTML={{ __html: `(() => {
+          try {
+            const key = 'theme-storage';
+            const stored = window.localStorage.getItem(key);
+            if (stored) {
+              document.documentElement.setAttribute('data-theme', stored);
+            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+              document.documentElement.setAttribute('data-theme', 'synthwave');
+            }
+          } catch (e) {
+            // ignore
+          }
+        })();` }} />
       </head>
       <body className="w-full min-w-0 overflow-x-hidden bg-base-100 text-base-content">
         <ThemeProvider>
