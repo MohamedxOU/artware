@@ -21,8 +21,15 @@ export default function AboutUs() {
     return () => observer.disconnect();
   }, []);
 
+  // Theme colors
+  const bgColor = isDarkTheme ? 'oklch(98% 0.003 247.858)' : 'oklch(98% 0 0)';
+  const textColor = isDarkTheme ? 'oklch(78% 0.115 274.713)' : 'oklch(0% 0 0)';
+  const primaryColor = isDarkTheme ? 'oklch(65% 0.241 354.308)' : 'oklch(65% 0.241 354.308)';
+  const secondaryBg = isDarkTheme ? 'oklch(20% 0.09 281.288)' : 'oklch(95% 0 0)';
+  const textMuted = isDarkTheme ? 'rgba(200, 190, 220, 0.7)' : 'rgba(0, 0, 0, 0.7)';
+
   return (
-    <section id="about-us" className="w-full bg-base-100 py-16 flex justify-center">
+    <section id="about-us" className="w-full py-16 flex justify-center" style={{ backgroundColor: bgColor }}>
       <div className="max-w-7xl w-full px-4 md:px-8">
         {/* Header - Fade in from top */}
         <motion.div 
@@ -32,10 +39,10 @@ export default function AboutUs() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            About Us, <span className="text-primary">Our Story & Vision</span>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: textColor }}>
+            About Us, <span style={{ color: primaryColor }}>Our Story & Vision</span>
           </h2>
-          <p className="text-lg text-base-content/70 max-w-2xl mx-auto">
+          <p className="text-lg max-w-2xl mx-auto" style={{ color: textMuted }}>
             Discover the story of ARTWARE, a passionate community dedicated to technological innovation and academic excellence
           </p>
         </motion.div>
@@ -43,16 +50,17 @@ export default function AboutUs() {
         <div className="grid md:grid-cols-2 gap-8 items-center">
           {/* Left: Text Card - Slide in from left */}
           <motion.div 
-            className="bg-base-100 rounded-2xl shadow p-8 flex flex-col gap-6"
+            className="rounded-2xl shadow p-8 flex flex-col gap-6"
+            style={{ backgroundColor: bgColor }}
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <h3 className="text-4xl md:text-5xl font-bold leading-tight text-base-content">
+            <h3 className="text-4xl md:text-5xl font-bold leading-tight" style={{ color: textColor }}>
               More than a club, a family.
             </h3>
-            <p className="text-base-content/90 text-lg">
+            <p className="text-lg" style={{ color: textColor, opacity: 0.9 }}>
               Artware is a club founded by engineering students specializing in Software Engineering and Artificial Intelligence (ILIA). It is open to all students from the Faculty of Science and Technology as well as the Multidisciplinary Faculty of Errachidia.<br/><br/>
               The goal of Artware is to develop and strengthen members&apos; skills in IT fields such as development, coding, and creativity. To achieve this, the club offers an enriching experience through events, training sessions, competitions, and hackathons, fostering collaborative learning and innovation. <br/><br/>Additionally, Artware is committed to solidarity activities and fun, friendly events aimed at improving students&apos; academic life and experience, while strengthening the spirit of community and sharing.
             </p>
@@ -66,7 +74,9 @@ export default function AboutUs() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className="rounded-2xl overflow-hidden shadow aspect-[4/3] bg-base-200 flex items-center justify-center">
+            <div className="rounded-2xl overflow-hidden shadow aspect-[4/3] flex items-center justify-center"
+              style={{ backgroundColor: secondaryBg }}
+            >
               <Image
                 src="/covers/cover-1.jpg"
                 alt="About Us"
@@ -87,14 +97,15 @@ export default function AboutUs() {
                 <motion.div
                   key={index}
                   className="rounded-xl shadow p-4 flex flex-col items-center"
+                  style={{ backgroundColor: bgColor }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
                   whileHover={{ scale: 1.05 }}
                 >
-                  <span className="text-2xl font-bold text-base-content">{stat.value}</span>
-                  <span className="text-base text-base-content/70">{stat.label}</span>
+                  <span className="text-2xl font-bold" style={{ color: textColor }}>{stat.value}</span>
+                  <span className="text-base" style={{ color: textMuted }}>{stat.label}</span>
                 </motion.div>
               ))}
             </div>

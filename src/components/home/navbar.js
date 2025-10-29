@@ -24,6 +24,37 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false); // Track when component is mounted
+  const [hoveredLink, setHoveredLink] = useState(null);
+  const [hoveredButton, setHoveredButton] = useState(null);
+  
+  // Theme detection
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
+  
+  useEffect(() => {
+    const checkTheme = () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      setIsDarkTheme(currentTheme === 'synthwave');
+    };
+    
+    checkTheme();
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme']
+    });
+    
+    return () => observer.disconnect();
+  }, []);
+  
+  // Theme colors
+  const bgPrimary = isDarkTheme ? 'oklch(98% 0.003 247.858)' : 'oklch(98% 0 0)';
+  const bgSecondary = isDarkTheme ? 'oklch(20% 0.09 281.288)' : 'oklch(95% 0 0)';
+  const bgTertiary = isDarkTheme ? 'oklch(25% 0.09 281.288)' : 'oklch(91% 0 0)';
+  const textColor = isDarkTheme ? 'oklch(78% 0.115 274.713)' : 'oklch(0% 0 0)';
+  const primaryColor = 'oklch(65% 0.241 354.308)';
+  const secondaryColor = isDarkTheme ? 'oklch(82% 0.111 230.318)' : 'oklch(73.37% 0.224 48.25)';
+  const errorColor = isDarkTheme ? 'oklch(73.7% 0.121 32.639)' : 'oklch(64.84% 0.293 29.349)';
+  const borderColor = isDarkTheme ? 'rgba(200, 190, 220, 0.2)' : 'rgba(0, 0, 0, 0.2)';
 
   // Set mounted state
   useEffect(() => {
@@ -133,14 +164,22 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className={`fixed top-0 z-50 w-full transition-all duration-300 ${
-        isScrolled 
-          ? "bg-base-100 border-b border-base-300 shadow-sm" 
-          : ""
-      }`}>
+      <nav className={`fixed top-0 z-50 w-full transition-all duration-300`}
+        style={{
+          backgroundColor: isScrolled ? bgPrimary : 'transparent',
+          borderBottom: isScrolled ? `1px solid ${borderColor}` : 'none',
+          boxShadow: isScrolled ? '0 1px 2px 0 rgba(0, 0, 0, 0.05)' : 'none'
+        }}
+      >
         <div className={`max-w-7xl mx-auto flex items-center justify-between px-4 py-4 transition-all duration-300 ${
-          !isScrolled && !isMobileMenuOpen ? "mx-8 mt-4 bg-white/10 backdrop-blur-md rounded-full shadow-lg border border-white/20" : ""
-        } ${isMobileMenuOpen ? "md:flex hidden" : ""}`}>
+          !isScrolled && !isMobileMenuOpen ? "mx-8 mt-4 rounded-full shadow-lg" : ""
+        } ${isMobileMenuOpen ? "md:flex hidden" : ""}`}
+          style={{
+            backgroundColor: !isScrolled && !isMobileMenuOpen ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
+            backdropFilter: !isScrolled && !isMobileMenuOpen ? 'blur(12px)' : 'none',
+            border: !isScrolled && !isMobileMenuOpen ? '1px solid rgba(255, 255, 255, 0.2)' : 'none'
+          }}
+        >
           {/* Logo */}
           <Link href="#hero" className="flex items-center gap-2">
             <div>
@@ -164,11 +203,14 @@ export default function Navbar() {
                 <a
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className={`cursor-target text-base font-medium transition-all duration-300 cursor-pointer ${
-                    isScrolled 
-                      ? "text-base-content hover:text-primary" 
-                      : "text-white hover:text-primary"
-                  }`}
+                  className="cursor-target text-base font-medium transition-all duration-300 cursor-pointer"
+                  style={{ 
+                    color: isScrolled 
+                      ? (hoveredLink === link.href ? primaryColor : textColor)
+                      : (hoveredLink === link.href ? primaryColor : 'white')
+                  }}
+                  onMouseEnter={() => setHoveredLink(link.href)}
+                  onMouseLeave={() => setHoveredLink(null)}
                 >
                   {link.label} 
                 </a>
@@ -180,9 +222,15 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-2">
             {/* Theme Switcher */}
             <div className="dropdown dropdown-end">
-              <label tabIndex={0} className={`btn btn-circle transition-all duration-300 ${
-                isScrolled ? "btn-ghost" : "btn-ghost text-white hover:bg-white/20"
-              }`}>
+              <label 
+                tabIndex={0} 
+                className="btn btn-circle transition-all duration-300"
+                style={{
+                  backgroundColor: 'transparent',
+                  borderColor: 'transparent',
+                  color: isScrolled ? textColor : 'white'
+                }}
+              >
                 {theme === "acid" ? (
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-5 w-5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
@@ -195,13 +243,15 @@ export default function Navbar() {
               </label>
               <ul
                 tabIndex={0}
-                className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-32 mt-2"
+                className="dropdown-content menu p-2 shadow rounded-box w-32 mt-2"
+                style={{ backgroundColor: bgPrimary }}
               >
                 <li>
                   <button
-                    className={
-                      theme === "acid" ? "cursor-target active text-primary flex items-center gap-2" : "cursor-target flex items-center gap-2"
-                    }
+                    className="cursor-target flex items-center gap-2"
+                    style={{ 
+                      color: theme === "acid" ? primaryColor : textColor 
+                    }}
                     onClick={() => handleTheme("acid")}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-4 w-4">
@@ -212,9 +262,10 @@ export default function Navbar() {
                 </li>
                 <li>
                   <button
-                    className={
-                      theme === "synthwave" ? "cursor-target active text-primary flex items-center gap-2" : "cursor-target flex items-center gap-2"
-                    }
+                    className="cursor-target flex items-center gap-2"
+                    style={{ 
+                      color: theme === "synthwave" ? primaryColor : textColor 
+                    }}
                     onClick={() => handleTheme("synthwave")}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-4 w-4">
@@ -231,18 +282,52 @@ export default function Navbar() {
               <div className="flex items-center space-x-2 ml-2">
                 <Link
                   href="/dashboard"
-                  className={`cursor-target btn btn-sm transition-all duration-300 ${
-                    isScrolled ? "btn-secondary" : "btn-outline text-white border-white hover:bg-white hover:text-secondary"
-                  }`}
+                  className="cursor-target btn btn-sm transition-all duration-300"
+                  style={{
+                    backgroundColor: isScrolled ? secondaryColor : 'transparent',
+                    borderColor: isScrolled ? 'transparent' : 'white',
+                    color: isScrolled ? 'white' : 'white',
+                    borderWidth: isScrolled ? '0' : '1px',
+                    borderStyle: 'solid'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isScrolled) {
+                      e.currentTarget.style.backgroundColor = 'white';
+                      e.currentTarget.style.color = secondaryColor;
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isScrolled) {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = 'white';
+                    }
+                  }}
                 >
                   Dashboard
                 </Link>
                 <button
                   onClick={handleLogout}
                   disabled={authLoading}
-                  className={`cursor-target btn btn-sm transition-all duration-300 ${
-                    isScrolled ? "btn-error" : "btn-outline text-white border-white hover:bg-white hover:text-error"
-                  }`}
+                  className="cursor-target btn btn-sm transition-all duration-300"
+                  style={{
+                    backgroundColor: isScrolled ? errorColor : 'transparent',
+                    borderColor: isScrolled ? 'transparent' : 'white',
+                    color: isScrolled ? 'white' : 'white',
+                    borderWidth: isScrolled ? '0' : '1px',
+                    borderStyle: 'solid'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isScrolled) {
+                      e.currentTarget.style.backgroundColor = 'white';
+                      e.currentTarget.style.color = errorColor;
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isScrolled) {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = 'white';
+                    }
+                  }}
                 >
                   {authLoading ? '...' : 'Logout'}
                 </button>
@@ -250,9 +335,26 @@ export default function Navbar() {
             ) : (
               <Link 
                 href="/login" 
-                className={`cursor-target btn btn-sm ml-2 transition-all duration-300 ${
-                  isScrolled ? "btn-primary" : "btn-outline border-white hover:bg-white hover:text-primary"
-                } ${!isScrolled ? "text-white" : "text-white"}`}
+                className="cursor-target btn btn-sm ml-2 transition-all duration-300"
+                style={{
+                  backgroundColor: isScrolled ? primaryColor : 'transparent',
+                  borderColor: isScrolled ? 'transparent' : 'white',
+                  color: 'white',
+                  borderWidth: isScrolled ? '0' : '1px',
+                  borderStyle: 'solid'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isScrolled) {
+                    e.currentTarget.style.backgroundColor = 'white';
+                    e.currentTarget.style.color = primaryColor;
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isScrolled) {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.color = 'white';
+                  }
+                }}
               >
                 Login
               </Link>
@@ -263,9 +365,15 @@ export default function Navbar() {
           <div className="flex md:hidden items-center gap-2">
             {/* Mobile Theme Switcher */}
             <div className="dropdown dropdown-end">
-              <label tabIndex={0} className={`btn btn-circle btn-sm transition-all duration-300 ${
-                isScrolled ? "btn-ghost" : "btn-ghost text-white hover:bg-white/20"
-              }`}>
+              <label 
+                tabIndex={0} 
+                className="btn btn-circle btn-sm transition-all duration-300"
+                style={{
+                  backgroundColor: 'transparent',
+                  borderColor: 'transparent',
+                  color: isScrolled ? textColor : 'white'
+                }}
+              >
                 {theme === "acid" ? (
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-4 w-4">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
@@ -278,13 +386,15 @@ export default function Navbar() {
               </label>
               <ul
                 tabIndex={0}
-                className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-32 mt-2"
+                className="dropdown-content menu p-2 shadow rounded-box w-32 mt-2"
+                style={{ backgroundColor: bgPrimary }}
               >
                 <li>
                   <button
-                    className={
-                      theme === "acid" ? "cursor-target active text-primary flex items-center gap-2" : "cursor-target flex items-center gap-2"
-                    }
+                    className="cursor-target flex items-center gap-2"
+                    style={{ 
+                      color: theme === "acid" ? primaryColor : textColor 
+                    }}
                     onClick={() => handleTheme("acid")}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-3 w-3">
@@ -295,9 +405,10 @@ export default function Navbar() {
                 </li>
                 <li>
                   <button
-                    className={
-                      theme === "synthwave" ? "cursor-target active text-primary flex items-center gap-2" : "cursor-target flex items-center gap-2"
-                    }
+                    className="cursor-target flex items-center gap-2"
+                    style={{ 
+                      color: theme === "synthwave" ? primaryColor : textColor 
+                    }}
                     onClick={() => handleTheme("synthwave")}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-3 w-3">
@@ -312,9 +423,12 @@ export default function Navbar() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`cursor-target btn btn-circle btn-sm transition-all duration-300 ${
-                isScrolled ? "btn-ghost" : "btn-ghost text-white hover:bg-white/20"
-              }`}
+              className="cursor-target btn btn-circle btn-sm transition-all duration-300"
+              style={{
+                backgroundColor: 'transparent',
+                borderColor: 'transparent',
+                color: isScrolled ? textColor : 'white'
+              }}
               aria-label="Menu"
             >
               {isMobileMenuOpen ? (
@@ -342,18 +456,24 @@ export default function Navbar() {
         ></div>
         
         {/* Drawer */}
-        <div className={`absolute right-0 top-0 h-full w-80 bg-base-100 shadow-xl transform transition-transform duration-300 ${
+        <div className={`absolute right-0 top-0 h-full w-80 shadow-xl transform transition-transform duration-300 ${
           isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}>
+        }`}
+          style={{ backgroundColor: bgPrimary }}
+        >
           <div className="p-6">
             {/* Drawer Header */}
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-xl font-semibold text-base-content">Menu</h2>
+              <h2 className="text-xl font-semibold" style={{ color: textColor }}>Menu</h2>
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="cursor-target btn btn-circle btn-sm btn-ghost"
+                className="cursor-target btn btn-circle btn-sm"
+                style={{
+                  backgroundColor: 'transparent',
+                  borderColor: 'transparent'
+                }}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-5 w-5">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-5 w-5" style={{ color: textColor }}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -366,7 +486,13 @@ export default function Navbar() {
                   <a
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
-                    className="block p-3 rounded-lg text-base-content hover:bg-base-200 transition-colors duration-200 cursor-pointer"
+                    className="block p-3 rounded-lg transition-colors duration-200 cursor-pointer"
+                    style={{ 
+                      color: textColor,
+                      backgroundColor: hoveredLink === link.href ? bgSecondary : 'transparent'
+                    }}
+                    onMouseEnter={() => setHoveredLink(link.href)}
+                    onMouseLeave={() => setHoveredLink(null)}
                   >
                     {link.label}
                   </a>
@@ -375,13 +501,18 @@ export default function Navbar() {
             </ul>
 
             {/* Mobile Controls */}
-            <div className="space-y-4 border-t border-base-300 pt-6">
+            <div className="space-y-4 pt-6" style={{ borderTop: `1px solid ${borderColor}` }}>
               {/* Auth Buttons */}
               {isAuthenticated && user ? (
                 <div className="space-y-2">
                   <Link 
                     href="/dashboard" 
-                    className="cursor-target btn btn-secondary w-full"
+                    className="cursor-target btn w-full"
+                    style={{
+                      backgroundColor: secondaryColor,
+                      color: 'white',
+                      borderColor: 'transparent'
+                    }}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Dashboard
@@ -392,7 +523,12 @@ export default function Navbar() {
                       handleLogout();
                     }}
                     disabled={authLoading}
-                    className="cursor-target btn btn-error w-full"
+                    className="cursor-target btn w-full"
+                    style={{
+                      backgroundColor: errorColor,
+                      color: 'white',
+                      borderColor: 'transparent'
+                    }}
                   >
                     {authLoading ? 'Logging out...' : 'Logout'}
                   </button>
@@ -400,7 +536,12 @@ export default function Navbar() {
               ) : (
                 <Link 
                   href="/login" 
-                  className="cursor-target btn btn-primary w-full"
+                  className="cursor-target btn w-full"
+                  style={{
+                    backgroundColor: primaryColor,
+                    color: 'white',
+                    borderColor: 'transparent'
+                  }}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Login

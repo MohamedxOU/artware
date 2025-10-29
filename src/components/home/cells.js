@@ -11,7 +11,6 @@ const cells = [
     description: "We create innovative web and mobile applications with the latest technologies to optimize your digital presence.",
     responsable: "Oucharrou Mohamed",
     activities: ["HTML/CSS","JavaScript","Java","Flutter", ],
-    gradient: "bg-gradient-to-br from-green-400 to-blue-500",
     buttonText: "Learn more →",
     image: "/cells/dev.png"
   },
@@ -23,7 +22,6 @@ const cells = [
     description: "We develop AI solutions to automate your processes and improve your business performance.",
     responsable: "Laghrib salim",
     activities: ["Machine Learning", "Computer Vision", "NLP", "data science"],
-    gradient: "bg-gradient-to-br from-yellow-400 to-orange-500",
     buttonText: "Learn more →",
     image: "/cells/ia.png"
   },
@@ -35,7 +33,6 @@ const cells = [
     description: "We excel in solving complex problems and participate in international competitions.",
     responsable: "Ayoub bouaik",
     activities: ["Algorithms", "Data Structures", "Codeforces", "ACM ICPC"],
-    gradient: "bg-gradient-to-br from-blue-400 to-purple-600",
     buttonText: "Learn more →",
     image: "/cells/cp.png"
   },
@@ -47,7 +44,6 @@ const cells = [
     description: "We organize tech events and create dynamic communities to foster learning.",
     responsable: "Mona Filali",
     activities: ["Tech Talks", "Games", "Travel", "Solidarity"],
-    gradient: "bg-gradient-to-br from-pink-400 to-purple-600",
     buttonText: "Learn more →",
     image: "/cells/soc.png"
   }
@@ -56,6 +52,22 @@ const cells = [
 export default function Cells() {
   const [isVisible, setIsVisible] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
+
+  useEffect(() => {
+    const checkTheme = () => {
+      const htmlElement = document.documentElement;
+      const currentTheme = htmlElement.getAttribute('data-theme');
+      setIsDarkTheme(currentTheme === 'synthwave');
+    };
+    checkTheme();
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme']
+    });
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -82,15 +94,30 @@ export default function Cells() {
     };
   }, []);
 
+  // Theme colors
+  const bgPrimary = isDarkTheme ? 'oklch(98% 0.003 247.858)' : 'oklch(98% 0 0)';
+  const bgSecondary = isDarkTheme ? 'oklch(20% 0.09 281.288)' : 'oklch(95% 0 0)';
+  const bgTertiary = isDarkTheme ? 'oklch(25% 0.09 281.288)' : 'oklch(91% 0 0)';
+  const textColor = isDarkTheme ? 'oklch(78% 0.115 274.713)' : 'oklch(0% 0 0)';
+  const primaryColor = isDarkTheme ? 'oklch(65% 0.241 354.308)' : 'oklch(65% 0.241 354.308)';
+  const textMuted = isDarkTheme ? 'rgba(200, 190, 220, 0.7)' : 'rgba(0, 0, 0, 0.7)';
+  const borderColor = isDarkTheme ? 'rgba(120, 100, 150, 0.2)' : 'rgba(0, 0, 0, 0.2)';
+
   return (
-    <section id="cells" className="w-full py-16 bg-gradient-to-br from-base-100 via-base-200 to-base-300">
+    <section id="cells" className="w-full py-16" 
+      style={{ 
+        background: isDarkTheme 
+          ? 'linear-gradient(to bottom right, oklch(98% 0.003 247.858), oklch(20% 0.09 281.288), oklch(25% 0.09 281.288))'
+          : 'linear-gradient(to bottom right, oklch(98% 0 0), oklch(95% 0 0), oklch(91% 0 0))'
+      }}
+    >
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-base-content">
-            Our Cells, <span className="text-primary">Your Key to Tech Success</span>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: textColor }}>
+            Our Cells, <span style={{ color: primaryColor }}>Your Key to Tech Success</span>
           </h2>
-          <p className="text-lg text-base-content/70 max-w-2xl mx-auto">
+          <p className="text-lg max-w-2xl mx-auto" style={{ color: textMuted }}>
             Discover our opportunities, develop your skills, and secure your technological future with us
           </p>
         </div>
@@ -101,11 +128,28 @@ export default function Cells() {
             <button
               key={cell.id}
               onClick={() => setActiveTab(index)}
-              className={`cursor-target px-6 py-3 rounded-full font-semibold transition-all duration-300 border-2 ${
-                activeTab === index
-                  ? 'bg-primary text-white border-primary shadow-lg scale-105'
-                  : 'bg-transparent text-base-content border-base-content/20 hover:border-primary/50 hover:text-primary hover:scale-102'
-              }`}
+              className="cursor-target px-6 py-3 rounded-full font-semibold transition-all duration-300 border-2"
+              style={{
+                backgroundColor: activeTab === index ? primaryColor : 'transparent',
+                color: activeTab === index ? 'white' : textColor,
+                borderColor: activeTab === index ? primaryColor : borderColor,
+                boxShadow: activeTab === index ? '0 10px 15px -3px rgba(0, 0, 0, 0.1)' : 'none',
+                transform: activeTab === index ? 'scale(1.05)' : 'scale(1)'
+              }}
+              onMouseEnter={(e) => {
+                if (activeTab !== index) {
+                  e.currentTarget.style.borderColor = `${primaryColor}80`;
+                  e.currentTarget.style.color = primaryColor;
+                  e.currentTarget.style.transform = 'scale(1.02)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (activeTab !== index) {
+                  e.currentTarget.style.borderColor = borderColor;
+                  e.currentTarget.style.color = textColor;
+                  e.currentTarget.style.transform = 'scale(1)';
+                }
+              }}
             >
               {cell.title}
             </button>
@@ -118,24 +162,40 @@ export default function Cells() {
             {/* Navigation Arrows */}
             <button 
               onClick={() => setActiveTab(activeTab > 0 ? activeTab - 1 : cells.length - 1)}
-              className="cursor-target absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-base-100 hover:bg-base-200 border border-base-300 p-3 rounded-full shadow-lg transition-all duration-300"
+              className="cursor-target absolute left-2 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full shadow-lg transition-all duration-300"
+              style={{ 
+                backgroundColor: bgPrimary, 
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                borderColor: borderColor 
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = bgSecondary}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = bgPrimary}
             >
-              <svg className="w-5 h-5 text-base-content" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" style={{ color: textColor }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
             
             <button 
               onClick={() => setActiveTab(activeTab < cells.length - 1 ? activeTab + 1 : 0)}
-              className="cursor-target absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-base-100 hover:bg-base-200 border border-base-300 p-3 rounded-full shadow-lg transition-all duration-300"
+              className="cursor-target absolute right-2 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full shadow-lg transition-all duration-300"
+              style={{ 
+                backgroundColor: bgPrimary, 
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                borderColor: borderColor 
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = bgSecondary}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = bgPrimary}
             >
-              <svg className="w-5 h-5 text-base-content" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" style={{ color: textColor }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
 
             {/* Mobile Card */}
-            <div className="bg-base-100 rounded-3xl shadow-xl overflow-hidden mx-4">
+            <div className="rounded-3xl shadow-xl overflow-hidden mx-4" style={{ backgroundColor: bgPrimary }}>
               <div className="relative">
                 <Image
                   src={cells[activeTab].image}
@@ -144,37 +204,38 @@ export default function Cells() {
                   height={300}
                   className="w-full h-48 object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6), transparent, transparent)' }}></div>
                 
                 {/* Card indicator */}
-                <div className="absolute top-4 right-4 bg-primary/90 backdrop-blur-sm px-3 py-1 rounded-full">
+                <div className="absolute top-4 right-4 backdrop-blur-sm px-3 py-1 rounded-full" style={{ backgroundColor: `${primaryColor}e6` }}>
                   <span className="text-xs font-semibold text-white">{activeTab + 1}/{cells.length}</span>
                 </div>
               </div>
 
               <div className="p-6">
-                <h3 className="text-2xl font-bold mb-3 text-base-content">
+                <h3 className="text-2xl font-bold mb-3" style={{ color: textColor }}>
                   {cells[activeTab].title}
                 </h3>
                 
-                <p className="text-base-content/70 text-sm leading-relaxed mb-4">
+                <p className="text-sm leading-relaxed mb-4" style={{ color: textMuted }}>
                   {cells[activeTab].description}
                 </p>
 
                 {/* Technologies */}
                 <div className="mb-4">
-                  <h4 className="text-sm font-semibold mb-2 text-base-content">Technologies</h4>
+                  <h4 className="text-sm font-semibold mb-2" style={{ color: textColor }}>Technologies</h4>
                   <div className="flex flex-wrap gap-1">
                     {cells[activeTab].activities.slice(0, 3).map((activity, actIndex) => (
                       <span
                         key={actIndex}
-                        className="px-2 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium"
+                        className="px-2 py-1 rounded-full text-xs font-medium"
+                        style={{ backgroundColor: `${primaryColor}1a`, color: primaryColor }}
                       >
                         {activity}
                       </span>
                     ))}
                     {cells[activeTab].activities.length > 3 && (
-                      <span className="px-2 py-1 bg-base-200 text-base-content/60 rounded-full text-xs">
+                      <span className="px-2 py-1 rounded-full text-xs" style={{ backgroundColor: bgSecondary, color: textMuted }}>
                         +{cells[activeTab].activities.length - 3}
                       </span>
                     )}
@@ -182,14 +243,14 @@ export default function Cells() {
                 </div>
 
                 {/* Stats */}
-                <div className="flex justify-between items-center pt-4 border-t border-base-content/10">
+                <div className="flex justify-between items-center pt-4" style={{ borderTop: `1px solid ${borderColor}` }}>
                   <div>
-                    <span className="text-xs text-base-content/60">Responsable</span>
-                    <p className="font-semibold text-base-content text-sm">{cells[activeTab].responsable}</p>
+                    <span className="text-xs" style={{ color: textMuted }}>Responsable</span>
+                    <p className="font-semibold text-sm" style={{ color: textColor }}>{cells[activeTab].responsable}</p>
                   </div>
                   <div className="text-right">
-                    <span className="text-xs text-base-content/60">Réalisations</span>
-                    <p className="font-bold text-primary text-lg">{cells[activeTab].subtitle}</p>
+                    <span className="text-xs" style={{ color: textMuted }}>Réalisations</span>
+                    <p className="font-bold text-lg" style={{ color: primaryColor }}>{cells[activeTab].subtitle}</p>
                   </div>
                 </div>
               </div>
@@ -201,9 +262,11 @@ export default function Cells() {
                 <button
                   key={index}
                   onClick={() => setActiveTab(index)}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    activeTab === index ? 'bg-primary w-6' : 'bg-base-content/30'
-                  }`}
+                  className="h-2 rounded-full transition-all duration-300"
+                  style={{
+                    backgroundColor: activeTab === index ? primaryColor : `${textColor}4d`,
+                    width: activeTab === index ? '1.5rem' : '0.5rem'
+                  }}
                 />
               ))}
             </div>
@@ -239,22 +302,27 @@ export default function Cells() {
                   {/* Content Section */}
                   <div className="space-y-6">
                     <div>
-                      <h3 className="text-3xl md:text-4xl font-bold mb-4 text-base-content">
+                      <h3 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: textColor }}>
                         {cell.title}
                       </h3>
-                      <p className="text-lg text-base-content/70 leading-relaxed">
+                      <p className="text-lg leading-relaxed" style={{ color: textMuted }}>
                         {cell.description}
                       </p>
                     </div>
 
                     {/* Activities */}
                     <div>
-                      <h4 className="text-lg font-semibold mb-3 text-base-content">Technologies & Compétences</h4>
+                      <h4 className="text-lg font-semibold mb-3" style={{ color: textColor }}>Technologies & Compétences</h4>
                       <div className="flex flex-wrap gap-2">
                         {cell.activities.map((activity, actIndex) => (
                           <span
                             key={actIndex}
-                            className="px-3 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium border border-primary/20"
+                            className="px-3 py-2 rounded-full text-sm font-medium"
+                            style={{ 
+                              backgroundColor: `${primaryColor}1a`, 
+                              color: primaryColor,
+                              border: `1px solid ${primaryColor}33`
+                            }}
                           >
                             {activity}
                           </span>
@@ -263,14 +331,14 @@ export default function Cells() {
                     </div>
 
                     {/* Stats & Responsable */}
-                    <div className="grid grid-cols-2 gap-6 pt-6 border-t border-base-content/10">
+                    <div className="grid grid-cols-2 gap-6 pt-6" style={{ borderTop: `1px solid ${borderColor}` }}>
                       <div>
-                        <span className="text-sm text-base-content/60 block">Responsable</span>
-                        <p className="font-semibold text-base-content text-lg">{cell.responsable}</p>
+                        <span className="text-sm block" style={{ color: textMuted }}>Responsable</span>
+                        <p className="font-semibold text-lg" style={{ color: textColor }}>{cell.responsable}</p>
                       </div>
                       <div className="text-right">
-                        <span className="text-sm text-base-content/60 block">Réalisations</span>
-                        <p className="font-bold text-primary text-2xl">{cell.subtitle}</p>
+                        <span className="text-sm block" style={{ color: textMuted }}>Réalisations</span>
+                        <p className="font-bold text-2xl" style={{ color: primaryColor }}>{cell.subtitle}</p>
                       </div>
                     </div>
 

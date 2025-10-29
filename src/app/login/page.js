@@ -9,7 +9,7 @@ import { useTheme } from "next-themes";
 import { useGuestRoute } from "@/hooks/useAuth";
 import TargetCursor from "@/components/TargetCursor";
 
-function LoginContent() {
+function LoginContent() { 
   const router = useRouter(); 
   
   // Route protection - redirect authenticated users
@@ -22,6 +22,39 @@ function LoginContent() {
   
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
+  
+  // Theme detection
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
+  
+  useEffect(() => {
+    const checkTheme = () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      setIsDarkTheme(currentTheme === 'synthwave');
+    };
+    
+    checkTheme();
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme']
+    });
+    
+    return () => observer.disconnect();
+  }, []);
+  
+  // Theme colors
+  const bgPrimary = isDarkTheme ? 'oklch(98% 0.003 247.858)' : 'oklch(98% 0 0)';
+  const bgSecondary = isDarkTheme ? 'oklch(20% 0.09 281.288)' : 'oklch(95% 0 0)';
+  const bgTertiary = isDarkTheme ? 'oklch(25% 0.09 281.288)' : 'oklch(91% 0 0)';
+  const textColor = isDarkTheme ? 'oklch(78% 0.115 274.713)' : 'oklch(0% 0 0)';
+  const primaryColor = 'oklch(65% 0.241 354.308)';
+  const secondaryColor = isDarkTheme ? 'oklch(82% 0.111 230.318)' : 'oklch(73.37% 0.224 48.25)';
+  const accentColor = isDarkTheme ? 'oklch(75% 0.183 55.934)' : 'oklch(92.78% 0.264 122.962)';
+  const errorColor = isDarkTheme ? 'oklch(73.7% 0.121 32.639)' : 'oklch(64.84% 0.293 29.349)';
+  const textMuted = isDarkTheme ? 'rgba(200, 190, 220, 0.7)' : 'rgba(0, 0, 0, 0.7)';
+  const textLight = isDarkTheme ? 'rgba(200, 190, 220, 0.5)' : 'rgba(0, 0, 0, 0.5)';
+  const borderColor = isDarkTheme ? 'rgba(200, 190, 220, 0.2)' : 'rgba(0, 0, 0, 0.2)';
+  const borderLight = isDarkTheme ? 'rgba(200, 190, 220, 0.3)' : 'rgba(0, 0, 0, 0.3)';
  
   useEffect(() => {
     setTimeout(() => setShowCard(true), 300);
@@ -30,10 +63,10 @@ function LoginContent() {
   // Show loading while checking authentication
   if (authCheckLoading) {
     return (
-      <div className="min-h-screen bg-base-300 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: bgTertiary }}>
         <div className="text-center">
-          <div className="loading loading-spinner loading-lg text-primary"></div>
-          <p className="mt-4 text-base-content/70">Vérification...</p>
+          <div className="loading loading-spinner loading-lg" style={{ color: primaryColor }}></div>
+          <p className="mt-4" style={{ color: textMuted }}>Vérification...</p>
         </div>
       </div>
     );
@@ -68,7 +101,7 @@ function LoginContent() {
   const isDarkMode = theme === 'synthwave';
 
   return (
-    <div className={`relative min-h-screen bg-base-300 overflow-hidden ${isDarkMode ? 'opacity-80' : 'opacity-100'}`}>
+    <div className={`relative min-h-screen overflow-hidden ${isDarkMode ? 'opacity-80' : 'opacity-100'}`} style={{ backgroundColor: bgTertiary }}>
       <TargetCursor 
               spinDuration={2}
               hideDefaultCursor={true}
@@ -76,51 +109,57 @@ function LoginContent() {
       {/* Background Textures - covering entire page */}
       <div className="absolute inset-0">
         {/* Large primary circles */}
-        <div className="absolute top-10 left-10 w-40 h-40 bg-primary/15 rounded-full blur-2xl"></div>
-        <div className="absolute bottom-20 right-20 w-48 h-48 bg-primary/12 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/3 right-10 w-36 h-36 bg-primary/10 rounded-full blur-2xl"></div>
+        <div className="absolute top-10 left-10 w-40 h-40 rounded-full blur-2xl" style={{ backgroundColor: `${primaryColor}26` }}></div>
+        <div className="absolute bottom-20 right-20 w-48 h-48 rounded-full blur-3xl" style={{ backgroundColor: `${primaryColor}1f` }}></div>
+        <div className="absolute top-1/3 right-10 w-36 h-36 rounded-full blur-2xl" style={{ backgroundColor: `${primaryColor}1a` }}></div>
         
         {/* Secondary color patterns */}
-        <div className="absolute top-1/2 left-1/4 w-32 h-32 bg-secondary/18 rounded-full blur-xl"></div>
-        <div className="absolute bottom-1/4 left-20 w-44 h-44 bg-secondary/12 rounded-full blur-3xl"></div>
-        <div className="absolute top-20 right-1/3 w-28 h-28 bg-secondary/15 rounded-full blur-xl"></div>
+        <div className="absolute top-1/2 left-1/4 w-32 h-32 rounded-full blur-xl" style={{ backgroundColor: `${secondaryColor}2e` }}></div>
+        <div className="absolute bottom-1/4 left-20 w-44 h-44 rounded-full blur-3xl" style={{ backgroundColor: `${secondaryColor}1f` }}></div>
+        <div className="absolute top-20 right-1/3 w-28 h-28 rounded-full blur-xl" style={{ backgroundColor: `${secondaryColor}26` }}></div>
         
         {/* Accent patterns */}
-        <div className="absolute top-3/4 left-1/3 w-24 h-24 bg-accent/20 rounded-full blur-lg"></div>
-        <div className="absolute bottom-10 right-1/4 w-38 h-38 bg-accent/14 rounded-full blur-2xl"></div>
-        <div className="absolute top-1/4 left-1/2 w-30 h-30 bg-accent/12 rounded-full blur-xl"></div>
+        <div className="absolute top-3/4 left-1/3 w-24 h-24 rounded-full blur-lg" style={{ backgroundColor: `${accentColor}33` }}></div>
+        <div className="absolute bottom-10 right-1/4 w-38 h-38 rounded-full blur-2xl" style={{ backgroundColor: `${accentColor}24` }}></div>
+        <div className="absolute top-1/4 left-1/2 w-30 h-30 rounded-full blur-xl" style={{ backgroundColor: `${accentColor}1f` }}></div>
         
         {/* Additional geometric patterns */}
-        <div className="absolute top-40 left-1/3 w-20 h-60 bg-primary/8 rounded-full blur-2xl rotate-45"></div>
-        <div className="absolute bottom-40 right-1/3 w-16 h-50 bg-secondary/10 rounded-full blur-xl -rotate-45"></div>
-        <div className="absolute top-1/2 right-20 w-18 h-45 bg-accent/12 rounded-full blur-lg rotate-12"></div>
+        <div className="absolute top-40 left-1/3 w-20 h-60 rounded-full blur-2xl rotate-45" style={{ backgroundColor: `${primaryColor}14` }}></div>
+        <div className="absolute bottom-40 right-1/3 w-16 h-50 rounded-full blur-xl -rotate-45" style={{ backgroundColor: `${secondaryColor}1a` }}></div>
+        <div className="absolute top-1/2 right-20 w-18 h-45 rounded-full blur-lg rotate-12" style={{ backgroundColor: `${accentColor}1f` }}></div>
         
         {/* Small scattered dots */}
-        <div className="absolute top-16 left-1/2 w-12 h-12 bg-primary/25 rounded-full blur-sm"></div>
-        <div className="absolute top-1/3 left-20 w-8 h-8 bg-secondary/30 rounded-full blur-sm"></div>
-        <div className="absolute bottom-1/3 right-16 w-10 h-10 bg-accent/25 rounded-full blur-sm"></div>
-        <div className="absolute top-2/3 left-16 w-14 h-14 bg-primary/20 rounded-full blur-md"></div>
-        <div className="absolute bottom-16 left-1/2 w-16 h-16 bg-secondary/18 rounded-full blur-md"></div>
+        <div className="absolute top-16 left-1/2 w-12 h-12 rounded-full blur-sm" style={{ backgroundColor: `${primaryColor}40` }}></div>
+        <div className="absolute top-1/3 left-20 w-8 h-8 rounded-full blur-sm" style={{ backgroundColor: `${secondaryColor}4d` }}></div>
+        <div className="absolute bottom-1/3 right-16 w-10 h-10 rounded-full blur-sm" style={{ backgroundColor: `${accentColor}40` }}></div>
+        <div className="absolute top-2/3 left-16 w-14 h-14 rounded-full blur-md" style={{ backgroundColor: `${primaryColor}33` }}></div>
+        <div className="absolute bottom-16 left-1/2 w-16 h-16 rounded-full blur-md" style={{ backgroundColor: `${secondaryColor}2e` }}></div>
         
         {/* Overlapping larger shapes */}
-        <div className="absolute top-0 left-1/4 w-56 h-56 bg-primary/6 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-1/4 w-52 h-52 bg-secondary/8 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-0 w-48 h-48 bg-accent/7 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 right-0 w-50 h-50 bg-primary/5 rounded-full blur-3xl"></div>
+        <div className="absolute top-0 left-1/4 w-56 h-56 rounded-full blur-3xl" style={{ backgroundColor: `${primaryColor}0f` }}></div>
+        <div className="absolute bottom-0 right-1/4 w-52 h-52 rounded-full blur-3xl" style={{ backgroundColor: `${secondaryColor}14` }}></div>
+        <div className="absolute top-1/2 left-0 w-48 h-48 rounded-full blur-3xl" style={{ backgroundColor: `${accentColor}12` }}></div>
+        <div className="absolute top-1/2 right-0 w-50 h-50 rounded-full blur-3xl" style={{ backgroundColor: `${primaryColor}0d` }}></div>
       </div>
 
       <AuthNavbar />
 
       {/* Centered Login Card */}
       <div className="relative z-10 flex items-center justify-center p-6 min-h-screen pt-24">
-        <div className={`w-full max-w-md bg-base-100/95 backdrop-blur-md rounded-3xl shadow-2xl border border-base-300/20 p-8 my-8 transition-all duration-1000 ${
+        <div className={`w-full max-w-md rounded-3xl shadow-2xl p-8 my-8 transition-all duration-1000 ${
           forms.showCard ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
-        }`}>
+        }`}
+          style={{
+            backgroundColor: `${bgPrimary}f2`,
+            backdropFilter: 'blur(12px)',
+            border: `1px solid ${borderColor}`
+          }}
+        >
           
           {/* Login Header */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-base-content mb-2">Member Login</h1>
-            <p className="text-base-content/70">
+            <h1 className="text-3xl font-bold mb-2" style={{ color: textColor }}>Member Login</h1>
+            <p style={{ color: textMuted }}>
               Hey, Enter your details to get sign in<br />
               to your account
             </p>
@@ -130,7 +169,11 @@ function LoginContent() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Error Message */}
             {error && (
-              <div className="bg-error/10 border border-error/20 text-error px-4 py-3 rounded-xl text-sm">
+              <div className="px-4 py-3 rounded-xl text-sm" style={{ 
+                backgroundColor: `${errorColor}1a`, 
+                border: `1px solid ${errorColor}33`,
+                color: errorColor 
+              }}>
                 {error}
               </div>
             )}
@@ -143,7 +186,21 @@ function LoginContent() {
                 value={formData.email}
                 onChange={handleInputChange}
                 placeholder="Enter Email"
-                className="cursor-target w-full px-4 py-4 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
+                className="cursor-target w-full px-4 py-4 rounded-xl transition-all"
+                style={{
+                  backgroundColor: `${bgSecondary}80`,
+                  border: `1px solid ${borderLight}`,
+                  color: textColor,
+                  outline: 'none'
+                }}
+                onFocus={(e) => {
+                  e.target.style.boxShadow = `0 0 0 2px ${primaryColor}80`;
+                  e.target.style.borderColor = `${primaryColor}80`;
+                }}
+                onBlur={(e) => {
+                  e.target.style.boxShadow = 'none';
+                  e.target.style.borderColor = borderLight;
+                }}
                 required
                 disabled={isLoading}
               />
@@ -157,14 +214,31 @@ function LoginContent() {
                 value={formData.password}
                 onChange={handleInputChange}
                 placeholder="Password"
-                className="cursor-target w-full px-4 py-4 pr-12 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
+                className="cursor-target w-full px-4 py-4 pr-12 rounded-xl transition-all"
+                style={{
+                  backgroundColor: `${bgSecondary}80`,
+                  border: `1px solid ${borderLight}`,
+                  color: textColor,
+                  outline: 'none'
+                }}
+                onFocus={(e) => {
+                  e.target.style.boxShadow = `0 0 0 2px ${primaryColor}80`;
+                  e.target.style.borderColor = `${primaryColor}80`;
+                }}
+                onBlur={(e) => {
+                  e.target.style.boxShadow = 'none';
+                  e.target.style.borderColor = borderLight;
+                }}
                 required
                 disabled={isLoading}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="cursor-target absolute inset-y-0 right-0 flex items-center justify-center w-12 text-base-content/50 hover:text-base-content/70 transition-colors"
+                className="cursor-target absolute inset-y-0 right-0 flex items-center justify-center w-12 transition-colors"
+                style={{ color: textLight }}
+                onMouseEnter={(e) => e.currentTarget.style.color = textMuted}
+                onMouseLeave={(e) => e.currentTarget.style.color = textLight}
                 disabled={isLoading}
               >
                 {showPassword ? (
@@ -185,7 +259,10 @@ function LoginContent() {
               <button
                 type="button"
                 onClick={() => openModal('forgotPasswordModal')}
-                className="cursor-target text-base-content/60 hover:text-primary text-sm underline"
+                className="cursor-target text-sm underline transition-colors"
+                style={{ color: textLight }}
+                onMouseEnter={(e) => e.currentTarget.style.color = primaryColor}
+                onMouseLeave={(e) => e.currentTarget.style.color = textLight}
               >
                 Having trouble in sign in?
               </button>
@@ -195,7 +272,18 @@ function LoginContent() {
             <button
               type="submit"
               disabled={isLoading}
-              className="cursor-target w-full bg-primary hover:bg-primary/90 disabled:bg-primary/50 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+              className="cursor-target w-full font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+              style={{
+                backgroundColor: isLoading ? `${primaryColor}80` : primaryColor,
+                color: 'white',
+                cursor: isLoading ? 'not-allowed' : 'pointer'
+              }}
+              onMouseEnter={(e) => {
+                if (!isLoading) e.currentTarget.style.backgroundColor = `${primaryColor}e6`;
+              }}
+              onMouseLeave={(e) => {
+                if (!isLoading) e.currentTarget.style.backgroundColor = primaryColor;
+              }}
             >
               {isLoading ? (
                 <>
@@ -252,9 +340,15 @@ function LoginContent() {
 
             {/* Sign Up Link */}
             <div className="text-center mt-6">
-              <span className="text-base-content/60 text-sm">
+              <span className="text-sm" style={{ color: textLight }}>
                 Don&apos;t have an account?{" "}
-                <Link href="/register" className="cursor-target text-primary hover:text-primary/80 font-semibold">
+                <Link 
+                  href="/register" 
+                  className="cursor-target font-semibold transition-colors"
+                  style={{ color: primaryColor }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = `${primaryColor}cc`}
+                  onMouseLeave={(e) => e.currentTarget.style.color = primaryColor}
+                >
                   Register now
                 </Link>
               </span>
@@ -265,7 +359,7 @@ function LoginContent() {
 
       {/* Footer */}
       <div className="relative z-20 text-center py-6">
-        <p className="text-base-content/50 text-sm">
+        <p className="text-sm" style={{ color: textLight }}>
           Copyright @artware 2025 | Privacy Policy
         </p>
       </div>

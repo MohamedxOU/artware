@@ -8,6 +8,34 @@ export default function Gallery() {
   const [showMore, setShowMore] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const router = useRouter();
+  
+  // Theme detection
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
+  
+  useEffect(() => {
+    const checkTheme = () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      setIsDarkTheme(currentTheme === 'synthwave');
+    };
+    
+    checkTheme();
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme']
+    });
+    
+    return () => observer.disconnect();
+  }, []);
+  
+  // Theme colors
+  const bgPrimary = isDarkTheme ? 'oklch(98% 0.003 247.858)' : 'oklch(98% 0 0)';
+  const bgSecondary = isDarkTheme ? 'oklch(20% 0.09 281.288)' : 'oklch(95% 0 0)';
+  const bgTertiary = isDarkTheme ? 'oklch(25% 0.09 281.288)' : 'oklch(91% 0 0)';
+  const textColor = isDarkTheme ? 'oklch(78% 0.115 274.713)' : 'oklch(0% 0 0)';
+  const primaryColor = 'oklch(65% 0.241 354.308)';
+  const textMuted = isDarkTheme ? 'rgba(200, 190, 220, 0.7)' : 'rgba(0, 0, 0, 0.7)';
+  const borderColor = isDarkTheme ? 'rgba(200, 190, 220, 0.1)' : 'rgba(0, 0, 0, 0.1)';
 
   // Initial number of images to show (responsive)
   const [initialCount, setInitialCount] = useState(12); // Default count
@@ -139,15 +167,21 @@ export default function Gallery() {
   }, [selectedImage, items]);
 
   return (
-    <section id="gallery" className="relative bg-gradient-to-br from-base-100 via-base-200 to-base-100 h-full">
+    <section 
+      id="gallery" 
+      className="relative h-full"
+      style={{ 
+        background: `linear-gradient(to bottom right, ${bgPrimary}, ${bgSecondary}, ${bgPrimary})` 
+      }}
+    >
       {/* Section Title */}
       <div className={`text-center pt-20 pb-12 px-4 transition-all duration-1000 ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       }`}>
-        <h2 className="text-4xl md:text-5xl font-bold mb-4">
-          Our <span className="text-primary">Gallery</span>
+        <h2 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: textColor }}>
+          Our <span style={{ color: primaryColor }}>Gallery</span>
         </h2>
-        <p className="text-lg text-base-content/70 max-w-2xl mx-auto mb-6">
+        <p className="text-lg max-w-2xl mx-auto mb-6" style={{ color: textMuted }}>
           Discover our memorable events and the creative spirit that drives our community
         </p>
       </div>
@@ -180,7 +214,10 @@ export default function Gallery() {
                 />
                 
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div 
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" 
+                  style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6), transparent, transparent)' }}
+                />
                 
                 {/* Content overlay */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
@@ -205,7 +242,14 @@ export default function Gallery() {
           <div className="text-center mb-8">
             <button
               onClick={() => setShowMore(!showMore)}
-              className="cursor-target group inline-flex items-center px-6 py-3 bg-base-200 hover:bg-base-300 dark:bg-base-700 dark:hover:bg-base-600 text-base-content font-medium rounded-xl transition-all duration-300 hover:scale-105 shadow-md hover:shadow-lg border border-base-300 dark:border-base-600"
+              className="cursor-target group inline-flex items-center px-6 py-3 font-medium rounded-xl transition-all duration-300 hover:scale-105 shadow-md hover:shadow-lg"
+              style={{ 
+                backgroundColor: bgSecondary, 
+                color: textColor,
+                border: `1px solid ${borderColor}`
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = bgTertiary}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = bgSecondary}
             >
               <span className="mr-2">
                 {showMore ? 'Voir moins' : `Voir plus (${allItems.length - items.length} images)`}
@@ -253,7 +297,10 @@ export default function Gallery() {
               />
               
               {/* Image info */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
+              <div 
+                className="absolute bottom-0 left-0 right-0 p-6 rounded-b-lg"
+                style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)' }}
+              >
                 <h3 className="text-white text-xl font-bold mb-2">{selectedImage.title}</h3>
                 <p className="text-white/80 text-sm">{selectedImage.category}</p>
               </div>
