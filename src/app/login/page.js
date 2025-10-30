@@ -113,7 +113,7 @@ function LoginContent() {
 
       {/* Centered Login Card */}
       <div className="relative z-10 flex items-center justify-center p-6 min-h-screen pt-24">
-        <div className={`w-full max-w-md bg-base-100/95 backdrop-blur-md rounded-3xl shadow-2xl border border-base-300/20 p-8 my-8 transition-all duration-1000 ${
+        <div className={`w-full max-w-md bg-base-100 backdrop-blur-md rounded-3xl shadow-2xl border border-base-300 p-8 my-8 transition-all duration-1000 ${
           forms.showCard ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
         }`}>
           
@@ -130,7 +130,7 @@ function LoginContent() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Error Message */}
             {error && (
-              <div className="bg-error/10 border border-error/20 text-error px-4 py-3 rounded-xl text-sm">
+              <div className="bg-error border border-error text-error px-4 py-3 rounded-xl text-sm">
                 {error}
               </div>
             )}
@@ -143,7 +143,7 @@ function LoginContent() {
                 value={formData.email}
                 onChange={handleInputChange}
                 placeholder="Enter Email"
-                className="cursor-target w-full px-4 py-4 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
+                className="cursor-target w-full px-4 py-4 bg-base-200 border border-base-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all placeholder-base-content"
                 required
                 disabled={isLoading}
               />
@@ -157,14 +157,14 @@ function LoginContent() {
                 value={formData.password}
                 onChange={handleInputChange}
                 placeholder="Password"
-                className="cursor-target w-full px-4 py-4 pr-12 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
+                className="cursor-target w-full px-4 py-4 pr-12 bg-base-200 border border-base-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all placeholder-base-content"
                 required
                 disabled={isLoading}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="cursor-target absolute inset-y-0 right-0 flex items-center justify-center w-12 text-base-content/50 hover:text-base-content/70 transition-colors"
+                className="cursor-target absolute inset-y-0 right-0 flex items-center justify-center w-12 text-base-content hover:text-base-content transition-colors"
                 disabled={isLoading}
               >
                 {showPassword ? (
@@ -185,7 +185,7 @@ function LoginContent() {
               <button
                 type="button"
                 onClick={() => openModal('forgotPasswordModal')}
-                className="cursor-target text-base-content/60 hover:text-primary text-sm underline"
+                className="cursor-target text-base-content hover:text-primary text-sm underline"
               >
                 Having trouble in sign in?
               </button>
@@ -195,11 +195,11 @@ function LoginContent() {
             <button
               type="submit"
               disabled={isLoading}
-              className="cursor-target w-full bg-primary hover:bg-primary/90 disabled:bg-primary/50 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+              className="cursor-target w-full bg-primary hover:bg-primary disabled:bg-primary disabled:cursor-not-allowed text-white font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <>
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  <div className="w-4 h-4 border-2 border-white border-t-white rounded-full animate-spin"></div>
                   Connexion...
                 </>
               ) : (
@@ -252,9 +252,9 @@ function LoginContent() {
 
             {/* Sign Up Link */}
             <div className="text-center mt-6">
-              <span className="text-base-content/60 text-sm">
+              <span className="text-base-content text-sm">
                 Don&apos;t have an account?{" "}
-                <Link href="/register" className="cursor-target text-primary hover:text-primary/80 font-semibold">
+                <Link href="/register" className="cursor-target text-primary hover:text-primary font-semibold">
                   Register now
                 </Link>
               </span>
@@ -265,7 +265,7 @@ function LoginContent() {
 
       {/* Footer */}
       <div className="relative z-20 text-center py-6">
-        <p className="text-base-content/50 text-sm">
+        <p className="text-base-content text-sm">
           Copyright @artware 2025 | Privacy Policy
         </p>
       </div>
