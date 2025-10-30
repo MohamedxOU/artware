@@ -133,7 +133,7 @@ export default function Activities() {
 									{activities[selected].title}
 								</h3>
 								
-								<p className="text-base-content/80 text-lg leading-relaxed mb-8">
+								<p className="text-base-content text-lg leading-relaxed mb-8">
 									{activities[selected].description}
 								</p>
 							</div>
