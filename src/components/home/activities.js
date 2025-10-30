@@ -74,7 +74,7 @@ export default function Activities() {
 						</div>
 
 						{/* Mobile Navigation Tabs */}
-						<div className="bg-base-200/50 p-4">
+						<div className="bg-base-200 p-4">
 							<div className="flex overflow-x-auto gap-2 pb-2 horizontal-scroll-container">
 								{activities.map((activity, idx) => (
 									<button
@@ -82,7 +82,7 @@ export default function Activities() {
 										className={`cursor-target flex-shrink-0 px-4 py-3 rounded-xl transition-all duration-300 text-sm font-semibold whitespace-nowrap ${
 											selected === idx
 												? 'bg-primary text-white shadow-lg'
-												: 'text-base-content/70 hover:bg-base-300/50 hover:text-base-content bg-base-100'
+												: 'text-base-content hover:bg-base-300 hover:text-base-content bg-base-100'
 										}`}
 										onClick={() => setSelected(idx)}
 									>
@@ -104,7 +104,7 @@ export default function Activities() {
 										className={`cursor-target w-full text-left px-6 py-4 rounded-xl transition-all duration-300 ${
 											selected === idx
 												? 'bg-primary text-white shadow-lg'
-												: 'text-base-content/70 hover:bg-base-300/50 hover:text-base-content'
+												: 'text-base-content hover:bg-base-300 hover:text-base-content'
 										}`}
 										onClick={() => setSelected(idx)}
 									>
