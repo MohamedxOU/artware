@@ -96,7 +96,7 @@ export default function Activities() {
 					{/* Desktop Layout */}
 					<div className="hidden lg:grid lg:grid-cols-5 min-h-[600px]">
 						{/* Sidebar Navigation */}
-						<div className="lg:col-span-2 bg-base-200/50 p-8">
+						<div className="lg:col-span-2 bg-base-200 p-8">
 							<div className="space-y-1">
 								{activities.map((activity, idx) => (
 									<button
