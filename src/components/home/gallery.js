@@ -147,7 +147,7 @@ export default function Gallery() {
         <h2 className="text-4xl md:text-5xl font-bold mb-4">
           Our <span className="text-primary">Gallery</span>
         </h2>
-        <p className="text-lg text-base-content/70 max-w-2xl mx-auto mb-6">
+        <p className="text-lg text-base-content opacity-70 max-w-2xl mx-auto mb-6">
           Discover our memorable events and the creative spirit that drives our community
         </p>
       </div>

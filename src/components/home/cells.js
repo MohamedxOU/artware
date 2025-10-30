@@ -90,7 +90,7 @@ export default function Cells() {
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-base-content">
             Our Cells, <span className="text-primary">Your Key to Tech Success</span>
           </h2>
-          <p className="text-lg text-base-content/70 max-w-2xl mx-auto">
+          <p className="text-lg text-base-content opacity-70 max-w-2xl mx-auto">
             Discover our opportunities, develop your skills, and secure your technological future with us
           </p>
         </div>
@@ -104,7 +104,7 @@ export default function Cells() {
               className={`cursor-target px-6 py-3 rounded-full font-semibold transition-all duration-300 border-2 ${
                 activeTab === index
                   ? 'bg-primary text-white border-primary shadow-lg scale-105'
-                  : 'bg-transparent text-base-content border-base-content/20 hover:border-primary/50 hover:text-primary hover:scale-102'
+                  : 'bg-transparent text-base-content border-base-content border-opacity-20 hover:border-primary hover:border-opacity-50 hover:text-primary hover:scale-102'
               }`}
             >
               {cell.title}
@@ -147,7 +147,7 @@ export default function Cells() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                 
                 {/* Card indicator */}
-                <div className="absolute top-4 right-4 bg-primary/90 backdrop-blur-sm px-3 py-1 rounded-full">
+                <div className="absolute top-4 right-4 bg-primary opacity-90 backdrop-blur-sm px-3 py-1 rounded-full">
                   <span className="text-xs font-semibold text-white">{activeTab + 1}/{cells.length}</span>
                 </div>
               </div>
@@ -157,7 +157,7 @@ export default function Cells() {
                   {cells[activeTab].title}
                 </h3>
                 
-                <p className="text-base-content/70 text-sm leading-relaxed mb-4">
+                <p className="text-base-content opacity-70 text-sm leading-relaxed mb-4">
                   {cells[activeTab].description}
                 </p>
 
@@ -168,13 +168,13 @@ export default function Cells() {
                     {cells[activeTab].activities.slice(0, 3).map((activity, actIndex) => (
                       <span
                         key={actIndex}
-                        className="px-2 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium"
+                        className="px-2 py-1 bg-primary opacity-10 text-primary rounded-full text-xs font-medium"
                       >
                         {activity}
                       </span>
                     ))}
                     {cells[activeTab].activities.length > 3 && (
-                      <span className="px-2 py-1 bg-base-200 text-base-content/60 rounded-full text-xs">
+                      <span className="px-2 py-1 bg-base-200 text-base-content opacity-60 rounded-full text-xs">
                         +{cells[activeTab].activities.length - 3}
                       </span>
                     )}
@@ -182,13 +182,13 @@ export default function Cells() {
                 </div>
 
                 {/* Stats */}
-                <div className="flex justify-between items-center pt-4 border-t border-base-content/10">
+                <div className="flex justify-between items-center pt-4 border-t border-base-content border-opacity-10">
                   <div>
-                    <span className="text-xs text-base-content/60">Responsable</span>
+                    <span className="text-xs text-base-content opacity-60">Responsable</span>
                     <p className="font-semibold text-base-content text-sm">{cells[activeTab].responsable}</p>
                   </div>
                   <div className="text-right">
-                    <span className="text-xs text-base-content/60">Réalisations</span>
+                    <span className="text-xs text-base-content opacity-60">Réalisations</span>
                     <p className="font-bold text-primary text-lg">{cells[activeTab].subtitle}</p>
                   </div>
                 </div>
@@ -202,7 +202,7 @@ export default function Cells() {
                   key={index}
                   onClick={() => setActiveTab(index)}
                   className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    activeTab === index ? 'bg-primary w-6' : 'bg-base-content/30'
+                    activeTab === index ? 'bg-primary w-6' : 'bg-base-content opacity-30'
                   }`}
                 />
               ))}
@@ -242,7 +242,7 @@ export default function Cells() {
                       <h3 className="text-3xl md:text-4xl font-bold mb-4 text-base-content">
                         {cell.title}
                       </h3>
-                      <p className="text-lg text-base-content/70 leading-relaxed">
+                      <p className="text-lg text-base-content opacity-70 leading-relaxed">
                         {cell.description}
                       </p>
                     </div>
@@ -254,7 +254,7 @@ export default function Cells() {
                         {cell.activities.map((activity, actIndex) => (
                           <span
                             key={actIndex}
-                            className="px-3 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium border border-primary/20"
+                            className="px-3 py-2 bg-primary opacity-80 text-primary-content rounded-full text-sm font-medium border border-primary border-opacity-20"
                           >
                             {activity}
                           </span>
@@ -263,20 +263,20 @@ export default function Cells() {
                     </div>
 
                     {/* Stats & Responsable */}
-                    <div className="grid grid-cols-2 gap-6 pt-6 border-t border-base-content/10">
+                    <div className="grid grid-cols-2 gap-6 pt-6 border-t border-base-content border-opacity-10">
                       <div>
-                        <span className="text-sm text-base-content/60 block">Responsable</span>
+                        <span className="text-sm text-base-content opacity-60 block">Responsable</span>
                         <p className="font-semibold text-base-content text-lg">{cell.responsable}</p>
                       </div>
                       <div className="text-right">
-                        <span className="text-sm text-base-content/60 block">Réalisations</span>
+                        <span className="text-sm text-base-content opacity-60 block">Réalisations</span>
                         <p className="font-bold text-primary text-2xl">{cell.subtitle}</p>
                       </div>
                     </div>
 
                     {/* CTA Button */}
                     {/* <div className="pt-4">
-                      <button className="bg-primary text-white px-8 py-4 rounded-full font-semibold hover:bg-primary/90 transition-all duration-300 hover:scale-105 shadow-lg">
+                      <button className="bg-primary text-white px-8 py-4 rounded-full font-semibold hover:bg-primary opacity-90 transition-all duration-300 hover:scale-105 shadow-lg">
                         {cell.buttonText}
                       </button>
                     </div> */}

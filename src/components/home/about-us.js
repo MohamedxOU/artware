@@ -35,7 +35,7 @@ export default function AboutUs() {
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             About Us, <span className="text-primary">Our Story & Vision</span>
           </h2>
-          <p className="text-lg text-base-content/70 max-w-2xl mx-auto">
+          <p className="text-lg text-base-content opacity-70 max-w-2xl mx-auto">
             Discover the story of ARTWARE, a passionate community dedicated to technological innovation and academic excellence
           </p>
         </motion.div>
@@ -52,7 +52,7 @@ export default function AboutUs() {
             <h3 className="text-4xl md:text-5xl font-bold leading-tight text-base-content">
               More than a club, a family.
             </h3>
-            <p className="text-base-content/90 text-lg">
+            <p className="text-base-content opacity-90 text-lg">
               Artware is a club founded by engineering students specializing in Software Engineering and Artificial Intelligence (ILIA). It is open to all students from the Faculty of Science and Technology as well as the Multidisciplinary Faculty of Errachidia.<br/><br/>
               The goal of Artware is to develop and strengthen members&apos; skills in IT fields such as development, coding, and creativity. To achieve this, the club offers an enriching experience through events, training sessions, competitions, and hackathons, fostering collaborative learning and innovation. <br/><br/>Additionally, Artware is committed to solidarity activities and fun, friendly events aimed at improving students&apos; academic life and experience, while strengthening the spirit of community and sharing.
             </p>
@@ -66,7 +66,7 @@ export default function AboutUs() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className="rounded-2xl overflow-hidden shadow aspect-[4/3] bg-base-200 flex items-center justify-center">
+            <div className="rounded-2xl overflow-hidden shadow aspect-video bg-base-200 flex items-center justify-center">
               <Image
                 src="/covers/cover-1.jpg"
                 alt="About Us"
@@ -94,7 +94,7 @@ export default function AboutUs() {
                   whileHover={{ scale: 1.05 }}
                 >
                   <span className="text-2xl font-bold text-base-content">{stat.value}</span>
-                  <span className="text-base text-base-content/70">{stat.label}</span>
+                  <span className="text-base text-base-content opacity-70">{stat.label}</span>
                 </motion.div>
               ))}
             </div>

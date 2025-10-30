@@ -177,7 +177,7 @@ export default function Bureau() {
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             Our team, <span className="text-primary">The Pillars of Success</span>
           </h2>
-          <p className="text-lg text-base-content/70 max-w-2xl mx-auto italic">
+          <p className="text-lg text-base-content opacity-70 max-w-2xl mx-auto italic">
             Meet the passionate leadership team that transforms our vision into reality
           </p>
         </div>
@@ -230,7 +230,7 @@ export default function Bureau() {
                   onClick={() => setCurrentSlide(index)}
                 >
                   {/* Background with gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-primary/40"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary from-opacity-20 via-transparent to-primary to-opacity-40"></div>
                   
                   {/* Image Container */}
                   <div className="relative h-full overflow-hidden">
@@ -304,7 +304,7 @@ export default function Bureau() {
               className={`transition-all duration-300 rounded-full ${
                 currentSlide === index 
                   ? 'w-8 h-3 bg-primary' 
-                  : 'w-3 h-3 bg-base-content/20 hover:bg-base-content/40'
+                  : 'w-3 h-3 bg-base-content opacity-20 hover:bg-base-content opacity-40'
               }`}
               aria-label={`View ${bureauMembers[index].name}`}
             />
@@ -313,14 +313,14 @@ export default function Bureau() {
 
         {/* Card Counter */}
         <div className="text-center mt-6">
-          <p className="text-base-content/50 text-sm font-medium">
+          <p className="text-base-content opacity-50 text-sm font-medium">
             {String(currentSlide + 1).padStart(2, '0')} / {String(totalSlides).padStart(2, '0')}
           </p>
         </div>
 
         {/* Additional Info */}
         <div className={`text-center mt-8 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <p className="text-base-content/60 text-sm">
+          <p className="text-base-content opacity-60 text-sm">
             A team united by a passion for technology and the ambition to shape the future.
           </p>
         </div>

@@ -64,9 +64,9 @@ export default function Footer() {
       
       {/* Decorative elements */}
       <div className="absolute inset-0">
-        <div className="absolute top-10 left-10 w-32 h-32 bg-primary/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-20 w-40 h-40 bg-secondary/10 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-accent/10 rounded-full blur-2xl"></div>
+        <div className="absolute top-10 left-10 w-32 h-32 bg-primary opacity-10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-20 w-40 h-40 bg-secondary opacity-10 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-accent opacity-10 rounded-full blur-2xl"></div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-16">
@@ -89,14 +89,14 @@ export default function Footer() {
               />
               
             </div>
-            <p className="text-base-content/80 text-sm leading-relaxed">
+            <p className="text-base-content opacity-80 text-sm leading-relaxed">
               We create the technological future through innovation, collaboration, and academic excellence.
             </p>
             {/* Social Media Links */}
             <div className="flex space-x-4">
               <a 
                 href="https://www.facebook.com/profile.php?id=61574231404463" 
-                className="w-10 h-10 bg-base-content/10 hover:bg-primary rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 group"
+                className="w-10 h-10 bg-base-200 hover:bg-primary rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 group"
                 aria-label="Facebook"
               >
                 <svg className="w-5 h-5 fill-current text-base-content group-hover:text-primary-content" viewBox="0 0 24 24">
@@ -105,7 +105,7 @@ export default function Footer() {
               </a>
               <a 
                 href="https://www.linkedin.com/company/artware-engineering-club/" 
-                className="w-10 h-10 bg-base-content/10 hover:bg-primary rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 group"
+                className="w-10 h-10 bg-base-200 hover:bg-primary rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 group"
                 aria-label="LinkedIn"
               >
                 <svg className="w-5 h-5 fill-current text-base-content group-hover:text-primary-content" viewBox="0 0 24 24">
@@ -114,7 +114,7 @@ export default function Footer() {
               </a>
               <a 
                 href="https://www.instagram.com/artware.club/" 
-                className="w-10 h-10 bg-base-content/10 hover:bg-primary rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 group"
+                className="w-10 h-10 bg-base-200 hover:bg-primary rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 group"
                 aria-label="Instagram"
               >
                 <svg className="w-5 h-5 fill-current text-base-content group-hover:text-primary-content" viewBox="0 0 24 24">
@@ -130,27 +130,27 @@ export default function Footer() {
             <h4 className="text-xl font-semibold text-base-content mb-4">Quick Links</h4>
             <ul className="space-y-3">
               <li>
-                <Link href="#hero" className="text-base-content/80 hover:text-primary transition-colors duration-300 text-sm">
+                <Link href="#hero" className="text-base-content opacity-80 hover:text-primary transition-colors duration-300 text-sm">
                   Home
                 </Link>
               </li>
               <li>
-                <Link href="#about" className="text-base-content/80 hover:text-primary transition-colors duration-300 text-sm">
+                <Link href="#about" className="text-base-content opacity-80 hover:text-primary transition-colors duration-300 text-sm">
                   About
                 </Link>
               </li>
               <li>
-                <Link href="#activities" className="text-base-content/80 hover:text-primary transition-colors duration-300 text-sm">
+                <Link href="#activities" className="text-base-content opacity-80 hover:text-primary transition-colors duration-300 text-sm">
                   Activities
                 </Link>
               </li>
               <li>
-                <Link href="#bureau" className="text-base-content/80 hover:text-primary transition-colors duration-300 text-sm">
+                <Link href="#bureau" className="text-base-content opacity-80 hover:text-primary transition-colors duration-300 text-sm">
                   Our Board
                 </Link>
               </li>
               <li>
-                <Link href="#contact" className="text-base-content/80 hover:text-primary transition-colors duration-300 text-sm">
+                <Link href="#contact" className="text-base-content opacity-80 hover:text-primary transition-colors duration-300 text-sm">
                   Contact
                 </Link>
               </li>
@@ -162,19 +162,19 @@ export default function Footer() {
             <h4 className="text-xl font-semibold text-base-content mb-4">Our Services</h4>
             <ul className="space-y-3">
               <li>
-                <span className="text-base-content/80 text-sm">Technical Training</span>
+                <span className="text-base-content opacity-80 text-sm">Technical Training</span>
               </li>
               <li>
-                <span className="text-base-content/80 text-sm">Workshops & Hackathons</span>
+                <span className="text-base-content opacity-80 text-sm">Workshops & Hackathons</span>
               </li>
               <li>
-                <span className="text-base-content/80 text-sm">Collaborative Projects</span>
+                <span className="text-base-content opacity-80 text-sm">Collaborative Projects</span>
               </li>
               <li>
-                <span className="text-base-content/80 text-sm">Professional Mentoring</span>
+                <span className="text-base-content opacity-80 text-sm">Professional Mentoring</span>
               </li>
               <li>
-                <span className="text-base-content/80 text-sm">Tech Events</span>
+                <span className="text-base-content opacity-80 text-sm">Tech Events</span>
               </li>
             </ul>
           </div>
@@ -189,21 +189,21 @@ export default function Footer() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
                 <div>
-                  <p className="text-base-content/80 text-sm">FSTE </p>
-                  <p className="text-base-content/60 text-xs">Errachidia, Maroc</p>
+                  <p className="text-base-content opacity-80 text-sm">FSTE </p>
+                  <p className="text-base-content opacity-60 text-xs">Errachidia, Maroc</p>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
                 <svg className="w-5 h-5 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
-                <p className="text-base-content/80 text-sm">artware.club@gmail.com</p>
+                <p className="text-base-content opacity-80 text-sm">artware.club@gmail.com</p>
               </div>
               <div className="flex items-center space-x-3">
                 <svg className="w-5 h-5 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
-                <p className="text-base-content/80 text-sm">+212 688 784 609</p>
+                <p className="text-base-content opacity-80 text-sm">+212 688 784 609</p>
               </div>
             </div>
           </div>
@@ -211,21 +211,21 @@ export default function Footer() {
 
        
         {/* Bottom Section */}
-        <div className={`border-t border-base-content/10 pt-8 transition-all duration-1000 delay-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div className={`border-t border-base-content border-opacity-10 pt-8 transition-all duration-1000 delay-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-center md:text-left">
-              <p className="text-base-content/60 text-sm">
+              <p className="text-base-content opacity-60 text-sm">
                 © 2025 ArtWare Club. All rights reserved.
               </p>
             </div>
             <div className="flex space-x-6">
-              <Link href="#" className="text-base-content/60 hover:text-primary text-sm transition-colors duration-300">
+              <Link href="#" className="text-base-content opacity-60 hover:text-primary text-sm transition-colors duration-300">
                 Privacy Policy
               </Link>
-              <Link href="#" className="text-base-content/60 hover:text-primary text-sm transition-colors duration-300">
+              <Link href="#" className="text-base-content opacity-60 hover:text-primary text-sm transition-colors duration-300">
                 Terms of Use
               </Link>
-              <Link href="#" className="text-base-content/60 hover:text-primary text-sm transition-colors duration-300">
+              <Link href="#" className="text-base-content opacity-60 hover:text-primary text-sm transition-colors duration-300">
                 Legal Notice
               </Link>
             </div>
