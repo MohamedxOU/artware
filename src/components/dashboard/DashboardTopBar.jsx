@@ -29,7 +29,7 @@ export default function DashboardAppBar({
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen && setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-1.5 text-base-content/60 hover:text-base-content hover:bg-base-200 rounded-lg transition-colors"
+            className="lg:hidden p-1.5 text-base-content  hover:text-base-content hover:bg-base-200 rounded-lg transition-colors"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -45,7 +45,7 @@ export default function DashboardAppBar({
         {/* Right - User Info */}
         <div className="flex items-center space-x-2 sm:space-x-3">
           {user?.profile_image_url ? (
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden ring-2 ring-primary/20">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden ring-2 ring-primary ">
               <Image 
                 src={user.profile_image_url} 
                 alt={`${user.first_name} ${user.last_name}`}
@@ -56,7 +56,7 @@ export default function DashboardAppBar({
               />
             </div>
           ) : (
-            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center ring-2 ring-primary/20">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center ring-2 ring-primary ">
               <span className="text-primary-content text-xs sm:text-sm font-medium">
                 {user?.first_name?.[0]}{user?.last_name?.[0]}
               </span>
@@ -67,7 +67,7 @@ export default function DashboardAppBar({
             <div className="text-sm font-medium text-base-content truncate max-w-32 lg:max-w-none">
               {user?.first_name} {user?.last_name}
             </div>
-            <div className="text-xs text-base-content/60 truncate max-w-32 lg:max-w-none">
+            <div className="text-xs text-base-content  truncate max-w-32 lg:max-w-none">
               {user?.email}
             </div>
           </div>

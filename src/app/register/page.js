@@ -54,7 +54,7 @@ function RegisterContent() {
       <div className="min-h-screen bg-base-300 flex items-center justify-center">
         <div className="text-center">
           <div className="loading loading-spinner loading-lg text-primary"></div>
-          <p className="mt-4 text-base-content/70">Vérification...</p>
+          <p className="mt-4 text-base-content">Vérification...</p>
         </div>
       </div>
     );
@@ -150,7 +150,7 @@ function RegisterContent() {
         {/* Large primary circles */}
         <div className="absolute top-10 left-10 w-40 h-40 bg-primary/15 rounded-full blur-2xl"></div>
         <div className="absolute bottom-20 right-20 w-48 h-48 bg-primary/12 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/3 right-10 w-36 h-36 bg-primary/10 rounded-full blur-2xl"></div>
+        <div className="absolute top-1/3 right-10 w-36 h-36 bg-primary  rounded-full blur-2xl"></div>
         
         {/* Secondary color patterns */}
         <div className="absolute top-1/2 left-1/4 w-32 h-32 bg-secondary/18 rounded-full blur-xl"></div>
@@ -158,41 +158,41 @@ function RegisterContent() {
         <div className="absolute top-20 right-1/3 w-28 h-28 bg-secondary/15 rounded-full blur-xl"></div>
         
         {/* Accent patterns */}
-        <div className="absolute top-3/4 left-1/3 w-24 h-24 bg-accent/20 rounded-full blur-lg"></div>
+        <div className="absolute top-3/4 left-1/3 w-24 h-24 bg-accent  rounded-full blur-lg"></div>
         <div className="absolute bottom-10 right-1/4 w-38 h-38 bg-accent/14 rounded-full blur-2xl"></div>
         <div className="absolute top-1/4 left-1/2 w-30 h-30 bg-accent/12 rounded-full blur-xl"></div>
         
         {/* Additional geometric patterns */}
         <div className="absolute top-40 left-1/3 w-20 h-60 bg-primary/8 rounded-full blur-2xl rotate-45"></div>
-        <div className="absolute bottom-40 right-1/3 w-16 h-50 bg-secondary/10 rounded-full blur-xl -rotate-45"></div>
+        <div className="absolute bottom-40 right-1/3 w-16 h-50 bg-secondary  rounded-full blur-xl -rotate-45"></div>
         <div className="absolute top-1/2 right-20 w-18 h-45 bg-accent/12 rounded-full blur-lg rotate-12"></div>
         
         {/* Small scattered dots */}
         <div className="absolute top-16 left-1/2 w-12 h-12 bg-primary/25 rounded-full blur-sm"></div>
-        <div className="absolute top-1/3 left-20 w-8 h-8 bg-secondary/30 rounded-full blur-sm"></div>
+        <div className="absolute top-1/3 left-20 w-8 h-8 bg-secondary   rounded-full blur-sm"></div>
         <div className="absolute bottom-1/3 right-16 w-10 h-10 bg-accent/25 rounded-full blur-sm"></div>
-        <div className="absolute top-2/3 left-16 w-14 h-14 bg-primary/20 rounded-full blur-md"></div>
+        <div className="absolute top-2/3 left-16 w-14 h-14 bg-primary  rounded-full blur-md"></div>
         <div className="absolute bottom-16 left-1/2 w-16 h-16 bg-secondary/18 rounded-full blur-md"></div>
         
         {/* Overlapping larger shapes */}
         <div className="absolute top-0 left-1/4 w-56 h-56 bg-primary/6 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 right-1/4 w-52 h-52 bg-secondary/8 rounded-full blur-3xl"></div>
         <div className="absolute top-1/2 left-0 w-48 h-48 bg-accent/7 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 right-0 w-50 h-50 bg-primary/5 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 right-0 w-50 h-50 bg-primary  rounded-full blur-3xl"></div>
       </div>
 
       <AuthNavbar />
 
       {/* Centered Register Card */}
       <div className="relative z-10 flex items-center justify-center p-6 min-h-screen pt-24">
-        <div className={`w-full max-w-2xl bg-base-100/95 backdrop-blur-md rounded-3xl shadow-2xl border border-base-300/20 p-8 my-8 transition-all duration-1000 ${
+        <div className={`w-full max-w-2xl bg-base-100 backdrop-blur-md rounded-3xl shadow-2xl border border-base-300 p-8 my-8 transition-all duration-1000 ${
           forms.showCard ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
         }`}>
           
           {/* Register Header */}
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-base-content mb-2">Create Account</h1>
-            <p className="text-base-content/70">
+            <p className="text-base-content">
               Join ARTWARE community<br />
               Fill in your details to create your account
             </p>
@@ -211,7 +211,7 @@ function RegisterContent() {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-base-content/50">
+                  <div className="w-full h-full flex items-center justify-center text-base-content">
                     <svg className=" w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
@@ -220,7 +220,7 @@ function RegisterContent() {
               </div>
               
               {/* Upload Button */}
-              <label className="cursor-target  absolute -bottom-2 -right-2 bg-primary hover:bg-primary/90 text-white rounded-full p-2 cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110">
+              <label className="cursor-target  absolute -bottom-2 -right-2 bg-primary hover:bg-primary text-white rounded-full p-2 cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                 </svg>
@@ -237,10 +237,10 @@ function RegisterContent() {
           
           {/* Profile Upload Instructions */}
           <div className="text-center mb-6">
-            <p className="text-xs text-base-content/60">
+            <p className="text-xs text-base-content">
               Cliquez sur le + pour ajouter votre photo de profil
               <br />
-              <span className="text-base-content/40">JPG, PNG ou WEBP • Max 5MB</span>
+              <span className="text-base-content ">JPG, PNG ou WEBP • Max 5MB</span>
             </p>
           </div>
 
@@ -248,14 +248,14 @@ function RegisterContent() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Error Message */}
             {error && (
-              <div className="bg-error/10 border border-error/20 text-error px-4 py-3 rounded-xl text-sm">
+              <div className="bg-error border border-error text-error px-4 py-3 rounded-xl text-sm">
                 {error}
               </div>
             )}
             {/* Name Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-base-content/70 mb-2">
+                <label className="block text-sm font-medium text-base-content mb-2">
                   Nom
                 </label>
                 <input
@@ -264,12 +264,12 @@ function RegisterContent() {
                   value={formData.last_name}
                   onChange={handleInputChange}
                   placeholder="Votre nom"
-                  className="cursor-target w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
+                  className="cursor-target w-full px-4 py-3 bg-base-200 border border-base-300   rounded-xl focus:outline-none focus:ring-2 focus:ring-primary  focus:border-primary  transition-all placeholder-base-content "
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-base-content/70 mb-2">
+                <label className="block text-sm font-medium text-base-content mb-2">
                   Prénom
                 </label>
                 <input
@@ -278,7 +278,7 @@ function RegisterContent() {
                   value={formData.first_name}
                   onChange={handleInputChange}
                   placeholder="Votre prénom"
-                  className="cursor-target w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
+                  className="cursor-target w-full px-4 py-3 bg-base-200 border border-base-300   rounded-xl focus:outline-none focus:ring-2 focus:ring-primary  focus:border-primary  transition-all placeholder-base-content "
                   required
                 />
               </div>
@@ -286,7 +286,7 @@ function RegisterContent() {
 
             {/* Phone Number */}
             <div>
-              <label className="block text-sm font-medium text-base-content/70 mb-2">
+              <label className="block text-sm font-medium text-base-content  mb-2">
                 Numéro de téléphone
               </label>
               <input
@@ -295,14 +295,14 @@ function RegisterContent() {
                 value={formData.phone_number}
                 onChange={handleInputChange}
                 placeholder="Votre numéro de téléphone"
-                className="cursor-target w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
+                className="cursor-target w-full px-4 py-3 bg-base-200  border border-base-300   rounded-xl focus:outline-none focus:ring-2 focus:ring-primary  focus:border-primary  transition-all placeholder-base-content "
                 required
               />
             </div>
 
             {/* Birth Date */}
             <div>
-              <label className="block text-sm font-medium text-base-content/70 mb-2">
+              <label className="block text-sm font-medium text-base-content  mb-2">
                 Date de naissance
               </label>
               <input
@@ -310,7 +310,7 @@ function RegisterContent() {
                 name="birth_date"
                 value={formData.birth_date}
                 onChange={handleInputChange}
-                className="cursor-target w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all text-base-content"
+                className="cursor-target w-full px-4 py-3 bg-base-200  border border-base-300   rounded-xl focus:outline-none focus:ring-2 focus:ring-primary  focus:border-primary  transition-all text-base-content"
                 required
               />
             </div>
@@ -318,14 +318,14 @@ function RegisterContent() {
             {/* Level and Specialty Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-base-content/70 mb-2">
+                <label className="block text-sm font-medium text-base-content  mb-2">
                   Niveau
                 </label>
                 <select
                   name="level"
                   value={formData.level}
                   onChange={handleInputChange}
-                  className="cursor-target w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all text-base-content"
+                  className="cursor-target w-full px-4 py-3 bg-base-200  border border-base-300   rounded-xl focus:outline-none focus:ring-2 focus:ring-primary  focus:border-primary  transition-all text-base-content"
                   required
                 >
                   <option value="" disabled>Sélectionner niveau</option>
@@ -336,7 +336,7 @@ function RegisterContent() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-base-content/70 mb-2">
+                <label className="block text-sm font-medium text-base-content  mb-2">
                   Spécialité
                 </label>
                 <input
@@ -345,7 +345,7 @@ function RegisterContent() {
                   value={formData.specialty}
                   onChange={handleInputChange}
                   placeholder="Votre spécialité"
-                  className="cursor-target w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
+                  className="cursor-target w-full px-4 py-3 bg-base-200  border border-base-300   rounded-xl focus:outline-none focus:ring-2 focus:ring-primary  focus:border-primary  transition-all placeholder-base-content "
                   required
                 />
               </div>
@@ -354,14 +354,14 @@ function RegisterContent() {
             {/* Gender and Email Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-base-content/70 mb-2">
+                <label className="block text-sm font-medium text-base-content  mb-2">
                   Genre
                 </label>
                 <select
                   name="gender"
                   value={formData.gender}
                   onChange={handleInputChange}
-                  className="cursor-target w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all text-base-content"
+                  className="cursor-target w-full px-4 py-3 bg-base-200  border border-base-300   rounded-xl focus:outline-none focus:ring-2 focus:ring-primary  focus:border-primary  transition-all text-base-content"
                   required
                 >
                   <option value="" disabled>Sélectionner genre</option>
@@ -370,7 +370,7 @@ function RegisterContent() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-base-content/70 mb-2">
+                <label className="block text-sm font-medium text-base-content  mb-2">
                   Email
                 </label>
                 <input
@@ -379,7 +379,7 @@ function RegisterContent() {
                   value={formData.email}
                   onChange={handleInputChange}
                   placeholder="votre.email@example.com"
-                  className="cursor-target w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
+                  className="cursor-target w-full px-4 py-3 bg-base-200  border border-base-300   rounded-xl focus:outline-none focus:ring-2 focus:ring-primary  focus:border-primary  transition-all placeholder-base-content "
                   required
                 />
               </div>
@@ -388,7 +388,7 @@ function RegisterContent() {
             {/* Password Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-base-content/70 mb-2">
+                <label className="block text-sm font-medium text-base-content  mb-2">
                   Mot de passe
                 </label>
                 <input
@@ -397,12 +397,12 @@ function RegisterContent() {
                   value={formData.password}
                   onChange={handleInputChange}
                   placeholder="Mot de passe"
-                  className="cursor-target w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
+                  className="cursor-target w-full px-4 py-3 bg-base-200  border border-base-300   rounded-xl focus:outline-none focus:ring-2 focus:ring-primary  focus:border-primary  transition-all placeholder-base-content "
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-base-content/70 mb-2">
+                <label className="block text-sm font-medium text-base-content  mb-2">
                   Confirmer mot de passe
                 </label>
                 <input
@@ -411,7 +411,7 @@ function RegisterContent() {
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
                   placeholder="Confirmer mot de passe"
-                  className="cursor-target w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
+                  className="cursor-target w-full px-4 py-3 bg-base-200  border border-base-300   rounded-xl focus:outline-none focus:ring-2 focus:ring-primary  focus:border-primary  transition-all placeholder-base-content "
                   required
                 />
               </div>
@@ -422,15 +422,15 @@ function RegisterContent() {
               <input
                 type="checkbox"
                 id="terms"
-                className="mt-1 w-4 h-4 text-primary bg-base-200 border-base-300 rounded focus:ring-primary/50"
+                className="mt-1 w-4 h-4 text-primary bg-base-200 border-base-300 rounded focus:ring-primary "
                 required
               />
-              <label htmlFor="terms" className="text-sm text-base-content/70">
+              <label htmlFor="terms" className="text-sm text-base-content ">
                 J&apos;accepte les{" "}
                 <button
                   type="button"
                   onClick={() => openModal('termsModal')}
-                  className="cursor-target text-primary hover:text-primary/80 underline font-medium"
+                  className="cursor-target text-primary hover:text-primary  underline font-medium"
                 >
                   conditions d&apos;utilisation
                 </button>{" "}
@@ -442,11 +442,11 @@ function RegisterContent() {
             <button
               type="submit"
               disabled={isLoading}
-              className="cursor-target w-full bg-primary hover:bg-primary/90 disabled:bg-primary/50 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+              className="cursor-target w-full bg-primary hover:bg-primary  disabled:bg-primary  disabled:cursor-not-allowed text-white font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <>
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  <div className="w-4 h-4 border-2 border-white   border-t-white rounded-full animate-spin"></div>
                   Création...
                 </>
               ) : (
@@ -456,9 +456,9 @@ function RegisterContent() {
 
             {/* Sign In Link */}
             <div className="text-center mt-6">
-              <span className="text-base-content/60 text-sm">
+              <span className="text-base-content  text-sm">
                 Vous avez déjà un compte?{" "}
-                <Link href="/login" className="cursor-target text-primary hover:text-primary/80 font-semibold">
+                <Link href="/login" className="cursor-target text-primary hover:text-primary  font-semibold">
                   Se connecter
                 </Link>
               </span>
@@ -469,7 +469,7 @@ function RegisterContent() {
 
       {/* Footer */}
       <div className="relative z-20 text-center py-6">
-        <p className="text-base-content/50 text-sm">
+        <p className="text-base-content  text-sm">
           Copyright @artware 2025 | Privacy Policy
         </p>
       </div>
@@ -482,10 +482,10 @@ function RegisterContent() {
 
       {/* Success Dialog */}
       {modals.successDialog && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black  backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-base-100 rounded-2xl shadow-2xl max-w-md w-full p-8 text-center animate-in fade-in zoom-in duration-300">
             {/* Success Icon */}
-            <div className="w-16 h-16 bg-success/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 bg-success  rounded-full flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
@@ -493,7 +493,7 @@ function RegisterContent() {
             
             {/* Success Message */}
             <h3 className="text-2xl font-bold text-base-content mb-3">Registration Successful!</h3>
-            <div className="text-base-content/70 mb-6 space-y-2">
+            <div className="text-base-content  mb-6 space-y-2">
               <p className="font-medium">Your account has been created successfully.</p>
               <p className="text-sm">
                 Please wait for the administrator to approve your account before you can sign in.
@@ -506,7 +506,7 @@ function RegisterContent() {
             {/* OK Button */}
             <button
               onClick={() => { hideSuccessDialog(); router.push('/'); }}
-              className="cursor-target w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl"
+              className="cursor-target w-full bg-primary hover:bg-primary  text-white font-semibold py-3 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl"
             >
               I understand
             </button>

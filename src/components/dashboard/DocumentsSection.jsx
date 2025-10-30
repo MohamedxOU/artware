@@ -231,9 +231,9 @@ export default function DocumentsSection() {
   if (isLoading) {
     return (
       <div className="w-full max-w-7xl mx-auto relative min-h-full">
-        <div className="backdrop-blur-sm bg-base-100/80 rounded-2xl p-8 text-center border border-base-300/20 shadow-sm relative z-10">
+        <div className="backdrop-blur-sm bg-base-100  rounded-2xl p-8 text-center border border-base-300  shadow-sm relative z-10">
           <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p className="text-base-content/60">Loading documents...</p>
+          <p className="text-base-content ">Loading documents...</p>
         </div>
       </div>
     );
@@ -243,17 +243,17 @@ export default function DocumentsSection() {
   if (error) {
     return (
       <div className="w-full max-w-7xl mx-auto relative min-h-full">
-        <div className="backdrop-blur-sm bg-base-100/80 rounded-2xl p-8 text-center border border-base-300/20 shadow-sm relative z-10">
+        <div className="backdrop-blur-sm bg-base-100  rounded-2xl p-8 text-center border border-base-300  shadow-sm relative z-10">
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
           </div>
           <h3 className="text-xl font-semibold text-base-content mb-2">Loading Error</h3>
-          <p className="text-base-content/60 mb-4">{error}</p>
+          <p className="text-base-content  mb-4">{error}</p>
           <button 
             onClick={() => window.location.reload()} 
-            className="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-content rounded-lg text-sm font-medium transition-colors"
+            className="px-4 py-2 bg-primary hover:bg-primary  text-primary-content rounded-lg text-sm font-medium transition-colors"
           >
             Retry
           </button>
@@ -309,15 +309,15 @@ export default function DocumentsSection() {
     <div className="w-full max-w-7xl mx-auto relative min-h-full">
       {/* Search Bar - Keep at top as requested */}
       <div className="mb-6 relative z-10">
-        <div className="backdrop-blur-sm bg-base-100/90 rounded-2xl p-4 border border-base-300 shadow-sm">
+        <div className="backdrop-blur-sm bg-base-100  rounded-2xl p-4 border border-base-300 shadow-sm">
           <div className="relative max-w-md mx-auto">
-            <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content " fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
             <input
               type="text"
               placeholder="Search documents..."
-              className="w-full pl-10 pr-4 py-3 bg-base-200 border border-base-300 rounded-xl text-base-content placeholder-base-content/50 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full pl-10 pr-4 py-3 bg-base-200 border border-base-300 rounded-xl text-base-content placeholder-base-content  focus:outline-none focus:ring-2 focus:ring-primary"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -352,8 +352,8 @@ export default function DocumentsSection() {
                     <div className="mb-2">
                       <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
                         doc.source === 'attended' 
-                          ? 'bg-success/20 text-success'
-                          : 'bg-info/20 text-info'
+                          ? 'bg-success  text-success'
+                          : 'bg-info  text-info'
                       }`}>
                         {doc.source === 'attended' ? (
                           <>
@@ -383,7 +383,7 @@ export default function DocumentsSection() {
                       </div>
                       
                       {/* Document icon */}
-                      <svg className="w-8 h-8 text-base-content/40" fill="currentColor" viewBox="0 0 20 20">
+                      <svg className="w-8 h-8 text-base-content " fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
                       </svg>
                     </div>
@@ -395,11 +395,11 @@ export default function DocumentsSection() {
                       {doc.title}
                     </h4>
                     {doc.eventName ? (
-                      <p className="text-base-content/60 text-xs line-clamp-1">
+                      <p className="text-base-content  text-xs line-clamp-1">
                         {doc.eventName}
                       </p>
                     ) : (
-                      <p className="text-base-content/60 text-xs">
+                      <p className="text-base-content  text-xs">
                         {formatDate(doc.created_at)}
                       </p>
                     )}
@@ -415,7 +415,7 @@ export default function DocumentsSection() {
       <div className="mb-8">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-base-content">All Documents</h2>
-          <span className="text-sm text-base-content/60">
+          <span className="text-sm text-base-content ">
             {filteredAndSortedDocuments.length} document{filteredAndSortedDocuments.length !== 1 ? 's' : ''}
           </span>
         </div>
@@ -450,7 +450,7 @@ export default function DocumentsSection() {
                       </div>
                       
                       {/* Document icon */}
-                      <svg className="w-8 h-8 text-base-content/40" fill="currentColor" viewBox="0 0 20 20">
+                      <svg className="w-8 h-8 text-base-content " fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
                       </svg>
                     </div>
@@ -461,7 +461,7 @@ export default function DocumentsSection() {
                     <h4 className="font-medium text-base-content text-sm mb-1 line-clamp-2">
                       {doc.title}
                     </h4>
-                    <p className="text-base-content/60 text-xs">
+                    <p className="text-base-content  text-xs">
                       {formatDate(doc.created_at)}
                     </p>
                   </div>
@@ -473,19 +473,19 @@ export default function DocumentsSection() {
           /* Empty State */
           <div className="text-center py-12">
             <div className="w-16 h-16 bg-base-200 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-8 h-8 text-base-content " fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
               </svg>
             </div>
             <h3 className="text-xl font-semibold text-base-content mb-2">No documents found</h3>
-            <p className="text-base-content/70 mb-4">
+            <p className="text-base-content  mb-4">
               No documents match your search criteria.
             </p>
             <button
               onClick={() => {
                 setSearchQuery('');
               }}
-              className="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-content rounded-lg text-sm font-medium transition-colors"
+              className="px-4 py-2 bg-primary hover:bg-primary  text-primary-content rounded-lg text-sm font-medium transition-colors"
             >
               Reset search
             </button>

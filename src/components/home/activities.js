@@ -53,7 +53,7 @@ export default function Activities() {
 						{/* Mobile Content Area */}
 						<div className="p-6">
 							<div className="mb-6">
-								<div className="w-full h-48 rounded-2xl overflow-hidden mb-6 bg-base-300/20 shadow-lg border border-base-300/10">
+								<div className="w-full h-48 rounded-2xl overflow-hidden mb-6 bg-base-300  shadow-lg border border-base-300 ">
 									<Image
 										src={activities[selected].image}
 										alt={activities[selected].title}
@@ -67,7 +67,7 @@ export default function Activities() {
 									{activities[selected].title}
 								</h3>
 								
-								<p className="text-base-content/80 text-base leading-relaxed mb-6">
+								<p className="text-base-content  text-base leading-relaxed mb-6">
 									{activities[selected].description}
 								</p>
 							</div>
@@ -119,7 +119,7 @@ export default function Activities() {
 						{/* Main Content Area */}
 						<div className="lg:col-span-3 p-8 lg:p-12 flex flex-col justify-center bg-base-100">
 							<div className="mb-8">
-								<div className="w-full h-64 lg:h-80 rounded-2xl overflow-hidden mb-8 bg-base-300/20 shadow-lg border border-base-300/10">
+								<div className="w-full h-64 lg:h-80 rounded-2xl overflow-hidden mb-8 bg-base-300  shadow-lg border border-base-300 ">
 									<Image
 										src={activities[selected].image}
 										alt={activities[selected].title}

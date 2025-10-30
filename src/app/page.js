@@ -12,7 +12,7 @@ export default function Page() {
       <div className="min-h-screen bg-base-300 flex items-center justify-center">
         <div className="text-center">
           <div className="loading loading-spinner loading-lg text-primary"></div>
-          <p className="mt-4 text-base-content/70">Loading...</p>
+          <p className="mt-4 text-base-content ">Loading...</p>
         </div>
       </div>
     );

@@ -134,7 +134,7 @@ export default function ProfileSection({ user }) {
           {/* Profile Avatar */}
           <div className="relative">
             {user?.profile_image_url ? (
-              <div className="w-20 h-20 rounded-full overflow-hidden ring-4 ring-primary/20">
+              <div className="w-20 h-20 rounded-full overflow-hidden ring-4 ring-primary ">
                 <Image 
                   src={user.profile_image_url} 
                   alt={`${user.first_name} ${user.last_name}`}
@@ -145,7 +145,7 @@ export default function ProfileSection({ user }) {
                 />
               </div>
             ) : (
-              <div className="w-20 h-20 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center ring-4 ring-primary/20">
+              <div className="w-20 h-20 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center ring-4 ring-primary ">
                 <span className="text-primary-content text-2xl font-bold">
                   {user?.first_name?.[0]}{user?.last_name?.[0]}
                 </span>
@@ -160,10 +160,10 @@ export default function ProfileSection({ user }) {
             <h2 className="text-xl font-semibold text-base-content">
               {user?.first_name} {user?.last_name}
             </h2>
-            <p className="text-sm text-base-content/60">
+            <p className="text-sm text-base-content ">
               {user?.specialty?.replace('-', ' ') || 'Student'}
             </p>
-            <p className="text-sm text-base-content/60">
+            <p className="text-sm text-base-content ">
               {user?.level || 'N/A'}
             </p>
           </div>
@@ -192,7 +192,7 @@ export default function ProfileSection({ user }) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* First Name */}
           <div>
-            <label className="block text-xs font-medium text-base-content/60 mb-2">
+            <label className="block text-xs font-medium text-base-content  mb-2">
               First Name
             </label>
             <div className="text-base font-medium text-base-content">
@@ -202,7 +202,7 @@ export default function ProfileSection({ user }) {
 
           {/* Last Name */}
           <div>
-            <label className="block text-xs font-medium text-base-content/60 mb-2">
+            <label className="block text-xs font-medium text-base-content  mb-2">
               Last Name
             </label>
             <div className="text-base font-medium text-base-content">
@@ -212,7 +212,7 @@ export default function ProfileSection({ user }) {
 
           {/* Gender */}
           <div>
-            <label className="block text-xs font-medium text-base-content/60 mb-2">
+            <label className="block text-xs font-medium text-base-content  mb-2">
               Gender
             </label>
             <div className="text-base font-medium text-base-content capitalize">
@@ -222,7 +222,7 @@ export default function ProfileSection({ user }) {
 
           {/* Email Address */}
           <div>
-            <label className="block text-xs font-medium text-base-content/60 mb-2">
+            <label className="block text-xs font-medium text-base-content  mb-2">
               Email Address
             </label>
             <div className="text-base font-medium text-base-content">
@@ -232,7 +232,7 @@ export default function ProfileSection({ user }) {
 
           {/* Phone Number */}
           <div>
-            <label className="block text-xs font-medium text-base-content/60 mb-2">
+            <label className="block text-xs font-medium text-base-content  mb-2">
               Phone Number
             </label>
             <div className="text-base font-medium text-base-content">
@@ -242,7 +242,7 @@ export default function ProfileSection({ user }) {
 
           {/* User Role */}
           <div>
-            <label className="block text-xs font-medium text-base-content/60 mb-2">
+            <label className="block text-xs font-medium text-base-content  mb-2">
               User Role
             </label>
             <div className="text-base font-medium text-base-content">
@@ -259,7 +259,7 @@ export default function ProfileSection({ user }) {
           <h3 className="text-lg font-semibold text-base-content mb-1">
             Contact & Social Links
           </h3>
-          <p className="text-sm text-base-content/60">
+          <p className="text-sm text-base-content ">
             Ways to connect with the club admins
           </p>
         </div>
@@ -268,7 +268,7 @@ export default function ProfileSection({ user }) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Facebook */}
           <div>
-            <label className="block text-xs font-medium text-base-content/60 mb-2">
+            <label className="block text-xs font-medium text-base-content  mb-2">
               Facebook
             </label>
             <div className="flex items-center gap-2">
@@ -283,7 +283,7 @@ export default function ProfileSection({ user }) {
 
           {/* Instagram */}
           <div>
-            <label className="block text-xs font-medium text-base-content/60 mb-2">
+            <label className="block text-xs font-medium text-base-content  mb-2">
               Instagram
             </label>
             <div className="flex items-center gap-2">
@@ -298,7 +298,7 @@ export default function ProfileSection({ user }) {
 
           {/* LinkedIn */}
           <div>
-            <label className="block text-xs font-medium text-base-content/60 mb-2">
+            <label className="block text-xs font-medium text-base-content  mb-2">
               LinkedIn
             </label>
             <div className="flex items-center gap-2">
@@ -313,11 +313,11 @@ export default function ProfileSection({ user }) {
 
             {/* Email */}
           <div>
-            <label className="block text-xs font-medium text-base-content/60 mb-2">
+            <label className="block text-xs font-medium text-base-content  mb-2">
               Email
             </label>
             <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-base-content/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-base-content " fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
               <div className="text-base font-medium text-base-content truncate underline">
@@ -328,7 +328,7 @@ export default function ProfileSection({ user }) {
 
           {/* WhatsApp */}
           <div>
-            <label className="block text-xs font-medium text-base-content/60 mb-2">
+            <label className="block text-xs font-medium text-base-content  mb-2">
               WhatsApp
             </label>
             <div className="flex items-center gap-2">
@@ -345,11 +345,11 @@ export default function ProfileSection({ user }) {
 
           {/* Phone */}
           <div>
-            <label className="block text-xs font-medium text-base-content/60 mb-2">
+            <label className="block text-xs font-medium text-base-content  mb-2">
               Phone
             </label>
             <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-base-content/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-base-content " fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
               </svg>
               <div className="text-base font-medium text-base-content truncate underline">
@@ -362,7 +362,7 @@ export default function ProfileSection({ user }) {
 
       {/* Edit Modal */}
       {isEditing && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={handleCancel}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black  backdrop-blur-sm" onClick={handleCancel}>
           <div className="bg-base-100 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             {/* Modal Header */}
             <div className="sticky top-0 bg-base-100 border-b border-base-300 px-6 py-4 flex items-center justify-between">
@@ -371,7 +371,7 @@ export default function ProfileSection({ user }) {
               </h3>
               <button 
                 onClick={handleCancel}
-                className="text-base-content/40 hover:text-base-content/60 transition-colors"
+                className="text-base-content  hover:text-base-content  transition-colors"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -385,7 +385,7 @@ export default function ProfileSection({ user }) {
               <div className="flex flex-col items-center gap-4 pb-6 border-b border-base-300">
                 <div className="relative">
                   {previewUrl ? (
-                    <div className="w-24 h-24 rounded-full overflow-hidden ring-4 ring-primary/20">
+                    <div className="w-24 h-24 rounded-full overflow-hidden ring-4 ring-primary ">
                       <img 
                         src={previewUrl} 
                         alt="Preview"
@@ -393,7 +393,7 @@ export default function ProfileSection({ user }) {
                       />
                     </div>
                   ) : editedUser.profile_image_url ? (
-                    <div className="w-24 h-24 rounded-full overflow-hidden ring-4 ring-primary/20">
+                    <div className="w-24 h-24 rounded-full overflow-hidden ring-4 ring-primary ">
                       <Image 
                         src={editedUser.profile_image_url} 
                         alt="Profile"
@@ -404,7 +404,7 @@ export default function ProfileSection({ user }) {
                       />
                     </div>
                   ) : (
-                    <div className="w-24 h-24 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center ring-4 ring-primary/20">
+                    <div className="w-24 h-24 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center ring-4 ring-primary ">
                       <span className="text-white text-3xl font-bold">
                         {editedUser.first_name?.[0]}{editedUser.last_name?.[0]}
                       </span>
@@ -421,12 +421,12 @@ export default function ProfileSection({ user }) {
                 <button 
                   type="button"
                   onClick={handleChangePhotoClick}
-                  className="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-content text-sm font-medium rounded-lg transition-colors"
+                  className="px-4 py-2 bg-primary hover:bg-primary  text-primary-content text-sm font-medium rounded-lg transition-colors"
                 >
                   {selectedFile ? 'Change Photo' : 'Upload Photo'}
                 </button>
                 {selectedFile && (
-                  <p className="text-xs text-base-content/60">
+                  <p className="text-xs text-base-content ">
                     Selected: {selectedFile.name}
                   </p>
                 )}
@@ -497,13 +497,13 @@ export default function ProfileSection({ user }) {
 
             {/* Error Message */}
             {error && (
-              <div className="px-6 py-3 bg-error/10 border border-error/30 rounded-lg">
+              <div className="px-6 py-3 bg-error  border border-error   rounded-lg">
                 <p className="text-sm text-error">{error}</p>
               </div>
             )}
 
             {/* Modal Footer */}
-            <div className="sticky bottom-0 bg-base-200/50 border-t border-base-300 px-6 py-4 flex justify-end gap-3">
+            <div className="sticky bottom-0 bg-base-200  border-t border-base-300 px-6 py-4 flex justify-end gap-3">
               <button
                 onClick={handleCancel}
                 className="px-6 py-2.5 text-sm font-medium text-base-content bg-base-100 border border-base-300 rounded-lg hover:bg-base-200 transition-colors"
@@ -512,7 +512,7 @@ export default function ProfileSection({ user }) {
               </button>
               <button
                 onClick={handleSave}
-                className="px-6 py-2.5 text-sm font-medium text-primary-content bg-primary hover:bg-primary/90 rounded-lg transition-colors"
+                className="px-6 py-2.5 text-sm font-medium text-primary-content bg-primary hover:bg-primary  rounded-lg transition-colors"
               >
                 Save Changes
               </button>
@@ -523,7 +523,7 @@ export default function ProfileSection({ user }) {
 
       {/* Confirmation Modal */}
       {showConfirmModal && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={handleCancelConfirm}>
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black  backdrop-blur-sm" onClick={handleCancelConfirm}>
           <div className="bg-base-100 rounded-2xl shadow-2xl max-w-md w-full" onClick={(e) => e.stopPropagation()}>
             {/* Modal Header */}
             <div className="px-6 py-4 border-b border-base-300">
@@ -541,26 +541,26 @@ export default function ProfileSection({ user }) {
               {/* Show what's being changed */}
               <div className="bg-base-200 rounded-lg p-4 space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-base-content/60">First Name:</span>
+                  <span className="text-base-content ">First Name:</span>
                   <span className="font-medium text-base-content">{editedUser.first_name}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-base-content/60">Last Name:</span>
+                  <span className="text-base-content ">Last Name:</span>
                   <span className="font-medium text-base-content">{editedUser.last_name}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-base-content/60">Phone:</span>
+                  <span className="text-base-content ">Phone:</span>
                   <span className="font-medium text-base-content">{editedUser.phone_number || 'N/A'}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-base-content/60">Gender:</span>
+                  <span className="text-base-content ">Gender:</span>
                   <span className="font-medium text-base-content capitalize">{editedUser.gender || 'N/A'}</span>
                 </div>
               </div>
             </div>
 
             {/* Modal Footer */}
-            <div className="px-6 py-4 bg-base-200/50 border-t border-base-300 flex justify-end gap-3">
+            <div className="px-6 py-4 bg-base-200  border-t border-base-300 flex justify-end gap-3">
               <button
                 onClick={handleCancelConfirm}
                 disabled={isSaving}
@@ -571,11 +571,11 @@ export default function ProfileSection({ user }) {
               <button
                 onClick={handleConfirmSave}
                 disabled={isSaving}
-                className="px-6 py-2.5 text-sm font-medium text-primary-content bg-primary hover:bg-primary/90 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                className="px-6 py-2.5 text-sm font-medium text-primary-content bg-primary hover:bg-primary  rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 {isSaving ? (
                   <>
-                    <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org 00/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>

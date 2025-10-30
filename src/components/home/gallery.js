@@ -180,7 +180,7 @@ export default function Gallery() {
                 />
                 
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black  via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 
                 {/* Content overlay */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
@@ -189,7 +189,7 @@ export default function Gallery() {
                 </div>
                 
                 {/* View icon */}
-                <div className="absolute top-3 right-3 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute top-3 right-3 w-8 h-8 bg-white  backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -226,14 +226,14 @@ export default function Gallery() {
       {/* Image Modal/Lightbox */}
       {selectedImage && (
         <div 
-          className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black  flex items-center justify-center z-50 p-4"
           onClick={() => setSelectedImage(null)}
         >
           <div className="relative max-w-7xl max-h-full">
             {/* Close button */}
             <button
               onClick={() => setSelectedImage(null)}
-              className="cursor-target absolute top-4 right-4 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors duration-200 z-10"
+              className="cursor-target absolute top-4 right-4 w-10 h-10 bg-white  backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white   transition-colors duration-200 z-10"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -253,9 +253,9 @@ export default function Gallery() {
               />
               
               {/* Image info */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black  to-transparent p-6 rounded-b-lg">
                 <h3 className="text-white text-xl font-bold mb-2">{selectedImage.title}</h3>
-                <p className="text-white/80 text-sm">{selectedImage.category}</p>
+                <p className="text-white  text-sm">{selectedImage.category}</p>
               </div>
             </div>
 
@@ -268,7 +268,7 @@ export default function Gallery() {
                   const prevIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
                   setSelectedImage(items[prevIndex]);
                 }}
-                className="cursor-target w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors duration-200"
+                className="cursor-target w-12 h-12 bg-white  backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white   transition-colors duration-200"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -284,7 +284,7 @@ export default function Gallery() {
                   const nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
                   setSelectedImage(items[nextIndex]);
                 }}
-                className="cursor-target w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors duration-200"
+                className="cursor-target w-12 h-12 bg-white  backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white   transition-colors duration-200"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

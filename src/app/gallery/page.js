@@ -19,73 +19,73 @@ const galleryItems = [
   {
     id: 1,
     title: "Workshop Intelligence Artificielle",
-    date: "4/20/2024",
+    date: "4  24",
     category: "Formations",
     type: "formation",
-    imageUrl: "https://picsum.photos/id/1015/800/600",
+    imageUrl: "https://picsum.photos/id 15 0 0",
     description: "Session intensive sur les fondamentaux de l'IA et machine learning"
   },
   {
     id: 2,
     title: "Hackathon Spring 2024",
-    date: "3/15/2024", 
+    date: "3/15 24", 
     category: "Competitions",
     type: "competition",
-    imageUrl: "https://picsum.photos/id/1011/900/700",
+    imageUrl: "https://picsum.photos/id 11 0 0",
     description: "Compétition de programmation de 48h avec des défis innovants"
   },
   {
     id: 3,
     title: "Conférence Cybersécurité",
-    date: "2/28/2024",
+    date: "2/28 24",
     category: "Articles",
     type: "conference",
-    imageUrl: "https://picsum.photos/id/1020/800/500",
+    imageUrl: "https://picsum.photos/id 20 0 0",
     description: "Présentation des dernières tendances en sécurité informatique"
   },
   {
     id: 4,
     title: "Projet Fin d'Études - App Mobile",
-    date: "4/10/2024",
+    date: "4  24",
     category: "Member Work",
     type: "project",
-    imageUrl: "https://picsum.photos/id/1022/700/800",
+    imageUrl: "https://picsum.photos/id 22 0 0",
     description: "Application mobile innovante développée par nos étudiants"
   },
   {
     id: 5,
     title: "Tech Talk - Cloud Computing",
-    date: "3/25/2024",
+    date: "3/25 24",
     category: "Articles",
     type: "tech-talk",
-    imageUrl: "https://picsum.photos/id/1023/800/600",
+    imageUrl: "https://picsum.photos/id 23 0 0",
     description: "Exploration des technologies cloud et leur impact"
   },
   {
     id: 6,
     title: "Collaboration Entreprise",
-    date: "4/05/2024",
+    date: "4/05 24",
     category: "Member Work",
     type: "collaboration",
-    imageUrl: "https://picsum.photos/id/1024/900/600",
+    imageUrl: "https://picsum.photos/id 24 0 0",
     description: "Partenariat avec des entreprises technologiques locales"
   },
   {
     id: 7,
     title: "Formation React Advanced",
-    date: "3/20/2024",
+    date: "3  24",
     category: "Formations",
     type: "formation",
-    imageUrl: "https://picsum.photos/id/1025/800/700",
+    imageUrl: "https://picsum.photos/id 25 0 0",
     description: "Maîtrise avancée du framework React et ses écosystèmes"
   },
   {
     id: 8,
     title: "Innovation Lab Session",
-    date: "4/15/2024",
+    date: "4/15 24",
     category: "Articles",
     type: "innovation",
-    imageUrl: "https://picsum.photos/id/1026/700/600",
+    imageUrl: "https://picsum.photos/id 26 0 0",
     description: "Laboratoire d'innovation pour développer des idées créatives"
   }
 ];
@@ -150,7 +150,7 @@ function Picture({ position, rotation, imageUrl, title, description, scale = [2,
       {/* Info Panel (appears when hovered) */}
       {hovered && (
         <Html position={[0, -scale[1]/2 - 0.5, 0]} center>
-          <div className="bg-black/80 text-white p-4 rounded-lg max-w-xs backdrop-blur-sm">
+          <div className="bg-black  text-white p-4 rounded-lg max-w-xs backdrop-blur-sm">
             <h3 className="font-bold text-lg mb-2">{title}</h3>
             <p className="text-sm opacity-90">{description}</p>
           </div>
@@ -414,11 +414,11 @@ export default function GalleryPage() {
       <div className="min-h-screen bg-base-100 flex items-center justify-center">
         <div className="text-center">
           <div className="loading loading-spinner loading-lg text-primary"></div>
-          <p className="mt-4 text-base-content/70">Initialisation du musée 3D...</p>
-          <p className="mt-2 text-sm text-base-content/50">Chargement de l&apos;expérience immersive</p>
+          <p className="mt-4 text-base-content ">Initialisation du musée 3D...</p>
+          <p className="mt-2 text-sm text-base-content ">Chargement de l&apos;expérience immersive</p>
           <button 
             onClick={() => setIsLoading(false)}
-            className="mt-4 px-4 py-2 bg-primary text-primary-content rounded-lg text-sm hover:bg-primary/90 transition-colors"
+            className="mt-4 px-4 py-2 bg-primary text-primary-content rounded-lg text-sm hover:bg-primary  transition-colors"
           >
             Passer le chargement
           </button>
@@ -432,12 +432,12 @@ export default function GalleryPage() {
       <div className="min-h-screen bg-base-100 flex items-center justify-center">
         <div className="text-center max-w-md">
           <h1 className="text-2xl font-bold text-base-content mb-4">Erreur 3D</h1>
-          <p className="text-base-content/70 mb-4">
+          <p className="text-base-content  mb-4">
             Le musée 3D ne peut pas se charger. Cela peut être dû à votre navigateur ou votre matériel.
           </p>
           <Link 
             href="/gallery-2d" 
-            className="px-6 py-3 bg-primary text-primary-content rounded-lg hover:bg-primary/90 transition-colors"
+            className="px-6 py-3 bg-primary text-primary-content rounded-lg hover:bg-primary  transition-colors"
           >
             Voir la galerie classique
           </Link>
@@ -449,7 +449,7 @@ export default function GalleryPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 relative">
       {/* 3D Museum Controls Instructions */}
-      <div className="absolute top-4 left-4 z-20 bg-black/80 text-white p-4 rounded-lg backdrop-blur-sm">
+      <div className="absolute top-4 left-4 z-20 bg-black  text-white p-4 rounded-lg backdrop-blur-sm">
         <h3 className="font-bold mb-2">🎮 Contrôles du Musée</h3>
         <div className="text-sm space-y-1">
           <p><kbd className="px-2 py-1 bg-gray-700 rounded text-xs">Clic</kbd> pour verrouiller la souris</p>
@@ -462,7 +462,7 @@ export default function GalleryPage() {
       {/* Top UI Bar */}
       <div className="absolute top-4 right-4 z-20 flex items-center space-x-4">
         {/* Category Filter */}
-        <div className="bg-black/80 backdrop-blur-sm rounded-lg p-2">
+        <div className="bg-black  backdrop-blur-sm rounded-lg p-2">
           <select 
             value={selectedCategory} 
             onChange={(e) => setSelectedCategory(e.target.value)}
@@ -476,13 +476,13 @@ export default function GalleryPage() {
 
         {/* Theme Switcher */}
         <div className="dropdown dropdown-end">
-          <label tabIndex={0} className="btn btn-circle btn-ghost text-white hover:bg-white/20">
+          <label tabIndex={0} className="btn btn-circle btn-ghost text-white hover:bg-white ">
             {theme === "acid" ? (
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-5 w-5">
+              <svg xmlns="http://www.w3.org 00/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-5 w-5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
               </svg>
             ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-5 w-5">
+              <svg xmlns="http://www.w3.org 00/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-5 w-5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
               </svg>
             )}
@@ -510,7 +510,7 @@ export default function GalleryPage() {
         {/* Go Back Button */}
         <Link
           href="/"
-          className="bg-black/80 hover:bg-black text-white px-4 py-2 rounded-lg backdrop-blur-sm transition-colors flex items-center space-x-2"
+          className="bg-black  hover:bg-black text-white px-4 py-2 rounded-lg backdrop-blur-sm transition-colors flex items-center space-x-2"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -558,7 +558,7 @@ export default function GalleryPage() {
 
       {/* Bottom Info Bar */}
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20">
-        <div className="bg-black/80 text-white px-6 py-3 rounded-full backdrop-blur-sm">
+        <div className="bg-black  text-white px-6 py-3 rounded-full backdrop-blur-sm">
           <p className="text-sm">
             🖼️ {filteredItems.length} œuvres exposées • Survolez les tableaux pour plus d&apos;infos
           </p>

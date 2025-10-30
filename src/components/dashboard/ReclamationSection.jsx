@@ -25,11 +25,11 @@ export default function ReclamationSection({ user }) {
       {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-base-content mb-2">Faire une Réclamation</h1>
-        <p className="text-base-content/60">Signalez un problème ou faites une suggestion</p>
+        <p className="text-base-content ">Signalez un problème ou faites une suggestion</p>
       </div>
 
       {/* Reclamation Form */}
-      <div className="bg-base-100 rounded-3xl p-8 shadow-lg border border-base-300/20">
+      <div className="bg-base-100 rounded-3xl p-8 shadow-lg border border-base-300 ">
         <form onSubmit={handleSubmit} className="space-y-6">
           
           {/* Subject */}
@@ -43,7 +43,7 @@ export default function ReclamationSection({ user }) {
               value={formData.subject}
               onChange={handleInputChange}
               placeholder="Résumé de votre réclamation"
-              className="w-full p-3 bg-base-200 border border-base-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50"
+              className="w-full p-3 bg-base-200 border border-base-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary  focus:border-primary "
               required
             />
           </div>
@@ -58,7 +58,7 @@ export default function ReclamationSection({ user }) {
                 name="category"
                 value={formData.category}
                 onChange={handleInputChange}
-                className="w-full p-3 bg-base-200 border border-base-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50"
+                className="w-full p-3 bg-base-200 border border-base-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary  focus:border-primary "
                 required
               >
                 <option value="">Sélectionner une catégorie</option>
@@ -79,7 +79,7 @@ export default function ReclamationSection({ user }) {
                 name="priority"
                 value={formData.priority}
                 onChange={handleInputChange}
-                className="w-full p-3 bg-base-200 border border-base-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50"
+                className="w-full p-3 bg-base-200 border border-base-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary  focus:border-primary "
               >
                 <option value="low">Faible</option>
                 <option value="medium">Moyenne</option>
@@ -100,7 +100,7 @@ export default function ReclamationSection({ user }) {
               onChange={handleInputChange}
               placeholder="Décrivez votre problème ou suggestion en détail..."
               rows={6}
-              className="w-full p-3 bg-base-200 border border-base-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 resize-none"
+              className="w-full p-3 bg-base-200 border border-base-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary  focus:border-primary  resize-none"
               required
             />
           </div>
@@ -109,13 +109,13 @@ export default function ReclamationSection({ user }) {
           <div className="flex justify-end space-x-4">
             <button
               type="button"
-              className="px-6 py-3 text-base-content/70 hover:text-base-content hover:bg-base-200 rounded-lg transition-colors"
+              className="px-6 py-3 text-base-content  hover:text-base-content hover:bg-base-200 rounded-lg transition-colors"
             >
               Annuler
             </button>
             <button
               type="submit"
-              className="px-6 py-3 bg-primary text-primary-content rounded-lg hover:bg-primary/90 transition-colors font-medium"
+              className="px-6 py-3 bg-primary text-primary-content rounded-lg hover:bg-primary  transition-colors font-medium"
             >
               Envoyer la réclamation
             </button>
@@ -124,7 +124,7 @@ export default function ReclamationSection({ user }) {
       </div>
 
       {/* Info Box */}
-      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-2xl p-6">
+      <div className="bg-blue-50 dark:bg-blue-900  border border-blue-200 dark:border-blue-800 rounded-2xl p-6">
         <div className="flex items-start space-x-3">
           <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
             <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -59,18 +59,18 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/20  backdrop-blur-sm"
       onClick={handleBackdropClick}
     >
-      <div className={`relative w-full max-w-md bg-base-100/95 backdrop-blur-md rounded-3xl shadow-2xl border border-base-300/20 overflow-hidden transition-all duration-500 ${
+      <div className={`relative w-full max-w-md bg-base-100/95 backdrop-blur-md rounded-3xl shadow-2xl border border-base-300  overflow-hidden transition-all duration-500 ${
         showModal ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
       }`}>
         
         {/* Header */}
-        <div className="bg-base-100/95 backdrop-blur-md border-b border-base-300/20 px-6 py-4 flex items-center justify-between">
+        <div className="bg-base-100/95 backdrop-blur-md border-b border-base-300  px-6 py-4 flex items-center justify-between">
           <div>
             <h2 className="text-xl font-bold text-base-content">Mot de passe oublié</h2>
-            <p className="text-base-content/60 text-sm">Récupérez l&apos;ccès à votre compte</p>
+            <p className="text-base-content  text-sm">Récupérez l&apos;ccès à votre compte</p>
           </div>
           
           <button
@@ -89,12 +89,12 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
             <>
               {/* Instructions */}
               <div className="mb-6">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-primary  rounded-full flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                 </div>
-                <p className="text-center text-base-content/70 text-sm leading-relaxed">
+                <p className="text-center text-base-content  text-sm leading-relaxed">
                   Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe.
                 </p>
               </div>
@@ -103,13 +103,13 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
               <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Error Message */}
                 {error && (
-                  <div className="bg-error/10 border border-error/20 text-error px-4 py-3 rounded-xl text-sm">
+                  <div className="bg-error  border border-error  text-error px-4 py-3 rounded-xl text-sm">
                     {error}
                   </div>
                 )}
 
                 <div>
-                  <label className="block text-sm font-medium text-base-content/70 mb-2">
+                  <label className="block text-sm font-medium text-base-content  mb-2">
                     Adresse email
                   </label>
                   <input
@@ -117,7 +117,7 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="votre.email@example.com"
-                    className="w-full px-4 py-3 bg-base-200/50 border border-base-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder-base-content/50"
+                    className="w-full px-4 py-3 bg-base-200  border border-base-300   rounded-xl focus:outline-none focus:ring-2 focus:ring-primary  focus:border-primary  transition-all placeholder-base-content "
                     required
                     disabled={isLoading}
                   />
@@ -126,11 +126,11 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
                 <button
                   type="submit"
                   disabled={!email || isLoading}
-                  className="w-full bg-primary hover:bg-primary/90 disabled:bg-primary/50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                  className="w-full bg-primary hover:bg-primary  disabled:bg-primary  disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
                 >
                   {isLoading ? (
                     <>
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      <div className="w-4 h-4 border-2 border-white   border-t-white rounded-full animate-spin"></div>
                       Envoi en cours...
                     </>
                   ) : (
@@ -148,7 +148,7 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
               <div className="mt-6 text-center">
                 <button
                   onClick={handleClose}
-                  className="text-base-content/60 hover:text-primary text-sm font-medium"
+                  className="text-base-content  hover:text-primary text-sm font-medium"
                 >
                   ← Retour à la connexion
                 </button>
@@ -157,7 +157,7 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
           ) : (
             /* Success State */
             <div className="text-center">
-              <div className="w-16 h-16 bg-success/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-success  rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="w-8 h-8 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
@@ -167,13 +167,13 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
                 Email envoyé !
               </h3>
               
-              <p className="text-base-content/70 text-sm mb-6 leading-relaxed">
+              <p className="text-base-content  text-sm mb-6 leading-relaxed">
                 If this email exists, a reset link was sent to <br />
                 <span className="font-medium text-base-content">{email}</span>
               </p>
 
-              <div className="bg-base-200/50 rounded-lg p-4 mb-6">
-                <p className="text-xs text-base-content/60">
+              <div className="bg-base-200  rounded-lg p-4 mb-6">
+                <p className="text-xs text-base-content ">
                   <strong>Note:</strong> Le lien expirera dans 15 minutes. 
                   Vérifiez également votre dossier spam si vous ne voyez pas l&apos;email.
                 </p>

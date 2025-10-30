@@ -54,7 +54,7 @@ export default function TermsModal({ isOpen, onClose }) {
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/20  backdrop-blur-sm"
       onClick={handleBackdropClick}
     >
       <div className={`relative w-full max-w-4xl h-[80vh] bg-base-100 rounded-3xl shadow-2xl overflow-hidden transition-all duration-500 ${
@@ -62,10 +62,10 @@ export default function TermsModal({ isOpen, onClose }) {
       }`}>
         
         {/* Header */}
-        <div className="sticky top-0 z-10 bg-base-100/95 backdrop-blur-md border-b border-base-300/20 px-6 py-4 flex items-center justify-between">
+        <div className="sticky top-0 z-10 bg-base-100/95 backdrop-blur-md border-b border-base-300  px-6 py-4 flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold text-base-content">Conditions d&apos;Utilisation</h2>
-            <p className="text-base-content/60 text-sm">ARTWARE Community Platform</p>
+            <p className="text-base-content  text-sm">ARTWARE Community Platform</p>
           </div>
           
           <button
@@ -84,11 +84,11 @@ export default function TermsModal({ isOpen, onClose }) {
             {termsData.map((section, index) => (
               <div
                 key={section.id}
-                className={`${section.bgColor} rounded-2xl p-6 border border-base-300/20 transition-all duration-300 hover:shadow-lg`}
+                className={`${section.bgColor} rounded-2xl p-6 border border-base-300  transition-all duration-300 hover:shadow-lg`}
               >
                 <div className="flex items-start gap-4">
                   {/* Section Number */}
-                  <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                  <div className="flex-shrink-0 w-12 h-12 bg-primary  rounded-full flex items-center justify-center">
                     <span className="text-primary font-bold text-sm">{section.id}</span>
                   </div>
                   
@@ -100,12 +100,12 @@ export default function TermsModal({ isOpen, onClose }) {
                     
                     
                     
-                    <p className="text-base-content/80 leading-relaxed mb-4">
+                    <p className="text-base-content  leading-relaxed mb-4">
                       {section.description}
                     </p>
                     
                     {section.hasButton && (
-                      <button className="px-6 py-2 border border-base-content/20 rounded-full text-sm font-medium text-base-content hover:bg-base-200 transition-colors">
+                      <button className="px-6 py-2 border border-base-content  rounded-full text-sm font-medium text-base-content hover:bg-base-200 transition-colors">
                         DISCUTER PROJET
                       </button>
                     )}
@@ -115,10 +115,10 @@ export default function TermsModal({ isOpen, onClose }) {
             ))}
 
             {/* Additional Terms */}
-            <div className="bg-base-200/50 rounded-2xl p-6 border border-base-300/20">
+            <div className="bg-base-200  rounded-2xl p-6 border border-base-300 ">
               <h4 className="text-lg font-semibold text-base-content mb-4">Termes Supplémentaires</h4>
               
-              <div className="space-y-4 text-sm text-base-content/70">
+              <div className="space-y-4 text-sm text-base-content ">
                 <div>
                   <h5 className="font-medium text-base-content mb-2">Participation aux Événements</h5>
                   <p>En participant à nos événements, workshops et hackathons, vous acceptez de respecter notre code de conduite et de contribuer positivement à l&apos;expérience collective.</p>
@@ -139,9 +139,9 @@ export default function TermsModal({ isOpen, onClose }) {
         </div>
 
         {/* Footer */}
-        <div className="absolute bottom-0 left-0 right-0 bg-base-100/95 backdrop-blur-md border-t border-base-300/20 p-6">
+        <div className="absolute bottom-0 left-0 right-0 bg-base-100/95 backdrop-blur-md border-t border-base-300  p-6">
           <div className="flex items-center justify-between">
-            <div className="text-sm text-base-content/60">
+            <div className="text-sm text-base-content ">
               Dernière mise à jour: Janvier 2025
             </div>
             

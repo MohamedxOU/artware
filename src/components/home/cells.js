@@ -144,7 +144,7 @@ export default function Cells() {
                   height={300}
                   className="w-full h-48 object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black  via-transparent to-transparent"></div>
                 
                 {/* Card indicator */}
                 <div className="absolute top-4 right-4 bg-primary opacity-90 backdrop-blur-sm px-3 py-1 rounded-full">

@@ -348,9 +348,9 @@ export default function EventsSection() {
   if (isLoading) {
     return (
       <div className="w-full max-w-7xl mx-auto relative min-h-full">
-        <div className="backdrop-blur-sm bg-base-100/80 rounded-2xl p-8 text-center border border-base-300/20 shadow-sm relative z-10">
+        <div className="backdrop-blur-sm bg-base-100  rounded-2xl p-8 text-center border border-base-300  shadow-sm relative z-10">
           <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p className="text-base-content/60">Loading events...</p>
+          <p className="text-base-content ">Loading events...</p>
         </div>
       </div>
     );
@@ -360,17 +360,17 @@ export default function EventsSection() {
   if (error) {
     return (
       <div className="w-full max-w-7xl mx-auto relative min-h-full">
-        <div className="backdrop-blur-sm bg-base-100/80 rounded-2xl p-8 text-center border border-base-300/20 shadow-sm relative z-10">
+        <div className="backdrop-blur-sm bg-base-100  rounded-2xl p-8 text-center border border-base-300  shadow-sm relative z-10">
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
           </div>
           <h3 className="text-xl font-semibold text-base-content mb-2">Loading Error</h3>
-          <p className="text-base-content/60 mb-4">{error}</p>
+          <p className="text-base-content  mb-4">{error}</p>
           <button 
             onClick={() => window.location.reload()} 
-            className="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-content rounded-lg text-sm font-medium transition-colors"
+            className="px-4 py-2 bg-primary hover:bg-primary  text-primary-content rounded-lg text-sm font-medium transition-colors"
           >
             Retry
           </button>
@@ -385,7 +385,7 @@ export default function EventsSection() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6 relative z-10">
-        <div className="backdrop-blur-sm bg-info/10 rounded-2xl p-4 lg:p-6 border border-info/30 shadow-lg">
+        <div className="backdrop-blur-sm bg-info  rounded-2xl p-4 lg:p-6 border border-info   shadow-lg">
           <div className="flex items-center justify-between mb-2 lg:mb-4">
             <div className="w-10 h-10 lg:w-12 lg:h-12 bg-info rounded-xl flex items-center justify-center">
               <svg className="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -399,7 +399,7 @@ export default function EventsSection() {
           </div>
         </div>
 
-        <div className="backdrop-blur-sm bg-primary/10 rounded-2xl p-4 lg:p-6 border border-primary/30 shadow-lg">
+        <div className="backdrop-blur-sm bg-primary  rounded-2xl p-4 lg:p-6 border border-primary   shadow-lg">
           <div className="flex items-center justify-between mb-2 lg:mb-4">
             <div className="w-10 h-10 lg:w-12 lg:h-12 bg-primary rounded-xl flex items-center justify-center">
               <svg className="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -413,7 +413,7 @@ export default function EventsSection() {
           </div>
         </div>
 
-        <div className="backdrop-blur-sm bg-success/10 rounded-2xl p-4 lg:p-6 border border-success/30 shadow-lg">
+        <div className="backdrop-blur-sm bg-success  rounded-2xl p-4 lg:p-6 border border-success   shadow-lg">
           <div className="flex items-center justify-between mb-2 lg:mb-4">
             <div className="w-10 h-10 lg:w-12 lg:h-12 bg-success rounded-xl flex items-center justify-center">
               <svg className="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -427,7 +427,7 @@ export default function EventsSection() {
           </div>
         </div>
 
-        <div className="backdrop-blur-sm bg-warning/10 rounded-2xl p-4 lg:p-6 border border-warning/30 shadow-lg">
+        <div className="backdrop-blur-sm bg-warning  rounded-2xl p-4 lg:p-6 border border-warning   shadow-lg">
           <div className="flex items-center justify-between mb-2 lg:mb-4">
             <div className="w-10 h-10 lg:w-12 lg:h-12 bg-warning rounded-xl flex items-center justify-center">
               <svg className="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -443,16 +443,16 @@ export default function EventsSection() {
       </div>
 
       {/* Event Tabs */}
-      <div className="backdrop-blur-sm bg-base-100/5 rounded-2xl shadow-lg border border-base-300/30 overflow-hidden relative z-10">
+      <div className="backdrop-blur-sm bg-base-100  rounded-2xl shadow-lg border border-base-300   overflow-hidden relative z-10">
         {/* Tab Navigation */}
-        <div className="border-b border-base-100/10 bg-base-100/10 backdrop-blur-sm">
+        <div className="border-b border-base-100  bg-base-100  backdrop-blur-sm">
           <div className="flex overflow-x-auto">
             <button
               onClick={() => setActiveTab('upcoming')}
               className={`px-4 lg:px-6 py-4 font-medium transition-all duration-200 border-b-2 whitespace-nowrap text-sm lg:text-base ${
                 activeTab === 'upcoming'
-                  ? 'border-primary text-primary bg-primary/5'
-                  : 'border-transparent text-base-content/70 hover:text-base-content hover:bg-base-200'
+                  ? 'border-primary text-primary bg-primary '
+                  : 'border-transparent text-base-content  hover:text-base-content hover:bg-base-200'
               }`}
             >
               Upcoming
@@ -461,8 +461,8 @@ export default function EventsSection() {
               onClick={() => setActiveTab('registered')}
               className={`px-4 lg:px-6 py-4 font-medium transition-all duration-200 border-b-2 whitespace-nowrap text-sm lg:text-base ${
                 activeTab === 'registered'
-                  ? 'border-primary text-primary bg-primary/5'
-                  : 'border-transparent text-base-content/70 hover:text-base-content hover:bg-base-200'
+                  ? 'border-primary text-primary bg-primary '
+                  : 'border-transparent text-base-content  hover:text-base-content hover:bg-base-200'
               }`}
             >
               My Registrations
@@ -471,8 +471,8 @@ export default function EventsSection() {
               onClick={() => setActiveTab('attended')}
               className={`px-4 lg:px-6 py-4 font-medium transition-all duration-200 border-b-2 whitespace-nowrap text-sm lg:text-base ${
                 activeTab === 'attended'
-                  ? 'border-primary text-primary bg-primary/5'
-                  : 'border-transparent text-base-content/70 hover:text-base-content hover:bg-base-200'
+                  ? 'border-primary text-primary bg-primary '
+                  : 'border-transparent text-base-content  hover:text-base-content hover:bg-base-200'
               }`}
             >
               Events Attended
@@ -483,9 +483,9 @@ export default function EventsSection() {
         {/* Events List */}
         <div className="p-6 backdrop-blur-sm">
           {filteredEvents.length === 0 ? (
-            <div className="text-center py-12 backdrop-blur-sm bg-base-100/50 rounded-xl border border-base-300/20">
+            <div className="text-center py-12 backdrop-blur-sm bg-base-100  rounded-xl border border-base-300 ">
               <div className="w-16 h-16 bg-base-300 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-8 h-8 text-base-content " fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
               </div>
@@ -494,7 +494,7 @@ export default function EventsSection() {
                 {activeTab === 'registered' && 'No registrations'}
                 {activeTab === 'attended' && 'No events attended'}
               </h3>
-              <p className="text-base-content/60">
+              <p className="text-base-content ">
                 {activeTab === 'upcoming' && 'Upcoming events will appear here.'}
                 {activeTab === 'registered' && 'Events you are registered for will appear here.'}
                 {activeTab === 'attended' && 'Events you have attended will appear here.'}
@@ -520,8 +520,8 @@ export default function EventsSection() {
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         />
                       ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-base-300 to-base-content/50 flex items-center justify-center">
-                          <svg className="w-16 h-16 text-base-content/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="w-full h-full bg-gradient-to-br from-base-300 to-base-content  flex items-center justify-center">
+                          <svg className="w-16 h-16 text-base-content " fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                           </svg>
                         </div>
@@ -532,7 +532,7 @@ export default function EventsSection() {
                     <div className="w-full lg:w-2/3 p-6 relative flex flex-col">
                       {/* Date Badge */}
                       <div className="absolute top-4 right-4 text-center">
-                        <div className="text-xs text-base-content/60 uppercase tracking-wide">
+                        <div className="text-xs text-base-content  uppercase tracking-wide">
                           {event.date.split(' ')[2] || 'OCT'}
                         </div>
                         <div className="text-2xl font-bold text-secondary">
@@ -545,7 +545,7 @@ export default function EventsSection() {
                         <h3 className="text-xl font-bold text-base-content mb-1 line-clamp-2">
                           {event.title}
                         </h3>
-                        <p className="text-base-content/70 text-sm">
+                        <p className="text-base-content  text-sm">
                           {event.eventType === 'workshop' ? 'Workshop' : 
                            event.eventType === 'conference' ? 'Conference' :
                            event.eventType === 'hackathon' ? 'Hackathon' : 'Event'}
@@ -597,7 +597,7 @@ export default function EventsSection() {
                                 handleRegisterEvent(event.id);
                               }}
                               disabled={actionLoading === event.id}
-                              className="cursor-target w-full py-3 bg-primary hover:bg-primary/90 text-primary-content rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                              className="cursor-target w-full py-3 bg-primary hover:bg-primary  text-primary-content rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                             >
                               {actionLoading === event.id ? (
                                 <>
@@ -618,7 +618,7 @@ export default function EventsSection() {
                                 e.stopPropagation();
                                 window.open(`/event/${event.id}`, '_blank');
                               }}
-                              className="cursor-target w-full py-2.5 border-2 border-primary text-primary rounded-lg font-medium hover:bg-primary/10 transition-colors duration-200 flex items-center justify-center gap-2"
+                              className="cursor-target w-full py-2.5 border-2 border-primary text-primary rounded-lg font-medium hover:bg-primary  transition-colors duration-200 flex items-center justify-center gap-2"
                             >
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -626,7 +626,7 @@ export default function EventsSection() {
                               </svg>
                               View Details
                             </button>
-                            <p className="text-xs text-base-content/60 text-center mt-2 italic">
+                            <p className="text-xs text-base-content  text-center mt-2 italic">
                               *Limited spots, registration required
                             </p>
                           </>
@@ -640,7 +640,7 @@ export default function EventsSection() {
                                 handleUnregisterEvent(event.id);
                               }}
                               disabled={actionLoading === event.id}
-                              className="cursor-target w-full py-3 border-2 border-error text-error rounded-lg font-medium hover:bg-error/10 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                              className="cursor-target w-full py-3 border-2 border-error text-error rounded-lg font-medium hover:bg-error  transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               {actionLoading === event.id ? 'Cancelling...' : 'Cancel Registration'}
                             </button>
@@ -649,7 +649,7 @@ export default function EventsSection() {
                                 e.stopPropagation();
                                 window.open(`/event/${event.id}`, '_blank');
                               }}
-                              className="cursor-target w-full py-2.5 border-2 border-primary text-primary rounded-lg font-medium hover:bg-primary/10 transition-colors duration-200 flex items-center justify-center gap-2"
+                              className="cursor-target w-full py-2.5 border-2 border-primary text-primary rounded-lg font-medium hover:bg-primary  transition-colors duration-200 flex items-center justify-center gap-2"
                             >
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -666,7 +666,7 @@ export default function EventsSection() {
                               e.stopPropagation();
                               window.open(`/event/${event.id}`, '_blank');
                             }}
-                            className="cursor-target w-full py-3 border-2 border-primary text-primary rounded-lg font-medium hover:bg-primary/10 transition-colors duration-200 flex items-center justify-center gap-2"
+                            className="cursor-target w-full py-3 border-2 border-primary text-primary rounded-lg font-medium hover:bg-primary  transition-colors duration-200 flex items-center justify-center gap-2"
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -727,7 +727,7 @@ export default function EventsSection() {
               </div>
               <button
                 onClick={() => setNotification({ show: false, type: '', message: '', title: '' })}
-                className={`flex-shrink-0 p-1 rounded-full hover:bg-black/10 transition-colors ${
+                className={`flex-shrink-0 p-1 rounded-full hover:bg-black  transition-colors ${
                   notification.type === 'success' 
                     ? 'text-green-700 dark:text-green-300' 
                     : 'text-red-700 dark:text-red-300'
@@ -744,12 +744,12 @@ export default function EventsSection() {
 
       {/* Confirmation Modal */}
       {confirmModal.show && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black  backdrop-blur-sm animate-in fade-in duration-200">
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full animate-in zoom-in-95 duration-200">
             {/* Modal Header */}
             <div className="p-6 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center">
+                <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900   rounded-full flex items-center justify-center">
                   <svg className="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1-1.968-1-2.732 0L3.732 16c-.77 1.333.192 3 1.732 3z" />
                   </svg>
@@ -788,10 +788,10 @@ export default function EventsSection() {
 
       {/* Documents Modal */}
       {selectedEvent && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
+        <div className="fixed inset-0 bg-black  backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
           <div className="bg-white dark:bg-gray-800 rounded-2xl max-w-4xl w-full max-h-[80vh] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
             {/* Modal Header */}
-            <div className="bg-blue-50 dark:bg-blue-900/30 border-b border-gray-200 dark:border-gray-700 p-6">
+            <div className="bg-blue-50 dark:bg-blue-900   border-b border-gray-200 dark:border-gray-700 p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
@@ -886,7 +886,7 @@ export default function EventsSection() {
             </div>
 
             {/* Modal Footer */}
-            <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-900/50">
+            <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-900 ">
               <button
                 onClick={closeDocumentsModal}
                 className="w-full sm:w-auto sm:ml-auto sm:block px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition-colors"

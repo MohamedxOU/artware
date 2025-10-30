@@ -88,13 +88,13 @@ export default function NotificationsSection({ notifications = mockNotifications
 
   const getNotificationColor = (type) => {
     switch (type) {
-      case 'event': return 'border-blue-200 bg-blue-50/50 dark:border-blue-800 dark:bg-blue-900/20';
-      case 'invitation': return 'border-purple-200 bg-purple-50/50 dark:border-purple-800 dark:bg-purple-900/20';
-      case 'document': return 'border-green-200 bg-green-50/50 dark:border-green-800 dark:bg-green-900/20';
-      case 'success': return 'border-emerald-200 bg-emerald-50/50 dark:border-emerald-800 dark:bg-emerald-900/20';
-      case 'reminder': return 'border-orange-200 bg-orange-50/50 dark:border-orange-800 dark:bg-orange-900/20';
-      case 'system': return 'border-gray-200 bg-gray-50/50 dark:border-gray-800 dark:bg-gray-900/20';
-      default: return 'border-base-300 bg-base-100/50';
+      case 'event': return 'border-blue-200 bg-blue-50  dark:border-blue-800 dark:bg-blue-900 ';
+      case 'invitation': return 'border-purple-200 bg-purple-50  dark:border-purple-800 dark:bg-purple-900 ';
+      case 'document': return 'border-green-200 bg-green-50  dark:border-green-800 dark:bg-green-900 ';
+      case 'success': return 'border-emerald-200 bg-emerald-50  dark:border-emerald-800 dark:bg-emerald-900 ';
+      case 'reminder': return 'border-orange-200 bg-orange-50  dark:border-orange-800 dark:bg-orange-900 ';
+      case 'system': return 'border-gray-200 bg-gray-50  dark:border-gray-800 dark:bg-gray-900 ';
+      default: return 'border-base-300 bg-base-100 ';
     }
   };
 
@@ -105,7 +105,7 @@ export default function NotificationsSection({ notifications = mockNotifications
         {/* Large primary circles */}
         <div className="absolute top-10 left-10 w-40 h-40 bg-primary/15 rounded-full blur-2xl"></div>
         <div className="absolute bottom-20 right-20 w-48 h-48 bg-primary/12 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/3 right-10 w-36 h-36 bg-primary/10 rounded-full blur-2xl"></div>
+        <div className="absolute top-1/3 right-10 w-36 h-36 bg-primary  rounded-full blur-2xl"></div>
         
         {/* Secondary color patterns */}
         <div className="absolute top-1/2 left-1/4 w-32 h-32 bg-secondary/18 rounded-full blur-xl"></div>
@@ -113,40 +113,40 @@ export default function NotificationsSection({ notifications = mockNotifications
         <div className="absolute top-20 right-1/3 w-28 h-28 bg-secondary/15 rounded-full blur-xl"></div>
         
         {/* Accent patterns */}
-        <div className="absolute top-3/4 left-1/3 w-24 h-24 bg-accent/20 rounded-full blur-lg"></div>
+        <div className="absolute top-3/4 left-1/3 w-24 h-24 bg-accent  rounded-full blur-lg"></div>
         <div className="absolute bottom-10 right-1/4 w-38 h-38 bg-accent/14 rounded-full blur-2xl"></div>
         <div className="absolute top-1/4 left-1/2 w-30 h-30 bg-accent/12 rounded-full blur-xl"></div>
         
         {/* Additional geometric patterns */}
         <div className="absolute top-40 left-1/3 w-20 h-60 bg-primary/8 rounded-full blur-2xl rotate-45"></div>
-        <div className="absolute bottom-40 right-1/3 w-16 h-50 bg-secondary/10 rounded-full blur-xl -rotate-45"></div>
+        <div className="absolute bottom-40 right-1/3 w-16 h-50 bg-secondary  rounded-full blur-xl -rotate-45"></div>
         <div className="absolute top-1/2 right-20 w-18 h-45 bg-accent/12 rounded-full blur-lg rotate-12"></div>
         
         {/* Small scattered dots */}
         <div className="absolute top-16 left-1/2 w-12 h-12 bg-primary/25 rounded-full blur-sm"></div>
-        <div className="absolute top-1/3 left-20 w-8 h-8 bg-secondary/30 rounded-full blur-sm"></div>
+        <div className="absolute top-1/3 left-20 w-8 h-8 bg-secondary   rounded-full blur-sm"></div>
         <div className="absolute bottom-1/3 right-16 w-10 h-10 bg-accent/25 rounded-full blur-sm"></div>
-        <div className="absolute top-2/3 left-16 w-14 h-14 bg-primary/20 rounded-full blur-md"></div>
+        <div className="absolute top-2/3 left-16 w-14 h-14 bg-primary  rounded-full blur-md"></div>
         <div className="absolute bottom-16 left-1/2 w-16 h-16 bg-secondary/18 rounded-full blur-md"></div>
         
         {/* Overlapping larger shapes */}
         <div className="absolute top-0 left-1/4 w-56 h-56 bg-primary/6 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 right-1/4 w-52 h-52 bg-secondary/8 rounded-full blur-3xl"></div>
         <div className="absolute top-1/2 left-0 w-48 h-48 bg-accent/7 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 right-0 w-50 h-50 bg-primary/5 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 right-0 w-50 h-50 bg-primary  rounded-full blur-3xl"></div>
       </div>
 
       {/* Header */}
       <div className="mb-8 relative z-10">
-        <div className="backdrop-blur-sm bg-base-100/80 rounded-2xl p-6 border border-base-300/20 shadow-sm">
+        <div className="backdrop-blur-sm bg-base-100  rounded-2xl p-6 border border-base-300  shadow-sm">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-base-content mb-2">Notifications</h1>
-              <p className="text-base-content/60">Restez au courant de toutes les activités du club</p>
+              <p className="text-base-content ">Restez au courant de toutes les activités du club</p>
             </div>
             <button
               onClick={markAllAsRead}
-              className="px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-xl transition-colors text-sm font-medium"
+              className="px-4 py-2 bg-primary  hover:bg-primary  text-primary rounded-xl transition-colors text-sm font-medium"
             >
               Tout marquer comme lu
             </button>
@@ -156,7 +156,7 @@ export default function NotificationsSection({ notifications = mockNotifications
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 relative z-10">
-        <div className="backdrop-blur-sm bg-blue-500/5 rounded-2xl p-6 border border-blue-500/10 shadow-sm">
+        <div className="backdrop-blur-sm bg-blue-500  rounded-2xl p-6 border border-blue-500  shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -170,7 +170,7 @@ export default function NotificationsSection({ notifications = mockNotifications
           </div>
         </div>
 
-        <div className="backdrop-blur-sm bg-red-500/5 rounded-2xl p-6 border border-red-500/10 shadow-sm">
+        <div className="backdrop-blur-sm bg-red-500  rounded-2xl p-6 border border-red-500  shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <div className="w-12 h-12 bg-red-500 rounded-xl flex items-center justify-center">
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -184,7 +184,7 @@ export default function NotificationsSection({ notifications = mockNotifications
           </div>
         </div>
 
-        <div className="backdrop-blur-sm bg-green-500/5 rounded-2xl p-6 border border-green-500/10 shadow-sm">
+        <div className="backdrop-blur-sm bg-green-500  rounded-2xl p-6 border border-green-500  shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -198,7 +198,7 @@ export default function NotificationsSection({ notifications = mockNotifications
           </div>
         </div>
 
-        <div className="backdrop-blur-sm bg-purple-500/5 rounded-2xl p-6 border border-purple-500/10 shadow-sm">
+        <div className="backdrop-blur-sm bg-purple-500  rounded-2xl p-6 border border-purple-500  shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <div className="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center">
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -215,7 +215,7 @@ export default function NotificationsSection({ notifications = mockNotifications
 
       {/* Filters */}
       <div className="mb-6 relative z-10">
-        <div className="backdrop-blur-sm bg-base-100/80 rounded-2xl p-4 border border-base-300/20 shadow-sm">
+        <div className="backdrop-blur-sm bg-base-100  rounded-2xl p-4 border border-base-300  shadow-sm">
           <div className="flex flex-wrap gap-2">
             {[
               { key: 'all', label: 'Toutes', count: stats.total },
@@ -228,7 +228,7 @@ export default function NotificationsSection({ notifications = mockNotifications
                 className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                   filter === filterOption.key
                     ? 'bg-primary text-primary-content shadow-sm'
-                    : 'bg-base-200/50 text-base-content/70 hover:bg-base-200'
+                    : 'bg-base-200  text-base-content  hover:bg-base-200'
                 }`}
               >
                 {filterOption.label} ({filterOption.count})
@@ -241,14 +241,14 @@ export default function NotificationsSection({ notifications = mockNotifications
       {/* Notifications List */}
       <div className="space-y-4 relative z-10">
         {filteredNotifications.length === 0 ? (
-          <div className="backdrop-blur-sm bg-base-100/80 rounded-2xl p-8 text-center border border-base-300/20 shadow-sm">
-            <div className="w-16 h-16 bg-base-300/50 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-base-content/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="backdrop-blur-sm bg-base-100  rounded-2xl p-8 text-center border border-base-300  shadow-sm">
+            <div className="w-16 h-16 bg-base-300  rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-base-content " fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5v-5zM9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
             <h3 className="text-lg font-semibold text-base-content mb-2">Aucune notification</h3>
-            <p className="text-base-content/60">
+            <p className="text-base-content ">
               {filter === 'unread' ? 'Toutes vos notifications ont été lues.' : 
                filter === 'read' ? 'Aucune notification lue pour le moment.' :
                'Aucune notification disponible.'}
@@ -260,7 +260,7 @@ export default function NotificationsSection({ notifications = mockNotifications
               key={notification.id}
               className={`backdrop-blur-sm rounded-2xl p-6 border shadow-sm transition-all hover:shadow-md cursor-pointer ${
                 getNotificationColor(notification.type)
-              } ${!notification.read ? 'ring-2 ring-primary/20' : ''}`}
+              } ${!notification.read ? 'ring-2 ring-primary ' : ''}`}
               onClick={() => {
                 setSelectedNotification(notification);
                 if (!notification.read) markAsRead(notification.id);
@@ -272,25 +272,25 @@ export default function NotificationsSection({ notifications = mockNotifications
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between mb-2">
-                    <h3 className={`text-base font-semibold ${!notification.read ? 'text-base-content' : 'text-base-content/80'}`}>
+                    <h3 className={`text-base font-semibold ${!notification.read ? 'text-base-content' : 'text-base-content '}`}>
                       {notification.title}
                     </h3>
                     {!notification.read && (
                       <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0 ml-2 mt-2"></div>
                     )}
                   </div>
-                  <p className={`text-sm mb-3 ${!notification.read ? 'text-base-content/70' : 'text-base-content/60'}`}>
+                  <p className={`text-sm mb-3 ${!notification.read ? 'text-base-content ' : 'text-base-content '}`}>
                     {notification.message}
                   </p>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-base-content/50">{notification.time}</span>
+                    <span className="text-xs text-base-content ">{notification.time}</span>
                     <span className={`text-xs px-2 py-1 rounded-full ${
-                      notification.type === 'event' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300' :
-                      notification.type === 'invitation' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300' :
-                      notification.type === 'document' ? 'bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300' :
-                      notification.type === 'success' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300' :
-                      notification.type === 'reminder' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/50 dark:text-orange-300' :
-                      'bg-gray-100 text-gray-700 dark:bg-gray-900/50 dark:text-gray-300'
+                      notification.type === 'event' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900  dark:text-blue-300' :
+                      notification.type === 'invitation' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900  dark:text-purple-300' :
+                      notification.type === 'document' ? 'bg-green-100 text-green-700 dark:bg-green-900  dark:text-green-300' :
+                      notification.type === 'success' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900  dark:text-emerald-300' :
+                      notification.type === 'reminder' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900  dark:text-orange-300' :
+                      'bg-gray-100 text-gray-700 dark:bg-gray-900  dark:text-gray-300'
                     }`}>
                       {notification.type === 'event' ? 'Événement' :
                        notification.type === 'invitation' ? 'Invitation' :
