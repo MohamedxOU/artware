@@ -47,7 +47,7 @@ export default function Activities() {
 				</div>
 
 				{/* Main Content Layout */}
-				<div className="bg-base-100 border border-base-300/20 rounded-3xl shadow-2xl overflow-hidden">
+				<div className="bg-base-100 border border-base-300 rounded-3xl shadow-2xl overflow-hidden">
 					{/* Mobile Layout */}
 					<div className="block lg:hidden">
 						{/* Mobile Content Area */}
