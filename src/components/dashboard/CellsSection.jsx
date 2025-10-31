@@ -324,11 +324,11 @@ export default function CellsSection({ user }) {
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                   {/* Gradient overlay for better text readability */}
-                  <div className="absolute inset-0 bg-gradient-to-b from-black  via-black  to-black "></div>
+                  <div className="absolute inset-0 bg-linear-to-b from-black/30 via-black/50 to-black/90"></div>
                 </>
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-primary via-secondary to-accent">
-                  <div className="absolute inset-0 bg-gradient-to-b from-black  via-black  to-black "></div>
+                  <div className="absolute inset-0 bg-linear-to-b from-black/30 via-black/50 to-black/90"></div>
                 </div>
               )}
             </div>
@@ -338,7 +338,7 @@ export default function CellsSection({ user }) {
               {/* Top Section - Badge */}
               <div className="flex justify-between items-start">
                 {cell.isMember && (
-                  <div className="bg-white  backdrop-blur-md border border-white   text-white px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 shadow-lg">
+                  <div className="bg-info  backdrop-blur-md border border-white   text-white px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 shadow-lg">
                     <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
@@ -370,7 +370,7 @@ export default function CellsSection({ user }) {
                   </div>
                   
                   {/* Abbreviation Badge */}
-                  <span className="inline-block px-2 py-1 bg-white  backdrop-blur-md border border-white   text-white text-xs font-semibold rounded-md">
+                  <span className="inline-block px-2 py-1 bg-info  backdrop-blur-md border border-white   text-white text-xs font-semibold rounded-md">
                     {cell.abbreviation}
                   </span>
                 </div>
@@ -385,7 +385,7 @@ export default function CellsSection({ user }) {
                   {/* Show Events Button */}
                   <button
                     onClick={() => handleShowEvents(cell.abbreviation)}
-                    className="cursor-target w-full py-2.5 bg-white  hover:bg-white  backdrop-blur-md border border-white   text-white rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2"
+                    className="cursor-target w-full py-2.5   backdrop-blur-md border border-primary   text-white rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -398,7 +398,7 @@ export default function CellsSection({ user }) {
                     <button
                       onClick={() => handleQuitCell(cell.id, cell.name)}
                       disabled={quittingCell === cell.id}
-                      className="cursor-target w-full py-3 bg-white  hover:bg-white  backdrop-blur-md border border-white   text-white rounded-xl font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="cursor-target w-full py-3  bg-error   backdrop-blur-md border border-error   text-white rounded-xl font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {quittingCell === cell.id ? (
                         <div className="flex items-center justify-center gap-2">
@@ -413,7 +413,7 @@ export default function CellsSection({ user }) {
                     <button
                       onClick={() => handleJoinCell(cell.id, cell.name)}
                       disabled={joiningCell === cell.id}
-                      className="cursor-target w-full py-3 bg-white  hover:bg-white text-gray-900 rounded-xl font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur-md shadow-lg"
+                      className="cursor-target w-full py-3 bg-primary  text-gray-900 rounded-xl font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur-md shadow-lg"
                     >
                       {joiningCell === cell.id ? (
                         <div className="flex items-center justify-center gap-2">
@@ -452,7 +452,7 @@ export default function CellsSection({ user }) {
 
       {/* Events Modal */}
       {selectedCell && (
-        <div className="fixed inset-0 bg-black  backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/40  backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-base-100 rounded-2xl max-w-4xl w-full max-h-[80vh] overflow-hidden shadow-2xl">
             {/* Modal Header */}
             <div className="bg-primary  border-b border-base-300   p-6">
@@ -515,7 +515,7 @@ export default function CellsSection({ user }) {
                           </div>
                         ) : (
                           <div className="shrink-0 w-12 h-12 bg-primary  rounded-lg flex items-center justify-center">
-                            <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-6 h-6 text-primary-content" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
                           </div>
@@ -529,7 +529,7 @@ export default function CellsSection({ user }) {
                             </h3>
                             {/* Type Badge */}
                             {event.type && (
-                              <span className="px-2.5 py-1 bg-primary  text-primary rounded-md text-xs font-medium capitalize">
+                              <span className="px-2.5 py-1 bg-primary  text-primary-content rounded-md text-xs font-medium capitalize">
                                 {event.type === 'training' ? 'Training' : 
                                  event.type === 'workshop' ? 'Workshop' : 
                                  event.type === 'competition' ? 'Competition' : 

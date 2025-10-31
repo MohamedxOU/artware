@@ -352,8 +352,8 @@ export default function DocumentsSection() {
                     <div className="mb-2">
                       <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
                         doc.source === 'attended' 
-                          ? 'bg-success  text-success'
-                          : 'bg-info  text-info'
+                          ? 'bg-success text-primary-content'
+                          : 'bg-info  text-primary-content'
                       }`}>
                         {doc.source === 'attended' ? (
                           <>
