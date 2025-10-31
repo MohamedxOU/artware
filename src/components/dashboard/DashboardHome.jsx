@@ -114,10 +114,10 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
 
   // Mock data matching the dashboard image
   const overviewStats = [
-    { label: "Events Attended", value: 18, color: "text-warning", bgColor: "bg-warning " },
-    { label: "Upcoming Events", value: 97, color: "text-success", bgColor: "bg-success " },
-    { label: "Cells Joined", value: 4, color: "text-info", bgColor: "bg-info " },
-    { label: "Certificates", value: 245, color: "text-secondary", bgColor: "bg-secondary " },
+    { label: "Events Attended", value: 18, color: "text-base-content", bgColor: "bg-base-200 " },
+    { label: "Upcoming Events", value: 97, color: "text-base-content", bgColor: "bg-base-200 " },
+    { label: "Cells Joined", value: 4, color: "text-base-content", bgColor: "bg-base-200 " },
+    { label: "Certificates", value: 245, color: "text-base-content", bgColor: "bg-base-200 " },
   ];
 
   // Helper function to format announcement date
@@ -178,7 +178,7 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
       {user && (
         <div className="mb-8">
           <h2 className="text-2xl font-semibold text-base-content mb-6">My QR Code</h2>
-          <div className="bg-primary  rounded-2xl p-6 border border-primary   shadow-lg">
+          <div className="bg-base-200  rounded-2xl p-6     shadow-lg">
             <div className="flex flex-col lg:flex-row items-center gap-6">
               {/* QR Code Display */}
               <div className="shrink-0">
@@ -219,7 +219,7 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
 
               {/* QR Code Info */}
               <div className="flex-1 text-center lg:text-left">
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                <h3 className="text-2xl font-bold text-base-content dark:text-white mb-2">
                   Your Access QR Code
                 </h3>
                 <p className="text-base-content  mb-4">
@@ -253,7 +253,7 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
                   <button
                     onClick={() => setShowQrModal(true)}
                     disabled={!qrCode}
-                    className="px-6 py-3 bg-base-100 text-primary border-2 border-primary rounded-lg font-semibold hover:bg-primary  transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="px-6 py-3 bg-base-100 text-primary border-2 border-primary rounded-lg font-semibold hover:bg-primary hover:text-primary-content  transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
@@ -295,7 +295,7 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
                     <div className="flex items-start space-x-6">
                       {/* Icon - Hidden on small devices */}
                       <div className="hidden sm:flex bg-primary  rounded-2xl p-4 items-center justify-center shrink-0">
-                        <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-8 h-8 text-primary-content" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
                         </svg>
                       </div>

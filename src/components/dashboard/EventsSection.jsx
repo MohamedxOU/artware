@@ -394,8 +394,8 @@ export default function EventsSection() {
             </div>
           </div>
           <div>
-            <h3 className="text-xl lg:text-2xl font-bold text-info">{stats.totalEvents}</h3>
-            <p className="text-info text-xs lg:text-sm font-medium">Total Events</p>
+            <h3 className="text-xl lg:text-2xl font-bold text-info text-white">{stats.totalEvents}</h3>
+            <p className="text-info text-xs lg:text-sm font-medium text-white">Total Events</p>
           </div>
         </div>
 
@@ -408,8 +408,8 @@ export default function EventsSection() {
             </div>
           </div>
           <div>
-            <h3 className="text-xl lg:text-2xl font-bold text-primary">{stats.registeredEvents}</h3>
-            <p className="text-primary text-xs lg:text-sm font-medium">Registered Events</p>
+            <h3 className="text-xl lg:text-2xl font-bold text-primary text-white">{stats.registeredEvents}</h3>
+            <p className="text-primary text-xs lg:text-sm font-medium text-white">Registered Events</p>
           </div>
         </div>
 
@@ -422,8 +422,8 @@ export default function EventsSection() {
             </div>
           </div>
           <div>
-            <h3 className="text-xl lg:text-2xl font-bold text-success">{stats.upcomingEvents}</h3>
-            <p className="text-success text-xs lg:text-sm font-medium">Upcoming Events</p>
+            <h3 className="text-xl lg:text-2xl font-bold text-success text-white">{stats.upcomingEvents}</h3>
+            <p className="text-success text-xs lg:text-sm font-medium text-white">Upcoming Events</p>
           </div>
         </div>
 
@@ -436,8 +436,8 @@ export default function EventsSection() {
             </div>
           </div>
           <div>
-            <h3 className="text-xl lg:text-2xl font-bold text-warning">{stats.attendedEvents}</h3>
-            <p className="text-warning text-xs lg:text-sm font-medium">Events Attended</p>
+            <h3 className="text-xl lg:text-2xl font-bold text-warning text-white">{stats.attendedEvents}</h3>
+            <p className="text-warning text-xs lg:text-sm font-medium text-white">Events Attended</p>
           </div>
         </div>
       </div>
@@ -451,7 +451,7 @@ export default function EventsSection() {
               onClick={() => setActiveTab('upcoming')}
               className={`px-4 lg:px-6 py-4 font-medium transition-all duration-200 border-b-2 whitespace-nowrap text-sm lg:text-base ${
                 activeTab === 'upcoming'
-                  ? 'border-primary text-primary bg-primary '
+                  ? 'border-primary text-primary-content bg-primary '
                   : 'border-transparent text-base-content  hover:text-base-content hover:bg-base-200'
               }`}
             >
@@ -461,7 +461,7 @@ export default function EventsSection() {
               onClick={() => setActiveTab('registered')}
               className={`px-4 lg:px-6 py-4 font-medium transition-all duration-200 border-b-2 whitespace-nowrap text-sm lg:text-base ${
                 activeTab === 'registered'
-                  ? 'border-primary text-primary bg-primary '
+                  ? 'border-primary text-primary-content bg-primary '
                   : 'border-transparent text-base-content  hover:text-base-content hover:bg-base-200'
               }`}
             >
@@ -471,7 +471,7 @@ export default function EventsSection() {
               onClick={() => setActiveTab('attended')}
               className={`px-4 lg:px-6 py-4 font-medium transition-all duration-200 border-b-2 whitespace-nowrap text-sm lg:text-base ${
                 activeTab === 'attended'
-                  ? 'border-primary text-primary bg-primary '
+                  ? 'border-primary text-primary-content bg-primary '
                   : 'border-transparent text-base-content  hover:text-base-content hover:bg-base-200'
               }`}
             >
