@@ -130,7 +130,7 @@ function LoginContent() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Error Message */}
             {error && (
-              <div className="bg-error border border-error text-error px-4 py-3 rounded-xl text-sm">
+              <div className="bg-error border border-error text-primary-content px-4 py-3 rounded-xl text-sm">
                 {error}
               </div>
             )}
