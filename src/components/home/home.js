@@ -9,6 +9,7 @@ import Gallery from './gallery';
 import Hero from './hero';
 import Navbar from './navbar';
 import TargetCursor from '@/components/TargetCursor.jsx';
+import AppDownloadSection from '@/components/AppDownloadSection';
 
 export default function Home() {
 
@@ -25,7 +26,7 @@ export default function Home() {
 			<Cells />
 			<Gallery />
 			<Bureau />
-			
+			<AppDownloadSection />
 			<Contact />
 			<Footer />
 			{/* Add your home page content here */}
