@@ -39,12 +39,12 @@ export default function AppDownloadSection() {
             viewport={{ once: true, amount: 0.3 }}
             className="flex justify-center lg:justify-end"
           >
-            <div className="relative w-full max-w-sm lg:max-w-md">
+            <div className="relative w-64 sm:w-72 md:w-80 lg:w-96">
               {/* Glowing effect behind phone */}
               <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-secondary/30 rounded-[3rem] blur-2xl scale-95"></div>
               
               {/* Phone image container */}
-              <div className="relative bg-base-100 rounded-[3rem] p-4 shadow-2xl">
+              <div className="relative bg-base-100 rounded-[3rem] p-3 sm:p-4 shadow-2xl">
                 <Image
                   src="/phone-app.jpeg"
                   alt="Application mobile Artware"
@@ -83,15 +83,15 @@ export default function AppDownloadSection() {
               <a
                 href="https://expo.dev/artifacts/eas/ppg3DGH8aTqoxZfPWGbspX.apk"
                 download
-                className="group flex items-center justify-center gap-3 bg-gradient-to-r from-primary to-primary-focus hover:from-primary-focus hover:to-primary text-primary-content px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                className="group flex items-center justify-center gap-3 bg-primary hover:bg-primary-focus text-primary-content px-6 sm:px-8 py-3 sm:py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
               >
                 {/* Android Download Icon */}
-                <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+                <svg className="w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,8L16,12H13V16H11V12H8L12,8Z" />
                 </svg>
                 <div className="text-left">
                   <div className="text-xs font-normal opacity-90">Download</div>
-                  <div className="text-lg font-bold">Mobile Application</div>
+                  <div className="text-base sm:text-lg font-bold">Mobile Application</div>
                 </div>
               </a>
             </div>
