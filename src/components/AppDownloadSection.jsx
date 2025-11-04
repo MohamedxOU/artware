@@ -83,7 +83,7 @@ export default function AppDownloadSection() {
               <a
                 href="https://expo.dev/artifacts/eas/ppg3DGH8aTqoxZfPWGbspX.apk"
                 download
-                className="group flex items-center justify-center gap-3 bg-primary hover:bg-primary-focus text-primary-content px-6 sm:px-8 py-3 sm:py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                className="group flex items-end justify-center gap-3 bg-primary hover:bg-primary-focus text-primary-content px-6 sm:px-8 py-3 sm:py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
               >
                 {/* Android Download Icon */}
                 <svg className="w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
