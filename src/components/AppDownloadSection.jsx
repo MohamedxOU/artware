@@ -67,7 +67,7 @@ export default function AppDownloadSection() {
           >
             {/* Title Section */}
             <div className="space-y-4">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-base-content">
+              <h2 className="text-4xl md:text-5xl font-bold text-base-content">
                 Discover our
                 <span className="block text-primary mt-2">mobile application</span>
               </h2>
