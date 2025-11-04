@@ -119,7 +119,7 @@ export default function AppDownloadSection() {
               </div>
             </div>
 
-            {/* Features Pills */}
+            {/* Features Pills
             <div className="flex flex-wrap gap-3 pt-4">
               <span className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">
                 ✨ Intuitive interface
@@ -130,7 +130,7 @@ export default function AppDownloadSection() {
               <span className="px-4 py-2 bg-accent/10 text-accent rounded-full text-sm font-medium">
                 🔔 Real-time notifications
               </span>
-            </div>
+            </div> */}
           </motion.div>
         </div>
       </div>
