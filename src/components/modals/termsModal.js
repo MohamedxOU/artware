@@ -21,32 +21,32 @@ export default function TermsModal({ isOpen, onClose }) {
   const termsData = [
     {
       id: "01",
-      title: "Conditions Générales",
-      subtitle: "Acceptation • Utilisation • Responsabilités",
+      title: "General Terms",
+      subtitle: "Acceptance • Use • Responsibilities",
       bgColor: "bg-base-100",
-      description: "En vous inscrivant sur notre plateforme, vous acceptez de respecter nos conditions d'utilisation et de participer activement à notre communauté technologique."
+      description: "By registering on our platform, you agree to respect our terms of use and actively participate in our technology community."
     },
     {
       id: "02", 
-      title: "Données Personnelles",
-      subtitle: "Collecte • Protection • Traitement",
+      title: "Personal Data",
+      subtitle: "Collection • Protection • Processing",
       bgColor: "bg-base-100",
-      description: "Nous respectons votre vie privée et traitons vos données personnelles conformément au RGPD et aux lois marocaines sur la protection des données."
+      description: "We respect your privacy and process your personal data in accordance with GDPR and Moroccan data protection laws."
     },
     {
       id: "03",
-      title: "Propriété Intellectuelle",
-      subtitle: "Contenu • Projets • Innovations • Collaboration",
+      title: "Intellectual Property",
+      subtitle: "Content • Projects • Innovations • Collaboration",
       bgColor: "bg-base-100",
-      description: "Notre équipe de développement donne vie à vos projets numériques avec des solutions robustes, évolutives et performantes. En utilisant les technologies les plus récentes, nous nous assurons que vos applications sont conçues pour répondre aux objectifs de votre entreprise et offrir une expérience transparente aux utilisateurs.",
+      description: "Our development team brings your digital projects to life with robust, scalable and high-performance solutions. Using the latest technologies, we ensure that your applications are designed to meet your business objectives and deliver a seamless user experience.",
       
     },
     {
       id: "04",
-      title: "Responsabilités",
-      subtitle: "Sécurité • Conformité • Documentation",
+      title: "Responsibilities",
+      subtitle: "Security • Compliance • Documentation",
       bgColor: "bg-base-100",
-      description: "Nous garantissons la qualité de nos services et le respect des normes de sécurité pour protéger votre expérience sur notre plateforme."
+      description: "We guarantee the quality of our services and compliance with security standards to protect your experience on our platform."
     }
   ];
 
@@ -64,7 +64,7 @@ export default function TermsModal({ isOpen, onClose }) {
         {/* Header */}
         <div className="sticky top-0 z-10 bg-base-100/95 backdrop-blur-md border-b border-base-300  px-6 py-4 flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-base-content">Conditions d&apos;Utilisation</h2>
+            <h2 className="text-2xl font-bold text-base-content">Terms of Use</h2>
             <p className="text-base-content  text-sm">ARTWARE Community Platform</p>
           </div>
           
@@ -116,22 +116,22 @@ export default function TermsModal({ isOpen, onClose }) {
 
             {/* Additional Terms */}
             <div className="bg-base-200  rounded-2xl p-6 border border-base-300 ">
-              <h4 className="text-lg font-semibold text-base-content mb-4">Termes Supplémentaires</h4>
+              <h4 className="text-lg font-semibold text-base-content mb-4">Additional Terms</h4>
               
               <div className="space-y-4 text-sm text-base-content ">
                 <div>
-                  <h5 className="font-medium text-base-content mb-2">Participation aux Événements</h5>
-                  <p>En participant à nos événements, workshops et hackathons, vous acceptez de respecter notre code de conduite et de contribuer positivement à l&apos;expérience collective.</p>
+                  <h5 className="font-medium text-base-content mb-2">Event Participation</h5>
+                  <p>By participating in our events, workshops and hackathons, you agree to respect our code of conduct and contribute positively to the collective experience.</p>
                 </div>
                 
                 <div>
-                  <h5 className="font-medium text-base-content mb-2">Projets Collaboratifs</h5>
-                  <p>Les projets développés dans le cadre d&apos;ARTWARE restent la propriété de leurs créateurs, mais peuvent être partagés à des fins éducatives avec l&apos;accord des participants.</p>
+                  <h5 className="font-medium text-base-content mb-2">Collaborative Projects</h5>
+                  <p>Projects developed within ARTWARE remain the property of their creators, but may be shared for educational purposes with the participants&apos; agreement.</p>
                 </div>
                 
                 <div>
-                  <h5 className="font-medium text-base-content mb-2">Modifications des Conditions</h5>
-                  <p>Nous nous réservons le droit de modifier ces conditions à tout moment. Les membres seront informés des changements importants par email.</p>
+                  <h5 className="font-medium text-base-content mb-2">Terms Modifications</h5>
+                  <p>We reserve the right to modify these terms at any time. Members will be notified of important changes by email.</p>
                 </div>
               </div>
             </div>
@@ -142,7 +142,7 @@ export default function TermsModal({ isOpen, onClose }) {
         <div className="absolute bottom-0 left-0 right-0 bg-base-100/95 backdrop-blur-md border-t border-base-300  p-6">
           <div className="flex items-center justify-between">
             <div className="text-sm text-base-content ">
-              Dernière mise à jour: Janvier 2025
+              Last updated: January 2025
             </div>
             
             <div className="flex gap-3">
@@ -150,13 +150,13 @@ export default function TermsModal({ isOpen, onClose }) {
                 onClick={onClose}
                 className="btn btn-outline btn-sm"
               >
-                Fermer
+                Close
               </button>
               <button
                 onClick={onClose}
                 className="btn btn-primary btn-sm"
               >
-                J&apos;accepte
+                I Accept
               </button>
             </div>
           </div>

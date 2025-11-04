@@ -61,9 +61,9 @@ export default function ReclamationSection({ user }) {
                 className="w-full p-3 bg-base-200 border border-base-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary  focus:border-primary "
                 required
               >
-                <option value="">Sélectionner une catégorie</option>
+                <option value="">Select a category</option>
                 <option value="technical">Problème technique</option>
-                <option value="account">Problème de compte</option>
+                <option value="account">Account Issue</option>
                 <option value="content">Problème de contenu</option>
                 <option value="event">Problème d'événement</option>
                 <option value="suggestion">Suggestion d'amélioration</option>
@@ -117,7 +117,7 @@ export default function ReclamationSection({ user }) {
               type="submit"
               className="px-6 py-3 bg-primary text-primary-content rounded-lg hover:bg-primary  transition-colors font-medium"
             >
-              Envoyer la réclamation
+              Submit Complaint
             </button>
           </div>
         </form>
