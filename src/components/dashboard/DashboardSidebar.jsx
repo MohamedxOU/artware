@@ -129,8 +129,8 @@ export default function DashboardSidebar({
                   }}
                   className={`w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
                     activeSection === item.id 
-                      ? 'bg-primary text-primary-content hover:bg-primary/90 border-l-4 border-primary-focus' 
-                      : 'text-base-content hover:bg-primary hover:text-primary-content hover:border-l-4 hover:border-primary-focus'
+                      ? 'bg-primary text-primary-content hover:bg-primary/90' 
+                      : 'text-base-content hover:bg-primary hover:text-primary-content'
                   }`}
                 >
                   <span className={`mr-3 ${activeSection === item.id ? 'text-primary-content' : 'text-base-content group-hover:text-primary-content'}`}>
@@ -156,8 +156,8 @@ export default function DashboardSidebar({
           }}
           className={`w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 mb-2 group ${
             activeSection === 'profile'
-              ? 'bg-primary text-primary-content hover:bg-primary/90 border-l-4 border-primary-focus'
-              : 'text-base-content hover:bg-primary hover:text-primary-content hover:border-l-4 hover:border-primary-focus'
+              ? 'bg-primary text-primary-content hover:bg-primary/90'
+              : 'text-base-content hover:bg-primary hover:text-primary-content'
           }`}
         >
           <svg className={`w-5 h-5 mr-3 ${activeSection === 'profile' ? 'text-primary-content' : 'text-base-content group-hover:text-primary-content'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
