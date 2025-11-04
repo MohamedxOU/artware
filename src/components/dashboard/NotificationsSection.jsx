@@ -146,7 +146,7 @@ export default function NotificationsSection({ notifications = mockNotifications
             </div>
             <button
               onClick={markAllAsRead}
-              className="px-4 py-2 bg-primary  hover:bg-primary  text-primary rounded-xl transition-colors text-sm font-medium"
+              className="px-4 py-2 bg-primary hover:bg-primary-focus text-primary-content rounded-xl transition-colors text-sm font-medium"
             >
               Tout marquer comme lu
             </button>

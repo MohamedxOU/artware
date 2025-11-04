@@ -20,7 +20,7 @@ export default function FloatingThemeSwitcher() {
   return (
     <button
       onClick={toggleTheme}
-      className="cursor-target fixed bottom-6 right-6 z-50 w-14 h-14 bg-primary hover:bg-primary  text-primary-content rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group"
+      className="cursor-target fixed bottom-6 right-6 z-50 w-14 h-14 bg-primary hover:bg-primary-focus text-primary-content rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group"
       title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
     >
       <div className="relative">

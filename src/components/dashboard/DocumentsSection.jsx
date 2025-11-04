@@ -253,7 +253,7 @@ export default function DocumentsSection() {
           <p className="text-base-content  mb-4">{error}</p>
           <button 
             onClick={() => window.location.reload()} 
-            className="px-4 py-2 bg-primary hover:bg-primary  text-primary-content rounded-lg text-sm font-medium transition-colors"
+            className="px-4 py-2 bg-primary hover:bg-primary-focus text-primary-content rounded-lg text-sm font-medium transition-colors"
           >
             Retry
           </button>
@@ -485,7 +485,7 @@ export default function DocumentsSection() {
               onClick={() => {
                 setSearchQuery('');
               }}
-              className="px-4 py-2 bg-primary hover:bg-primary  text-primary-content rounded-lg text-sm font-medium transition-colors"
+              className="px-4 py-2 bg-primary hover:bg-primary-focus text-primary-content rounded-lg text-sm font-medium transition-colors"
             >
               Reset search
             </button>

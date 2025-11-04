@@ -195,11 +195,11 @@ function LoginContent() {
             <button
               type="submit"
               disabled={isLoading}
-              className="cursor-target w-full bg-primary hover:bg-primary disabled:bg-primary disabled:cursor-not-allowed text-white font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+              className="cursor-target w-full bg-primary hover:bg-primary-focus disabled:bg-primary/60 disabled:cursor-not-allowed text-primary-content font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <>
-                  <div className="w-4 h-4 border-2 border-white border-t-white rounded-full animate-spin"></div>
+                  <div className="w-4 h-4 border-2 border-primary-content border-t-transparent rounded-full animate-spin"></div>
                   Signing in...
                 </>
               ) : (

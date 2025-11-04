@@ -418,7 +418,7 @@ export default function GalleryPage() {
           <p className="mt-2 text-sm text-base-content ">Chargement de l&apos;expérience immersive</p>
           <button 
             onClick={() => setIsLoading(false)}
-            className="mt-4 px-4 py-2 bg-primary text-primary-content rounded-lg text-sm hover:bg-primary  transition-colors"
+            className="mt-4 px-4 py-2 bg-primary hover:bg-primary-focus text-primary-content rounded-lg text-sm transition-colors"
           >
             Passer le chargement
           </button>
@@ -437,7 +437,7 @@ export default function GalleryPage() {
           </p>
           <Link 
             href="/gallery-2d" 
-            className="px-6 py-3 bg-primary text-primary-content rounded-lg hover:bg-primary  transition-colors"
+            className="px-6 py-3 bg-primary hover:bg-primary-focus text-primary-content rounded-lg transition-colors"
           >
             Voir la galerie classique
           </Link>

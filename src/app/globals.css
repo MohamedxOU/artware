@@ -6,7 +6,8 @@
 @plugin "daisyui/theme" {
   name: "acid";
 
-  --color-primary: oklch(65% 0.241 354.308);
+  --color-primary: oklch(0.55 0.21 330);
+  --color-primary-content: #ffffff;
   --radius-selector: 0rem;
   --radius-field: 0.25rem;
   --radius-box: 0rem;
@@ -19,7 +20,8 @@
 
 @plugin "daisyui/theme"{
   name: "synthwave";
-  --color-primary: oklch(65% 0.241 354.308);
+  --color-primary: oklch(0.55 0.21 330);
+  --color-primary-content: #ffffff;
   --color-base-content: #f3f4f6;
   --radius-selector: 0rem;
   --radius-field: 0.25rem;

@@ -220,7 +220,7 @@ function RegisterContent() {
               </div>
               
               {/* Upload Button */}
-              <label className="cursor-target  absolute -bottom-2 -right-2 bg-primary hover:bg-primary text-white rounded-full p-2 cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110">
+              <label className="cursor-target absolute -bottom-2 -right-2 bg-primary hover:bg-primary-focus text-primary-content rounded-full p-2 cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                 </svg>
@@ -442,11 +442,11 @@ function RegisterContent() {
             <button
               type="submit"
               disabled={isLoading}
-              className="cursor-target w-full bg-primary hover:bg-primary  disabled:bg-primary  disabled:cursor-not-allowed text-white font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+              className="cursor-target w-full bg-primary hover:bg-primary-focus disabled:bg-primary/60 disabled:cursor-not-allowed text-primary-content font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <>
-                  <div className="w-4 h-4 border-2 border-white   border-t-white rounded-full animate-spin"></div>
+                  <div className="w-4 h-4 border-2 border-primary-content border-t-transparent rounded-full animate-spin"></div>
                   Creating...
                 </>
               ) : (
@@ -506,7 +506,7 @@ function RegisterContent() {
             {/* OK Button */}
             <button
               onClick={() => { hideSuccessDialog(); router.push('/'); }}
-              className="cursor-target w-full bg-primary hover:bg-primary  text-white font-semibold py-3 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl"
+              className="cursor-target w-full bg-primary hover:bg-primary-focus text-primary-content font-semibold py-3 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-xl"
             >
               I understand
             </button>
