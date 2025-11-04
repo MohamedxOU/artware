@@ -10,7 +10,7 @@ export default async function RootLayout({ children }) {
   // Read the theme cookie set by next-themes (storageKey: 'theme-storage').
   // Setting data-theme on the HTML element server-side prevents a flash or mismatch
   // where the wrong theme is visible until the client hydrates.
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const themeCookie = cookieStore.get('theme-storage');
   const theme = themeCookie?.value || 'acid';
 
