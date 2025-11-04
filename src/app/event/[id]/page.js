@@ -60,7 +60,7 @@ export default function EventDetailPage() {
 
   const handleRegister = async () => {
     if (!user?.user_id) {
-      showNotification('error', 'Erreur', 'Vous devez être connecté pour vous inscrire');
+      showNotification('error', 'Error', 'You must be logged in to register');
       return;
     }
 
@@ -68,9 +68,9 @@ export default function EventDetailPage() {
       setActionLoading(true);
       await registerForEvent(event.id, user.user_id);
       setIsRegistered(true);
-      showNotification('success', 'Inscription réussie', 'Vous êtes maintenant inscrit à cet événement');
+      showNotification('success', 'Registration Successful', 'You are now registered for this event');
     } catch (err) {
-      showNotification('error', 'Erreur', err.message || 'Échec de l\'inscription');
+      showNotification('error', 'Error', err.message || 'Registration failed');
     } finally {
       setActionLoading(false);
     }
@@ -83,16 +83,16 @@ export default function EventDetailPage() {
       setActionLoading(true);
       await unregisterFromEvent(event.id, user.user_id);
       setIsRegistered(false);
-      showNotification('success', 'Désinscription réussie', 'Votre inscription a été annulée');
+      showNotification('success', 'Unregistration Successful', 'Your registration has been cancelled');
     } catch (err) {
-      showNotification('error', 'Erreur', err.message || 'Échec de l\'annulation');
+      showNotification('error', 'Error', err.message || 'Cancellation failed');
     } finally {
       setActionLoading(false);
     }
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('fr-FR', {
+    return new Date(dateString).toLocaleDateString('en-US', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -103,10 +103,10 @@ export default function EventDetailPage() {
   const getEventTypeLabel = (type) => {
     switch (type) {
       case 'workshop': return 'Workshop';
-      case 'conference': return 'Conférence';
+      case 'conference': return 'Conference';
       case 'hackathon': return 'Hackathon';
-      case 'training': return 'Formation';
-      default: return 'Événement';
+      case 'training': return 'Training';
+      default: return 'Event';
     }
   };
 
@@ -134,7 +134,7 @@ export default function EventDetailPage() {
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin w-16 h-16 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Chargement de l&apos;événement...</p>
+          <p className="text-gray-600 dark:text-gray-400">Loading event...</p>
         </div>
       </div>
     );
@@ -150,8 +150,8 @@ export default function EventDetailPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Erreur</h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">{error || 'Événement non trouvé'}</p>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Error</h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">{error || 'Event not found'}</p>
             <button
               onClick={() => window.close()}
               className="px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors"
@@ -216,7 +216,7 @@ export default function EventDetailPage() {
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    Inscrit
+                    Registered
                   </span>
                 </div>
               )}
@@ -258,7 +258,7 @@ export default function EventDetailPage() {
                     </svg>
                   </div>
                   <div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">Lieu</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">Location</div>
                     <div className="text-lg font-semibold text-gray-900 dark:text-white">
                       {event.location}
                     </div>
@@ -288,7 +288,7 @@ export default function EventDetailPage() {
                     </svg>
                   </div>
                   <div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">Responsable</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">Organizer</div>
                     <div className="text-lg font-semibold text-gray-900 dark:text-white">
                       {event.responsable}
                     </div>
@@ -307,14 +307,14 @@ export default function EventDetailPage() {
                     {actionLoading ? (
                       <>
                         <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full"></div>
-                        Annulation...
+                        Cancelling...
                       </>
                     ) : (
                       <>
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                         </svg>
-                        Annuler l&apos;inscription
+                        Cancel Registration
                       </>
                     )}
                   </button>
@@ -327,14 +327,14 @@ export default function EventDetailPage() {
                     {actionLoading ? (
                       <>
                         <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full"></div>
-                        Inscription...
+                        Registering...
                       </>
                     ) : (
                       <>
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
-                        S&apos;inscrire à l&apos;événement
+                        Register for Event
                       </>
                     )}
                   </button>
@@ -392,7 +392,7 @@ export default function EventDetailPage() {
                           {doc.title}
                         </div>
                         <div className="text-xs text-gray-500 dark:text-gray-400">
-                          Cliquer pour télécharger
+                          Click to download
                         </div>
                       </div>
                     </div>
