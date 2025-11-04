@@ -33,7 +33,7 @@ function LoginContent() {
       <div className="min-h-screen bg-base-300 flex items-center justify-center">
         <div className="text-center">
           <div className="loading loading-spinner loading-lg text-primary"></div>
-          <p className="mt-4 text-base-content ">Vérification...</p>
+          <p className="mt-4 text-base-content ">Checking...</p>
         </div>
       </div>
     );
@@ -200,7 +200,7 @@ function LoginContent() {
               {isLoading ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white border-t-white rounded-full animate-spin"></div>
-                  Connexion...
+                  Signing in...
                 </>
               ) : (
                 "Sign in"

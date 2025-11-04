@@ -156,7 +156,7 @@ export default function EventDetailPage() {
               onClick={() => window.close()}
               className="px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors"
             >
-              Fermer
+              Close
             </button>
           </div>
         </div>
@@ -176,7 +176,7 @@ export default function EventDetailPage() {
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            Fermer
+            Close
           </button>
         </div>
       </div>
@@ -265,7 +265,7 @@ export default function EventDetailPage() {
                   </div>
                 </div>
 
-                {/* Cellule */}
+                {/* Cell */}
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900   rounded-lg flex items-center justify-center flex-shrink-0">
                     <svg className="w-5 h-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -273,7 +273,7 @@ export default function EventDetailPage() {
                     </svg>
                   </div>
                   <div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">Cellule</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">Cell</div>
                     <div className="text-lg font-semibold text-gray-900 dark:text-white">
                       {event.cellule_name}
                     </div>

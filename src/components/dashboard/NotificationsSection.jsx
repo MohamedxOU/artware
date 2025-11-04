@@ -15,7 +15,7 @@ const mockNotifications = [
   {
     id: 2,
     title: "Invitation rejoindre la cellule Web",
-    message: "Vous avez été invité à rejoindre la cellule de développement Web. Acceptez-vous cette invitation?",
+    message: "You have been invited to join the Web Development cell. Do you accept this invitation?",
     type: "invitation",
     time: "Il y a 5 heures",
     read: false,

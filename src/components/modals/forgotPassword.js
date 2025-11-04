@@ -69,8 +69,8 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
         {/* Header */}
         <div className="bg-base-100/95 backdrop-blur-md border-b border-base-300  px-6 py-4 flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold text-base-content">Mot de passe oublié</h2>
-            <p className="text-base-content  text-sm">Récupérez l&apos;ccès à votre compte</p>
+            <h2 className="text-xl font-bold text-base-content">Forgot Password</h2>
+            <p className="text-base-content  text-sm">Recover access to your account</p>
           </div>
           
           <button
@@ -95,7 +95,7 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
                   </svg>
                 </div>
                 <p className="text-center text-base-content  text-sm leading-relaxed">
-                  Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe.
+                  Enter your email address and we will send you a link to reset your password.
                 </p>
               </div>
 
@@ -110,13 +110,13 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
 
                 <div>
                   <label className="block text-sm font-medium text-base-content  mb-2">
-                    Adresse email
+                    Email Address
                   </label>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="votre.email@example.com"
+                    placeholder="your.email@example.com"
                     className="w-full px-4 py-3 bg-base-200  border border-base-300   rounded-xl focus:outline-none focus:ring-2 focus:ring-primary  focus:border-primary  transition-all placeholder-base-content "
                     required
                     disabled={isLoading}
@@ -131,14 +131,14 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
                   {isLoading ? (
                     <>
                       <div className="w-4 h-4 border-2 border-white   border-t-white rounded-full animate-spin"></div>
-                      Envoi en cours...
+                      Sending...
                     </>
                   ) : (
                     <>
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                       </svg>
-                      Envoyer le lien
+                      Send Link
                     </>
                   )}
                 </button>
@@ -150,7 +150,7 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
                   onClick={handleClose}
                   className="text-base-content  hover:text-primary text-sm font-medium"
                 >
-                  ← Retour à la connexion
+                  ← Back to login
                 </button>
               </div>
             </>
@@ -164,7 +164,7 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
               </div>
               
               <h3 className="text-lg font-semibold text-base-content mb-2">
-                Email envoyé !
+                Email sent!
               </h3>
               
               <p className="text-base-content  text-sm mb-6 leading-relaxed">
@@ -174,8 +174,8 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
 
               <div className="bg-base-200  rounded-lg p-4 mb-6">
                 <p className="text-xs text-base-content ">
-                  <strong>Note:</strong> Le lien expirera dans 15 minutes. 
-                  Vérifiez également votre dossier spam si vous ne voyez pas l&apos;email.
+                  <strong>Note:</strong> The link will expire in 15 minutes. 
+                  Also check your spam folder if you don&apos;t see the email.
                 </p>
               </div>
 
@@ -183,7 +183,7 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
                 onClick={handleClose}
                 className="w-full btn btn-outline btn-sm"
               >
-                Fermer
+                Close
               </button>
             </div>
           )}

@@ -54,7 +54,7 @@ function RegisterContent() {
       <div className="min-h-screen bg-base-300 flex items-center justify-center">
         <div className="text-center">
           <div className="loading loading-spinner loading-lg text-primary"></div>
-          <p className="mt-4 text-base-content">Vérification...</p>
+          <p className="mt-4 text-base-content">Checking...</p>
         </div>
       </div>
     );
@@ -75,13 +75,13 @@ function RegisterContent() {
       // Validate file type
       const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
       if (!validTypes.includes(file.type)) {
-        alert('Veuillez sélectionner une image valide (JPG, PNG, WEBP)');
+        alert('Please select a valid image (JPG, PNG, WEBP)');
         return;
       }
 
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
-        alert('La taille de l\'image ne doit pas dépasser 5MB');
+        alert('Image size must not exceed 5MB');
         return;
       }
 
@@ -238,9 +238,9 @@ function RegisterContent() {
           {/* Profile Upload Instructions */}
           <div className="text-center mb-6">
             <p className="text-xs text-base-content">
-              Cliquez sur le + pour ajouter votre photo de profil
+              Click on + to add your profile photo
               <br />
-              <span className="text-base-content ">JPG, PNG ou WEBP • Max 5MB</span>
+              <span className="text-base-content ">JPG, PNG or WEBP • Max 5MB</span>
             </p>
           </div>
 
@@ -256,28 +256,28 @@ function RegisterContent() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-base-content mb-2">
-                  Nom
+                  Last Name
                 </label>
                 <input
                   type="text"
                   name="last_name"
                   value={formData.last_name}
                   onChange={handleInputChange}
-                  placeholder="Votre nom"
+                  placeholder="Your last name"
                   className="cursor-target w-full px-4 py-3 bg-base-200 border border-base-300   rounded-xl focus:outline-none focus:ring-2 focus:ring-primary  focus:border-primary  transition-all placeholder-base-content "
                   required
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-base-content mb-2">
-                  Prénom
+                  First Name
                 </label>
                 <input
                   type="text"
                   name="first_name"
                   value={formData.first_name}
                   onChange={handleInputChange}
-                  placeholder="Votre prénom"
+                  placeholder="Your first name"
                   className="cursor-target w-full px-4 py-3 bg-base-200 border border-base-300   rounded-xl focus:outline-none focus:ring-2 focus:ring-primary  focus:border-primary  transition-all placeholder-base-content "
                   required
                 />
@@ -287,14 +287,14 @@ function RegisterContent() {
             {/* Phone Number */}
             <div>
               <label className="block text-sm font-medium text-base-content  mb-2">
-                Numéro de téléphone
+                Phone Number
               </label>
               <input
                 type="tel"
                 name="phone_number"
                 value={formData.phone_number}
                 onChange={handleInputChange}
-                placeholder="Votre numéro de téléphone"
+                placeholder="Your phone number"
                 className="cursor-target w-full px-4 py-3 bg-base-200  border border-base-300   rounded-xl focus:outline-none focus:ring-2 focus:ring-primary  focus:border-primary  transition-all placeholder-base-content "
                 required
               />
@@ -303,7 +303,7 @@ function RegisterContent() {
             {/* Birth Date */}
             <div>
               <label className="block text-sm font-medium text-base-content  mb-2">
-                Date de naissance
+                Birth Date
               </label>
               <input
                 type="date"
@@ -319,7 +319,7 @@ function RegisterContent() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-base-content  mb-2">
-                  Niveau
+                  Level
                 </label>
                 <select
                   name="level"
@@ -328,7 +328,7 @@ function RegisterContent() {
                   className="cursor-target w-full px-4 py-3 bg-base-200  border border-base-300   rounded-xl focus:outline-none focus:ring-2 focus:ring-primary  focus:border-primary  transition-all text-base-content"
                   required
                 >
-                  <option value="" disabled>Sélectionner niveau</option>
+                  <option value="" disabled>Select level</option>
                   <option value="LST">Licence (LST)</option>
                   <option value="MST">Master (MST)</option>
                   <option value="CI">Cycle Ingénieur (CI)</option>
@@ -337,14 +337,14 @@ function RegisterContent() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-base-content  mb-2">
-                  Spécialité
+                  Specialty
                 </label>
                 <input
                   type="text"
                   name="specialty"
                   value={formData.specialty}
                   onChange={handleInputChange}
-                  placeholder="Votre spécialité"
+                  placeholder="Your specialty"
                   className="cursor-target w-full px-4 py-3 bg-base-200  border border-base-300   rounded-xl focus:outline-none focus:ring-2 focus:ring-primary  focus:border-primary  transition-all placeholder-base-content "
                   required
                 />
@@ -355,7 +355,7 @@ function RegisterContent() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-base-content  mb-2">
-                  Genre
+                  Gender
                 </label>
                 <select
                   name="gender"
@@ -364,9 +364,9 @@ function RegisterContent() {
                   className="cursor-target w-full px-4 py-3 bg-base-200  border border-base-300   rounded-xl focus:outline-none focus:ring-2 focus:ring-primary  focus:border-primary  transition-all text-base-content"
                   required
                 >
-                  <option value="" disabled>Sélectionner genre</option>
-                  <option value="male">Homme</option>
-                  <option value="female">Femme</option>
+                  <option value="" disabled>Select gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
                 </select>
               </div>
               <div>
@@ -389,28 +389,28 @@ function RegisterContent() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-base-content  mb-2">
-                  Mot de passe
+                  Password
                 </label>
                 <input
                   type="password"
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  placeholder="Mot de passe"
+                  placeholder="Password"
                   className="cursor-target w-full px-4 py-3 bg-base-200  border border-base-300   rounded-xl focus:outline-none focus:ring-2 focus:ring-primary  focus:border-primary  transition-all placeholder-base-content "
                   required
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-base-content  mb-2">
-                  Confirmer mot de passe
+                  Confirm Password
                 </label>
                 <input
                   type="password"
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
-                  placeholder="Confirmer mot de passe"
+                  placeholder="Confirm password"
                   className="cursor-target w-full px-4 py-3 bg-base-200  border border-base-300   rounded-xl focus:outline-none focus:ring-2 focus:ring-primary  focus:border-primary  transition-all placeholder-base-content "
                   required
                 />
@@ -426,13 +426,13 @@ function RegisterContent() {
                 required
               />
               <label htmlFor="terms" className="text-sm text-base-content ">
-                J&apos;accepte les{" "}
+                I accept the{" "}
                 <button
                   type="button"
                   onClick={() => openModal('termsModal')}
                   className="cursor-target text-primary hover:text-primary  underline font-medium"
                 >
-                  conditions d&apos;utilisation
+                  terms of service
                 </button>{" "}
                 
               </label>
@@ -447,19 +447,19 @@ function RegisterContent() {
               {isLoading ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white   border-t-white rounded-full animate-spin"></div>
-                  Création...
+                  Creating...
                 </>
               ) : (
-                "Créer mon compte"
+                "Create my account"
               )}
             </button>
 
             {/* Sign In Link */}
             <div className="text-center mt-6">
               <span className="text-base-content  text-sm">
-                Vous avez déjà un compte?{" "}
+                Already have an account?{" "}
                 <Link href="/login" className="cursor-target text-primary hover:text-primary  font-semibold">
-                  Se connecter
+                  Sign in
                 </Link>
               </span>
             </div>
