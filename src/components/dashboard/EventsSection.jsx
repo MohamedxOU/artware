@@ -370,7 +370,7 @@ export default function EventsSection() {
           <p className="text-base-content  mb-4">{error}</p>
           <button 
             onClick={() => window.location.reload()} 
-            className="px-4 py-2 bg-primary hover:bg-primary  text-primary-content rounded-lg text-sm font-medium transition-colors"
+            className="px-4 py-2 bg-primary hover:bg-primary-focus text-primary-content rounded-lg text-sm font-medium transition-colors"
           >
             Retry
           </button>
@@ -597,7 +597,7 @@ export default function EventsSection() {
                                 handleRegisterEvent(event.id);
                               }}
                               disabled={actionLoading === event.id}
-                              className="cursor-target w-full py-3 bg-primary hover:bg-primary  text-primary-content rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                              className="cursor-target w-full py-3 bg-primary hover:bg-primary-focus text-primary-content rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                             >
                               {actionLoading === event.id ? (
                                 <>
@@ -618,7 +618,7 @@ export default function EventsSection() {
                                 e.stopPropagation();
                                 window.open(`/event/${event.id}`, '_blank');
                               }}
-                              className="cursor-target w-full py-2.5 border-2 border-primary text-primary rounded-lg font-medium  transition-colors duration-200 flex items-center justify-center gap-2"
+                              className="cursor-target w-full py-2.5 border-2 border-primary text-primary hover:bg-primary hover:text-primary-content rounded-lg font-medium transition-colors duration-200 flex items-center justify-center gap-2 group"
                             >
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -640,7 +640,7 @@ export default function EventsSection() {
                                 handleUnregisterEvent(event.id);
                               }}
                               disabled={actionLoading === event.id}
-                              className="cursor-target w-full py-3 border-2 border-error text-error rounded-lg font-medium hover:bg-error  transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                              className="cursor-target w-full py-3 border-2 border-error text-error hover:bg-error hover:text-error-content rounded-lg font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               {actionLoading === event.id ? 'Cancelling...' : 'Cancel Registration'}
                             </button>
@@ -649,7 +649,7 @@ export default function EventsSection() {
                                 e.stopPropagation();
                                 window.open(`/event/${event.id}`, '_blank');
                               }}
-                              className="cursor-target w-full py-2.5 border-2 border-primary text-primary rounded-lg font-medium hover:bg-primary  transition-colors duration-200 flex items-center justify-center gap-2"
+                              className="cursor-target w-full py-2.5 border-2 border-primary text-primary hover:bg-primary hover:text-primary-content rounded-lg font-medium transition-colors duration-200 flex items-center justify-center gap-2 group"
                             >
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -666,7 +666,7 @@ export default function EventsSection() {
                               e.stopPropagation();
                               window.open(`/event/${event.id}`, '_blank');
                             }}
-                            className="cursor-target w-full py-3 border-2 border-primary text-primary rounded-lg font-medium hover:bg-primary  transition-colors duration-200 flex items-center justify-center gap-2"
+                            className="cursor-target w-full py-3 border-2 border-primary text-primary hover:bg-primary hover:text-primary-content rounded-lg font-medium transition-colors duration-200 flex items-center justify-center gap-2 group"
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
