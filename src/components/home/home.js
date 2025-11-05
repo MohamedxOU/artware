@@ -8,8 +8,8 @@ import Footer from './footer';
 import Gallery from './gallery';
 import Hero from './hero';
 import Navbar from './navbar';
+import AppDownload from './app-download';
 import TargetCursor from '@/components/TargetCursor.jsx';
-import AppDownloadSection from '@/components/AppDownloadSection';
 
 export default function Home() {
 
@@ -26,7 +26,7 @@ export default function Home() {
 			<Cells />
 			<Gallery />
 			<Bureau />
-			<AppDownloadSection />
+			<AppDownload />
 			<Contact />
 			<Footer />
 			{/* Add your home page content here */}
