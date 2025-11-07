@@ -23,7 +23,7 @@ export default function AppDownloadSection() {
   };
 
   return (
-    <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-base-100 to-base-200 overflow-hidden">
+    <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-linear-to-br from-base-100 to-base-200 overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl"></div>
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/10 rounded-full blur-3xl"></div>
@@ -41,7 +41,7 @@ export default function AppDownloadSection() {
           >
             <div className="relative w-64 sm:w-72 md:w-80 lg:w-96">
               {/* Glowing effect behind phone */}
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-secondary/30 rounded-[3rem] blur-2xl scale-95"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-primary to-secondary rounded-[3rem] blur-2xl scale-95"></div>
               
               {/* Phone image container */}
               <div className="relative bg-base-100 rounded-[3rem] p-3 sm:p-4 shadow-2xl">
@@ -71,7 +71,7 @@ export default function AppDownloadSection() {
                 Discover our
                 <span className="block text-primary mt-2">mobile application</span>
               </h2>
-              <p className="text-lg md:text-xl text-base-content/70 leading-relaxed">
+              <p className="text-lg md:text-xl text-base-content leading-relaxed">
                 Access all your events, cells and documents directly from your smartphone. 
                 A smooth and optimized experience to accompany you everywhere.
               </p>
@@ -97,7 +97,7 @@ export default function AppDownloadSection() {
             </div>
 
             {/* QR Code Section */}
-            <div className="flex items-center gap-6 pt-6 border-t border-base-content/10">
+            <div className="flex items-center gap-6 pt-6 border-t border-base-content">
               <div className="flex-shrink-0">
                 <div className="bg-base-200 p-3 rounded-2xl shadow-lg">
                   <Image
@@ -113,7 +113,7 @@ export default function AppDownloadSection() {
                 <p className="text-sm font-semibold text-base-content">
                   Scan to download
                 </p>
-                <p className="text-xs text-base-content/60">
+                <p className="text-xs text-base-content">
                   Quick access from your mobile
                 </p>
               </div>

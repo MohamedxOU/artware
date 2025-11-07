@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { getAllAnnouncements } from '@/api/announcements';
 import { getAllEvents, getQrCode } from '@/api/events';
+import { getEventsAttended, getCellsJoined, getEventsRegistered, getUpcomingEvents } from '@/api/stats';
 
 export default function DashboardHome({ user, stats = {}, recentActivities = [] }) {
   const router = useRouter();
@@ -14,6 +15,71 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
   const [qrCode, setQrCode] = useState(null);
   const [isLoadingQr, setIsLoadingQr] = useState(true);
   const [showQrModal, setShowQrModal] = useState(false);
+  
+  // Stats state
+  const [overviewStats, setOverviewStats] = useState([
+    { label: "Events Attended", value: 0, color: "text-base-content", bgColor: "bg-base-200 " },
+    { label: "Upcoming Events", value: 0, color: "text-base-content", bgColor: "bg-base-200 " },
+    { label: "Events registred", value: 0, color: "text-base-content", bgColor: "bg-base-200 " },
+    { label: "Cells joined", value: 0, color: "text-base-content", bgColor: "bg-base-200 " },
+  ]);
+  const [isLoadingStats, setIsLoadingStats] = useState(true);
+
+  // Fetch statistics from API
+  useEffect(() => {
+    const fetchStats = async () => {
+      if (!user?.user_id) {
+        setIsLoadingStats(false);
+        return;
+      }
+
+      try {
+        setIsLoadingStats(true);
+        
+        // Fetch all statistics in parallel
+        const [attendedRes, cellsRes, registeredRes, upcomingRes] = await Promise.allSettled([
+          getEventsAttended(user.user_id),
+          getCellsJoined(user.user_id),
+          getEventsRegistered(user.user_id),
+          getUpcomingEvents()
+        ]);
+
+        // Update stats with API data
+        setOverviewStats([
+          { 
+            label: "Events Attended", 
+            value: attendedRes.status === 'fulfilled' ? (parseInt(attendedRes.value.totalAttended) || 0) : 0, 
+            color: "text-base-content", 
+            bgColor: "bg-base-200 " 
+          },
+          { 
+            label: "Upcoming Events", 
+            value: upcomingRes.status === 'fulfilled' ? (parseInt(upcomingRes.value.totalComing) || 0) : 0, 
+            color: "text-base-content", 
+            bgColor: "bg-base-200 " 
+          },
+          { 
+            label: "Events registred", 
+            value: registeredRes.status === 'fulfilled' ? (parseInt(registeredRes.value.totalRgistered) || 0) : 0, 
+            color: "text-base-content", 
+            bgColor: "bg-base-200 " 
+          },
+          { 
+            label: "Cells joined", 
+            value: cellsRes.status === 'fulfilled' ? (parseInt(cellsRes.value.totalCells) || 0) : 0, 
+            color: "text-base-content", 
+            bgColor: "bg-base-200 " 
+          },
+        ]);
+      } catch (error) {
+        console.error('Failed to fetch statistics:', error);
+      } finally {
+        setIsLoadingStats(false);
+      }
+    };
+
+    fetchStats();
+  }, [user?.user_id]);
 
   // Fetch announcements from API
   useEffect(() => {
@@ -111,14 +177,6 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
 
     fetchQrCode();
   }, [user?.user_id]);
-
-  // Mock data matching the dashboard image
-  const overviewStats = [
-    { label: "Events Attended", value: 18, color: "text-base-content", bgColor: "bg-base-200 " },
-    { label: "Upcoming Events", value: 97, color: "text-base-content", bgColor: "bg-base-200 " },
-    { label: "Cells Joined", value: 4, color: "text-base-content", bgColor: "bg-base-200 " },
-    { label: "Certificates", value: 245, color: "text-base-content", bgColor: "bg-base-200 " },
-  ];
 
   // Helper function to format announcement date
   const formatAnnouncementDate = (dateString) => {
@@ -374,7 +432,7 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           />
                         ) : (
-                          <div className="absolute inset-0 bg-gradient-to-br from-primary  to-secondary  flex items-center justify-center">
+                          <div className="absolute inset-0 bg-linear-to-br from-primary  to-secondary  flex items-center justify-center">
                             <div className="text-6xl opacity-80">{event.icon}</div>
                           </div>
                         )}
