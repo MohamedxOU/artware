@@ -270,11 +270,11 @@ export default function CellsSection({ user }) {
     <div className="w-full max-w-7xl mx-auto relative min-h-full">
       {/* Header */}
       <div className="mb-6 relative z-10">
-        <div className="backdrop-blur-sm bg-base-100  rounded-2xl p-4 lg:p-6 border border-base-300   shadow-sm">
+        <div className="backdrop-blur-sm bg-base-100  rounded-2xl p-4 sm:p-6 border border-base-300   shadow-sm">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-2xl lg:text-3xl font-bold text-base-content mb-2">Cells</h1>
-              <p className="text-base-content ">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-base-content mb-2">Cells</h1>
+              <p className="text-base-content  text-sm sm:text-base">
                 Discover and join the club's various technical cells
               </p>
             </div>
@@ -308,7 +308,7 @@ export default function CellsSection({ user }) {
       </div>
 
       {/* Cells Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 relative z-10">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 relative z-10">
         {displayedCells.map((cell) => (
           <div
             key={cell.id}
@@ -334,7 +334,7 @@ export default function CellsSection({ user }) {
             </div>
 
             {/* Content */}
-            <div className="relative h-[420px] flex flex-col justify-between p-6">
+            <div className="relative h-[420px] flex flex-col justify-between p-4 sm:p-6">
               {/* Top Section - Badge */}
               <div className="flex justify-between items-start">
                 {cell.isMember && (
@@ -361,7 +361,7 @@ export default function CellsSection({ user }) {
                 {/* Cell Name */}
                 <div>
                   <div className="flex items-center gap-2 mb-2">
-                    <h3 className="text-2xl font-bold text-white">
+                    <h3 className="text-xl sm:text-2xl font-bold text-white">
                       {cell.name}
                     </h3>
                     <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">

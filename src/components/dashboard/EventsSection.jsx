@@ -384,8 +384,8 @@ export default function EventsSection() {
       
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6 relative z-10">
-        <div className="backdrop-blur-sm bg-info  rounded-2xl p-4 lg:p-6 border border-info   shadow-lg">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-6 relative z-10">
+        <div className="backdrop-blur-sm bg-info  rounded-2xl p-3 sm:p-4 lg:p-6 border border-info   shadow-lg">
           <div className="flex items-center justify-between mb-2 lg:mb-4">
             <div className="w-10 h-10 lg:w-12 lg:h-12 bg-info rounded-xl flex items-center justify-center">
               <svg className="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -399,7 +399,7 @@ export default function EventsSection() {
           </div>
         </div>
 
-        <div className="backdrop-blur-sm bg-primary  rounded-2xl p-4 lg:p-6 border border-primary   shadow-lg">
+        <div className="backdrop-blur-sm bg-primary  rounded-2xl p-3 sm:p-4 lg:p-6 border border-primary   shadow-lg">
           <div className="flex items-center justify-between mb-2 lg:mb-4">
             <div className="w-10 h-10 lg:w-12 lg:h-12 bg-primary rounded-xl flex items-center justify-center">
               <svg className="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -413,7 +413,7 @@ export default function EventsSection() {
           </div>
         </div>
 
-        <div className="backdrop-blur-sm bg-success  rounded-2xl p-4 lg:p-6 border border-success   shadow-lg">
+        <div className="backdrop-blur-sm bg-success  rounded-2xl p-3 sm:p-4 lg:p-6 border border-success   shadow-lg">
           <div className="flex items-center justify-between mb-2 lg:mb-4">
             <div className="w-10 h-10 lg:w-12 lg:h-12 bg-success rounded-xl flex items-center justify-center">
               <svg className="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -427,7 +427,7 @@ export default function EventsSection() {
           </div>
         </div>
 
-        <div className="backdrop-blur-sm bg-warning  rounded-2xl p-4 lg:p-6 border border-warning   shadow-lg">
+        <div className="backdrop-blur-sm bg-warning  rounded-2xl p-3 sm:p-4 lg:p-6 border border-warning   shadow-lg">
           <div className="flex items-center justify-between mb-2 lg:mb-4">
             <div className="w-10 h-10 lg:w-12 lg:h-12 bg-warning rounded-xl flex items-center justify-center">
               <svg className="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -501,7 +501,7 @@ export default function EventsSection() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               {filteredEvents.map((event) => (
                 <div 
                   key={event.id} 
@@ -529,7 +529,7 @@ export default function EventsSection() {
                     </div>
 
                     {/* Right side - Event Details */}
-                    <div className="w-full lg:w-2/3 p-6 relative flex flex-col">
+                    <div className="w-full lg:w-2/3 p-4 sm:p-6 relative flex flex-col">
                       {/* Date Badge */}
                       <div className="absolute top-4 right-4 text-center">
                         <div className="text-xs text-base-content  uppercase tracking-wide">
@@ -541,8 +541,8 @@ export default function EventsSection() {
                       </div>
 
                       {/* Event Title and Type */}
-                      <div className="pr-16 mb-4">
-                        <h3 className="text-xl font-bold text-base-content mb-1 line-clamp-2">
+                      <div className="pr-12 sm:pr-16 mb-4">
+                        <h3 className="text-lg sm:text-xl font-bold text-base-content mb-1 line-clamp-2">
                           {event.title}
                         </h3>
                         <p className="text-base-content  text-sm">

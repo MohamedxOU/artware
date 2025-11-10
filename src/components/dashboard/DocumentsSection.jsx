@@ -309,7 +309,7 @@ export default function DocumentsSection() {
     <div className="w-full max-w-7xl mx-auto relative min-h-full">
       {/* Search Bar - Keep at top as requested */}
       <div className="mb-6 relative z-10">
-        <div className="backdrop-blur-sm bg-base-100  rounded-2xl p-4 border border-base-300 shadow-sm">
+        <div className="backdrop-blur-sm bg-base-100  rounded-2xl p-3 sm:p-4 border border-base-300 shadow-sm">
           <div className="relative max-w-md mx-auto">
             <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content " fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -338,7 +338,7 @@ export default function DocumentsSection() {
           </div>
 
           {/* Recommended Documents Horizontal Scroll */}
-          <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+          <div className="flex gap-3 sm:gap-4 overflow-x-auto pb-4 scrollbar-hide -mx-3 sm:mx-0 px-3 sm:px-0">
             {recommendedDocuments.map((doc) => (
               <div
                 key={doc.id}
@@ -422,7 +422,7 @@ export default function DocumentsSection() {
 
         {/* Documents Grid */}
         {filteredAndSortedDocuments.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
             {filteredAndSortedDocuments.map((doc) => (
               <div
                 key={doc.id}

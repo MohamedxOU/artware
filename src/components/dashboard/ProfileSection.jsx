@@ -11,6 +11,7 @@ export default function ProfileSection({ user }) {
   const [error, setError] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const [showImageModal, setShowImageModal] = useState(false);
   const authStore = useAuthStore();
   
   const [editedUser, setEditedUser] = useState({
@@ -129,12 +130,15 @@ export default function ProfileSection({ user }) {
   return (
     <div className="w-full max-w-5xl mx-auto space-y-6">
       {/* Profile Header Card */}
-      <div className="bg-base-100 rounded-2xl shadow-sm border border-base-300 p-6">
-        <div className="flex items-center gap-4">
+      <div className="bg-base-100 rounded-2xl shadow-sm border border-base-300 p-4 sm:p-6">
+        <div className="flex items-center gap-3 sm:gap-4">
           {/* Profile Avatar */}
           <div className="relative">
             {user?.profile_image_url ? (
-              <div className="w-20 h-20 rounded-full overflow-hidden ring-4 ring-primary ">
+              <div 
+                className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden ring-4 ring-primary cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => setShowImageModal(true)}
+              >
                 <Image 
                   src={user.profile_image_url} 
                   alt={`${user.first_name} ${user.last_name}`}
@@ -145,8 +149,8 @@ export default function ProfileSection({ user }) {
                 />
               </div>
             ) : (
-              <div className="w-20 h-20 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center ring-4 ring-primary ">
-                <span className="text-primary-content text-2xl font-bold">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-linear-to-br from-primary to-secondary rounded-full flex items-center justify-center ring-4 ring-primary ">
+                <span className="text-primary-content text-xl sm:text-2xl font-bold">
                   {user?.first_name?.[0]}{user?.last_name?.[0]}
                 </span>
               </div>
@@ -156,8 +160,8 @@ export default function ProfileSection({ user }) {
           </div>
 
           {/* User Info */}
-          <div className="flex-1">
-            <h2 className="text-xl font-semibold text-base-content">
+          <div className="flex-1 min-w-0">
+            <h2 className="text-lg sm:text-xl font-semibold text-base-content">
               {user?.first_name} {user?.last_name}
             </h2>
             <p className="text-sm text-base-content ">
@@ -189,7 +193,7 @@ export default function ProfileSection({ user }) {
         </div>
 
         {/* Information Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           {/* First Name */}
           <div>
             <label className="block text-xs font-medium text-base-content  mb-2">
@@ -404,7 +408,7 @@ export default function ProfileSection({ user }) {
                       />
                     </div>
                   ) : (
-                    <div className="w-24 h-24 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center ring-4 ring-primary ">
+                    <div className="w-24 h-24 bg-linear-to-br from-primary to-secondary rounded-full flex items-center justify-center ring-4 ring-primary ">
                       <span className="text-white text-3xl font-bold">
                         {editedUser.first_name?.[0]}{editedUser.last_name?.[0]}
                       </span>
@@ -521,9 +525,59 @@ export default function ProfileSection({ user }) {
         </div>
       )}
 
+      {/* Image Preview Modal */}
+      {showImageModal && user?.profile_image_url && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black backdrop-blur-sm animate-in fade-in duration-200"
+          onClick={() => setShowImageModal(false)}
+        >
+          <div 
+            className="relative max-w-4xl w-full bg-base-100 rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="absolute top-0 left-0 right-0 z-10 bg-linear-to-b from-black to-transparent p-4 flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-white">
+                Profile Picture
+              </h3>
+              <button
+                onClick={() => setShowImageModal(false)}
+                className="p-2 hover:bg-white rounded-full transition-colors"
+              >
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Image Container */}
+            <div className="relative w-full" style={{ maxHeight: '80vh' }}>
+              <Image
+                src={user.profile_image_url}
+                alt={`${user.first_name} ${user.last_name}`}
+                width={1200}
+                height={1200}
+                className="w-full h-full object-contain"
+                unoptimized={user.profile_image_url.includes('imagekit.io')}
+              />
+            </div>
+
+            {/* Modal Footer */}
+            <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black to-transparent p-4 flex justify-center">
+              <button
+                onClick={() => setShowImageModal(false)}
+                className="px-6 py-2.5 bg-white hover:bg-base-200 text-base-content rounded-lg font-medium transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Confirmation Modal */}
       {showConfirmModal && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black  backdrop-blur-sm" onClick={handleCancelConfirm}>
+        <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black  backdrop-blur-sm" onClick={handleCancelConfirm}>
           <div className="bg-base-100 rounded-2xl shadow-2xl max-w-md w-full" onClick={(e) => e.stopPropagation()}>
             {/* Modal Header */}
             <div className="px-6 py-4 border-b border-base-300">

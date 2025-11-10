@@ -213,13 +213,13 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-8 p-6">
+    <div className="w-full max-w-7xl mx-auto space-y-8 p-3 sm:p-4 md:p-6">
       {/* Overview Section */}
       <div className="mb-8">
         <h2 className="text-2xl font-semibold text-base-content mb-6">Overview</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {overviewStats.map((stat, index) => (
-            <div key={index} className={`${stat.bgColor} rounded-2xl p-6 border border-base-300`}>
+            <div key={index} className={`${stat.bgColor} rounded-2xl p-4 sm:p-6 border border-base-300`}>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium text-base-content ">{stat.label}</span>
               </div>
@@ -236,7 +236,7 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
       {user && (
         <div className="mb-8">
           <h2 className="text-2xl font-semibold text-base-content mb-6">My QR Code</h2>
-          <div className="bg-base-200  rounded-2xl p-6     shadow-lg">
+          <div className="bg-base-200  rounded-2xl p-4 sm:p-6     shadow-lg">
             <div className="flex flex-col lg:flex-row items-center gap-6">
               {/* QR Code Display */}
               <div className="shrink-0">
@@ -343,14 +343,14 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
                 <p className="text-base-content ">Loading announcements...</p>
               </div>
             ) : announcements.length > 0 ? (
-              <div className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-thin scrollbar-thumb-base-300 scrollbar-track-transparent">
+              <div className="flex gap-4 sm:gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-thin scrollbar-thumb-base-300 scrollbar-track-transparent -mx-3 sm:mx-0 px-3 sm:px-0">
                 {announcements.map((announcement) => (
                   <div 
                     key={announcement.id} 
-                    className="bg-base-100 rounded-3xl p-8 shadow-sm border border-base-300 hover:shadow-lg transition-all duration-300 cursor-pointer shrink-0 w-full lg:w-[600px] snap-start"
+                    className="bg-base-100 rounded-3xl p-6 sm:p-8 shadow-sm border border-base-300 hover:shadow-lg transition-all duration-300 cursor-pointer shrink-0 w-[90vw] sm:w-full lg:w-[600px] snap-start"
                     onClick={() => announcement.url && window.open(announcement.url, '_blank')}
                   >
-                    <div className="flex items-start space-x-6">
+                    <div className="flex items-start space-x-3 sm:space-x-6">
                       {/* Icon - Hidden on small devices */}
                       <div className="hidden sm:flex bg-primary  rounded-2xl p-4 items-center justify-center shrink-0">
                         <svg className="w-8 h-8 text-primary-content" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -359,11 +359,11 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
                       </div>
                       
                       {/* Content */}
-                      <div className="flex-1">
-                        <h3 className="text-2xl font-bold text-base-content mb-3">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-xl sm:text-2xl font-bold text-base-content mb-3">
                           {announcement.title}
                         </h3>
-                        <p className="text-base-content  leading-relaxed mb-4">
+                        <p className="text-base-content  leading-relaxed mb-4 text-sm sm:text-base">
                           {announcement.subtitle}
                         </p>
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -413,7 +413,7 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
                 <p className="text-base-content ">Loading events...</p>
               </div>
             ) : upcomingEvents.length > 0 ? (
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {upcomingEvents.map((event) => (
                   <div 
                     key={event.id} 
@@ -439,12 +439,12 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
                       </div>
 
                       {/* Right side - Event Details */}
-                      <div className="w-full lg:w-2/3 p-6 relative flex flex-col">
+                      <div className="w-full lg:w-2/3 p-4 sm:p-6 relative flex flex-col">
                         
 
                         {/* Event Title and Type */}
-                        <div className="pr-16 mb-4">
-                          <h3 className="text-xl font-bold text-base-content mb-1 line-clamp-2">
+                        <div className="pr-4 sm:pr-16 mb-4">
+                          <h3 className="text-lg sm:text-xl font-bold text-base-content mb-1 line-clamp-2">
                             {event.title}
                           </h3>
                           <p className="text-base-content  text-sm">
@@ -461,7 +461,7 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
                             </svg>
                           </div>
                           <div className="min-w-0">
-                            <div className="text-lg font-bold text-secondary truncate">{event.location}</div>
+                            <div className="text-base sm:text-lg font-bold text-secondary truncate">{event.location}</div>
                             
                           </div>
                         </div>
@@ -474,7 +474,7 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
                             </svg>
                           </div>
                           <div className="min-w-0">
-                            <div className="text-lg font-bold text-secondary">
+                            <div className="text-base sm:text-lg font-bold text-secondary">
                               {event.date}
                             </div>
                             {event.time && (
