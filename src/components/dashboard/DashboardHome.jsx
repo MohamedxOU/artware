@@ -505,7 +505,7 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
 
       {/* QR Code Modal */}
       {showQrModal && qrCode && (
-        <div className="fixed inset-0 bg-black  backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
+        <div className="fixed inset-0   backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
           <div className="bg-base-100 rounded-2xl max-w-2xl w-full p-8 shadow-2xl animate-in zoom-in-95 duration-200">
             {/* Modal Header */}
             <div className="flex items-center justify-between mb-6">
@@ -545,13 +545,13 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
 
             {/* Instructions */}
             <div className="bg-primary  rounded-xl p-4 mb-6">
-              <h3 className="font-semibold text-primary mb-2 flex items-center gap-2">
+              <h3 className="font-semibold text-white mb-2 flex items-center gap-2">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 Instructions
               </h3>
-              <ul className="text-sm text-base-content  space-y-1">
+              <ul className="text-sm text-white  space-y-1">
                 <li className="flex items-start gap-2">
                   <span className="text-primary mt-0.5">•</span>
                   <span>Present this QR code at the entrance of each event</span>

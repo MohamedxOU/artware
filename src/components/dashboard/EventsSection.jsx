@@ -48,6 +48,7 @@ export default function EventsSection() {
       id: event.id,
       title: event.title,
       date: formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1),
+      rawDate: event.date, // Keep the original date for comparisons
       location: event.location,
       price: "Free",
       image: event.image_url,
@@ -98,7 +99,25 @@ export default function EventsSection() {
           try {
             const attendedResponse = await getUserAttendedEvents(user.user_id);
             
-            const attended = attendedResponse.user.map(event => transformEvent(event));
+            // Get event details for each attendance record
+            const attendedEventPromises = attendedResponse.userAttendance.map(async (attendance) => {
+              try {
+                // Fetch the full event details using the event_id
+                const eventResponse = await getAllEvents();
+                const eventDetail = eventResponse.event.find(e => e.id === attendance.event_id);
+                
+                if (eventDetail) {
+                  return transformEvent(eventDetail);
+                }
+                return null;
+              } catch (err) {
+                console.error(`Failed to fetch event ${attendance.event_id}:`, err);
+                return null;
+              }
+            });
+            
+            const attendedEventsData = await Promise.all(attendedEventPromises);
+            const attended = attendedEventsData.filter(event => event !== null);
             
             setAttendedEvents(attended);
           } catch (err) {
@@ -136,7 +155,7 @@ export default function EventsSection() {
           
           try {
             const attendedResponse = await getUserAttendedEvents(user.user_id);
-            attendedCount = attendedResponse.user?.length || 0;
+            attendedCount = attendedResponse.count || 0;
           } catch (err) {
             console.error('Error counting attended events:', err);
           }
@@ -501,89 +520,88 @@ export default function EventsSection() {
                 <div 
                   key={event.id} 
                   onClick={() => window.open(`/event/${event.id}`, '_blank')}
-                  className="bg-base-100 rounded-2xl shadow-lg border border-base-300 overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer"
+                  className="bg-base-100 rounded-2xl shadow-lg border border-base-300 overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col"
                 >
-                  <div className="flex flex-col lg:flex-row">
-                    {/* Event Image */}
-                    <div className="w-full lg:w-1/3 relative h-48 lg:h-auto lg:min-h-[280px]">
-                      {event.image ? (
-                        <Image
-                          src={event.image}
-                          alt={event.title}
-                          fill
-                          className="object-cover"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-base-300 to-base-content  flex items-center justify-center">
-                          <svg className="w-16 h-16 text-base-content " fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                          </svg>
-                        </div>
-                      )}
+                  {/* Event Image on Top */}
+                  <div className="w-full relative aspect-video">
+                    {event.image ? (
+                      <Image
+                        src={event.image}
+                        alt={event.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-linear-to-br from-base-300 to-base-content flex items-center justify-center">
+                        <svg className="w-16 h-16 text-base-content" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                      </div>
+                    )}
+                    
+                    {/* Date Badge overlayed on image */}
+                    <div className="absolute top-4 right-4 rounded-lg p-2 shadow-lg text-center">
+                      <div className="text-xs text-secondary uppercase tracking-wide">
+                        {event.date.split(' ')[2] || 'OCT'}
+                      </div>
+                      <div className="text-2xl font-bold text-secondary">
+                        {event.date.split(' ')[1] || '21'}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Event Details */}
+                  <div className="p-4 sm:p-6 flex flex-col flex-1">
+                    {/* Event Title and Type */}
+                    <div className="mb-4">
+                      <h3 className="text-lg sm:text-xl font-bold text-base-content mb-1 line-clamp-2">
+                        {event.title}
+                      </h3>
+                      {/* <p className="text-base-content text-sm">
+                        {event.eventType === 'workshop' ? 'Workshop' : 
+                         event.eventType === 'conference' ? 'Conference' :
+                         event.eventType === 'hackathon' ? 'Hackathon' : 'Event'}
+                      </p> */}
                     </div>
 
-                    {/* Right side - Event Details */}
-                    <div className="w-full lg:w-2/3 p-4 sm:p-6 relative flex flex-col">
-                      {/* Date Badge */}
-                      <div className="absolute top-4 right-4 text-center">
-                        <div className="text-xs text-base-content  uppercase tracking-wide">
-                          {event.date.split(' ')[2] || 'OCT'}
-                        </div>
-                        <div className="text-2xl font-bold text-secondary">
-                          {event.date.split(' ')[1] || '21'}
+                    {/* Location */}
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center shrink-0">
+                        <svg className="w-4 h-4 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4-4a8 8 0 1111.314 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-lg font-bold text-pink-500 truncate">{event.location}</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400 truncate">
+                          {event.celluleName} 
                         </div>
                       </div>
+                    </div>
 
-                      {/* Event Title and Type */}
-                      <div className="pr-12 sm:pr-16 mb-4">
-                        <h3 className="text-lg sm:text-xl font-bold text-base-content mb-1 line-clamp-2">
-                          {event.title}
-                        </h3>
-                        <p className="text-base-content  text-sm">
-                          {event.eventType === 'workshop' ? 'Workshop' : 
-                           event.eventType === 'conference' ? 'Conference' :
-                           event.eventType === 'hackathon' ? 'Hackathon' : 'Event'}
-                        </p>
+                    {/* Event Date */}
+                    <div className="flex items-center gap-2 mb-6">
+                      <div className="w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center shrink-0">
+                        <svg className="w-4 h-4 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
                       </div>
-
-                      {/* Location */}
-                      <div className="flex items-center gap-2 mb-4">
-                        <div className="w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
-                          <svg className="w-4 h-4 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4-4a8 8 0 1111.314 0z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                          </svg>
+                      <div className="min-w-0">
+                        <div className="text-lg font-bold text-pink-500">
+                          {event.date}
                         </div>
-                        <div className="min-w-0">
-                          <div className="text-lg font-bold text-pink-500 truncate">{event.location}</div>
-                          <div className="text-sm text-gray-600 dark:text-gray-400 truncate">
-                            {event.celluleName} 
+                        {(event.timeStart || event.timeEnd) && (
+                          <div className="text-sm text-gray-600 dark:text-gray-400">
+                            {event.timeStart ? event.timeStart.substring(0, 5) : ''}{event.timeEnd && event.timeStart && ` - `}{event.timeEnd ? event.timeEnd.substring(0, 5) : ''}
                           </div>
-                        </div>
+                        )}
                       </div>
+                    </div>
 
-                      {/* Event Date */}
-                      <div className="flex items-center gap-2 mb-6">
-                        <div className="w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
-                          <svg className="w-4 h-4 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                          </svg>
-                        </div>
-                        <div className="min-w-0">
-                          <div className="text-lg font-bold text-pink-500">
-                            {event.date}
-                          </div>
-                          {(event.timeStart || event.timeEnd) && (
-                            <div className="text-sm text-gray-600 dark:text-gray-400">
-                              {event.timeStart ? event.timeStart.substring(0, 5) : ''}{event.timeEnd && event.timeStart && ` - `}{event.timeEnd ? event.timeEnd.substring(0, 5) : ''}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Action Button */}
-                      <div className="mt-auto space-y-2">
+                    {/* Action Button */}
+                    <div className="mt-auto space-y-2">
                         {activeTab === 'upcoming' && (
                           <>
                             <button 
@@ -605,7 +623,7 @@ export default function EventsSection() {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                   </svg>
                                   Register for Event
-                                </>
+                                </> 
                               )}
                             </button>
                             <button 
@@ -629,16 +647,19 @@ export default function EventsSection() {
                         
                         {activeTab === 'registered' && (
                           <>
-                            <button 
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleUnregisterEvent(event.id);
-                              }}
-                              disabled={actionLoading === event.id}
-                              className="cursor-target w-full py-3 border-2 border-error text-error hover:bg-error hover:text-error-content rounded-lg font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                              {actionLoading === event.id ? 'Cancelling...' : 'Cancel Registration'}
-                            </button>
+                            {/* Only show cancel button if event date hasn't passed */}
+                            {new Date(event.rawDate) > new Date() && (
+                              <button 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleUnregisterEvent(event.id);
+                                }}
+                                disabled={actionLoading === event.id}
+                                className="cursor-target w-full py-3 border-2 border-error text-error hover:bg-error hover:text-error-content rounded-lg font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                              >
+                                {actionLoading === event.id ? 'Cancelling...' : 'Cancel Registration'}
+                              </button>
+                            )}
                             <button 
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -673,8 +694,7 @@ export default function EventsSection() {
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           )}
         </div>
@@ -689,7 +709,7 @@ export default function EventsSection() {
               : 'bg-red-50/95 dark:bg-red-900/95 border-red-500'
           }`}>
             <div className="flex items-start gap-3">
-              <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
+              <div className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
                 notification.type === 'success' 
                   ? 'bg-green-500' 
                   : 'bg-red-500'
@@ -722,7 +742,7 @@ export default function EventsSection() {
               </div>
               <button
                 onClick={() => setNotification({ show: false, type: '', message: '', title: '' })}
-                className={`flex-shrink-0 p-1 rounded-full hover:bg-black  transition-colors ${
+                className={`shrink-0 p-1 rounded-full hover:bg-black  transition-colors ${
                   notification.type === 'success' 
                     ? 'text-green-700 dark:text-green-300' 
                     : 'text-red-700 dark:text-red-300'
@@ -772,7 +792,7 @@ export default function EventsSection() {
               </button>
               <button
                 onClick={confirmModal.onConfirm}
-                className="flex-1 py-3 px-4 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg font-semibold hover:from-red-600 hover:to-red-700 transition-all duration-200"
+                className="flex-1 py-3 px-4 bg-linear-to-r from-red-500 to-red-600 text-white rounded-lg font-semibold hover:from-red-600 hover:to-red-700 transition-all duration-200"
               >
                 Confirm
               </button>
