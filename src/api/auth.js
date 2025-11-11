@@ -6,7 +6,7 @@ export async function login(email, password) {
   try {
     const url = `${API_BASE}/login`;
     if (typeof window !== 'undefined') {
-      console.log('[auth.login] API_BASE:', API_BASE, 'URL:', url);
+     
     }
     const response = await fetch(url, {
       method: "POST",
@@ -15,27 +15,26 @@ export async function login(email, password) {
       body: JSON.stringify({ email, password }),
     });
     
-    console.log('Login response status:', response.status);
-    console.log('Login response headers:', Object.fromEntries(response.headers.entries()));
+    
     
     // Handle different response types
     if (response.ok) {
       const data = await response.json();
-      console.log('Login response data:', data);
+      
       return data;
     } else {
       // Handle error responses
       const contentType = response.headers.get('content-type');
-      console.log('Error response content-type:', contentType);
+     
       
       if (contentType && contentType.includes('application/json')) {
         const errorData = await response.json();
-        console.log('Error response data:', errorData);
+        
         throw new Error(errorData.message || 'Login failed');
       } else {
         // Handle plain text responses like "Unauthorized"
         const errorText = await response.text();
-        console.log('Error response text:', errorText);
+        
         if (response.status === 401) {
           throw new Error('Invalid email or password');
         }
@@ -47,7 +46,7 @@ export async function login(email, password) {
     
     // Retry once if it's a network error and we haven't already retried
     if (error.message.includes('Failed to fetch') && retryCount < 1) {
-      console.log('Retrying login request...');
+      
       await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second
       return login(email, password, retryCount + 1);
     }
@@ -127,7 +126,7 @@ export const refreshToken = async () => {
 export const register = async (formData) => {
     const url = `${API_BASE}/register`;
     if (typeof window !== 'undefined') {
-      console.log('[auth.register] API_BASE:', API_BASE, 'URL:', url);
+      
     }
     const response = await fetch(url, {
       method: 'POST',

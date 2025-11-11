@@ -110,7 +110,7 @@ function Picture({ position, rotation, imageUrl, title, description, scale = [2,
       },
       undefined,
       (error) => {
-        console.log('Texture failed to load, using fallback');
+      
         setTextureLoaded(true); // Still set to true to proceed
       }
     );
@@ -167,7 +167,7 @@ function Museum({ galleryItems }) {
   useEffect(() => {
     try {
       camera.position.set(0, 1.6, 5); // Eye level height
-      console.log('Museum component loaded successfully');
+    
     } catch (error) {
       console.error('Error setting up museum:', error);
     }
@@ -526,7 +526,7 @@ export default function GalleryPage() {
           camera={{ position: [0, 1.6, 5], fov: 75 }}
           onCreated={({ gl }) => {
             gl.setClearColor('#1a1a1a');
-            console.log('3D Canvas initialized successfully');
+           
           }}
           onError={(error) => {
             console.error('3D Canvas error:', error);

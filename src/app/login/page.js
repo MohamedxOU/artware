@@ -54,7 +54,7 @@ function LoginContent() {
       // Optional: Show success message with user's name
       if (result.user) {
         const userName = `${result.user.first_name} ${result.user.last_name}`;
-        console.log(`Welcome back, ${userName}!`);
+       
       }
       
       // Redirect to dashboard or intended page

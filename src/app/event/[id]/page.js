@@ -34,7 +34,7 @@ export default function EventDetailPage() {
             setDocuments(docsResponse.events);
           }
         } catch (docError) {
-          console.log('No documents available:', docError);
+        
         } finally {
           setLoadingDocs(false);
         }

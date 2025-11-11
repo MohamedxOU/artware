@@ -19,7 +19,7 @@ const useAuthStore = create(
         try {
           // Use real API
           const result = await authAPI.login(email, password);
-          console.log('AuthStore received result:', result);
+          
           
           // Handle backend response format: { accessToken: "...", user: {...} }
           if (result && result.accessToken && result.user) {
@@ -45,7 +45,7 @@ const useAuthStore = create(
               error: null
             });
             
-            console.log('Login successful, token stored:', accessToken);
+           
             return { success: true, user: user };
           } else {
             const errorMessage = result?.error || result?.message || 'Invalid credentials. Please try again.';
@@ -162,7 +162,7 @@ const useAuthStore = create(
           
           // If we have a token and persisted user data, keep them logged in
           if (token && currentState.user) {
-            console.log('Token and user data found, keeping user logged in');
+         
             set({ 
               user: currentState.user,
               isAuthenticated: true,
@@ -174,7 +174,7 @@ const useAuthStore = create(
           
           // If we have persisted user data but no token, log them out
           if (!token && currentState.user) {
-            console.log('No token found, logging user out');
+           
             removeAuthToken();
             set({ 
               user: null,
@@ -214,7 +214,7 @@ const useAuthStore = create(
           // If we have valid persisted data and token, keep user logged in
           const token = getAuthToken();
           if (token && currentState.user && currentState.isAuthenticated) {
-            console.log('Error during auth check, but token exists - keeping user logged in');
+     
             set({ 
               user: currentState.user,
               isAuthenticated: true,

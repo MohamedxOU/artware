@@ -79,12 +79,12 @@ export default function EventsSection() {
         
         // Fetch registered events if user is logged in
         if (user?.user_id) {
-          console.log('Fetching registered events for user:', user.user_id);
+         
           try {
             const registeredResponse = await getUserRegistredEvents(user.user_id);
-            console.log('Registered events response:', registeredResponse);
+            
             const registered = registeredResponse.user.map(event => transformEvent(event, true));
-            console.log('Transformed registered events:', registered);
+            
             setRegisteredEvents(registered);
             
             // Get IDs of registered events to filter them out from upcoming
@@ -97,16 +97,16 @@ export default function EventsSection() {
           // Fetch attended events
           try {
             const attendedResponse = await getUserAttendedEvents(user.user_id);
-            console.log('Attended events response:', attendedResponse);
+            
             const attended = attendedResponse.user.map(event => transformEvent(event));
-            console.log('Transformed attended events:', attended);
+            
             setAttendedEvents(attended);
           } catch (err) {
             console.error('Failed to fetch attended events:', err);
             setAttendedEvents([]);
           }
         } else {
-          console.log('No user logged in or user.user_id is missing:', user);
+          
         }
         
         // Filter upcoming events to exclude registered events
@@ -142,12 +142,7 @@ export default function EventsSection() {
           }
         }
         
-        console.log('Setting stats:', {
-          totalEvents: allEventsResponse.event.length,
-          upcomingEvents: upcoming.length,
-          registeredEvents: registeredCount,
-          attendedEvents: attendedCount
-        });
+        
         
         setStats({
           totalEvents: allEventsResponse.event.length,
@@ -207,10 +202,10 @@ export default function EventsSection() {
     try {
       setLoadingDocs(true);
       setSelectedEvent({ id: eventId, title: eventTitle });
-      console.log(`Fetching documents for event: ${eventId}`);
+      
       
       const response = await getEventDocs(eventId);
-      console.log('Event documents response:', response);
+      
       
       // Use 'events' field from the response, not 'documents'
       setEventDocs(response.events || []);

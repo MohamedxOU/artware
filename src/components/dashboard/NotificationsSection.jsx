@@ -78,12 +78,12 @@ export default function NotificationsSection({ notifications = mockNotifications
 
   const markAsRead = (id) => {
     // In a real app, this would make an API call
-    console.log(`Marking notification ${id} as read`);
+   
   };
 
   const markAllAsRead = () => {
     // In a real app, this would make an API call
-    console.log('Marking all notifications as read');
+  
   };
 
   const getNotificationColor = (type) => {

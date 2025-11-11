@@ -21,11 +21,7 @@ export default function CellsSection({ user }) {
 
   // Add debugging
   useEffect(() => {
-    console.log('CellsSection Debug Info:');
-    console.log('- user prop:', user);
-    console.log('- authUser:', authUser);
-    console.log('- currentUser:', currentUser);
-    console.log('- currentUser.user_id:', currentUser?.user_id);
+   
   }, [user, authUser, currentUser]);
 
   // Fetch cells from API
@@ -35,11 +31,11 @@ export default function CellsSection({ user }) {
         setIsLoading(true);
         setError(null);
         
-        console.log('Fetching cells for user:', currentUser?.user_id);
+       
         
         // Get all cells with membership info
         const allCellsResponse = await getAllCells();
-        console.log('All cells response:', allCellsResponse);
+        
         
         // Map cells with color and use isInCell from API
         const cellsWithColor = allCellsResponse.cells.map((cell, index) => ({
@@ -48,7 +44,7 @@ export default function CellsSection({ user }) {
           isMember: cell.isInCell // Use the isInCell field from API
         }));
         
-        console.log('Final cells with membership:', cellsWithColor);
+       
         setAllCells(cellsWithColor);
         
         // Set user cells for stats
@@ -74,10 +70,10 @@ export default function CellsSection({ user }) {
 
     try {
       setJoiningCell(cellId);
-      console.log(`Attempting to join cell ${cellId}`);
+     
       
       const result = await joinCell(cellId);
-      console.log('Join cell result:', result);
+     
       
       // Update the cell's membership status locally
       setAllCells(prevCells => 
@@ -94,7 +90,7 @@ export default function CellsSection({ user }) {
         setUserCells(prevUserCells => [...prevUserCells, { ...cellToAdd, isMember: true }]);
       }
       
-      console.log(`✅ Successfully joined cell ${cellId}`);
+      
       alert(`You have successfully joined the cell "${cellName}"!`);
     } catch (error) {
       console.error('Failed to join cell:', error);
@@ -113,10 +109,10 @@ export default function CellsSection({ user }) {
 
     try {
       setQuittingCell(cellId);
-      console.log(`Attempting to quit cell ${cellId}`);
+      
       
       const result = await quitCell(cellId);
-      console.log('Quit cell result:', result);
+      
       
       // Update the cell's membership status locally
       setAllCells(prevCells => 
@@ -132,7 +128,7 @@ export default function CellsSection({ user }) {
         prevUserCells.filter(cell => cell.id !== cellId)
       );
       
-      console.log(`✅ Successfully quit cell ${cellId}`);
+      
       alert(`You have successfully left the cell "${cellName}"!`);
     } catch (error) {
       console.error('Failed to quit cell:', error);
@@ -147,10 +143,10 @@ export default function CellsSection({ user }) {
     try {
       setLoadingEvents(true);
       setSelectedCell(cellName);
-      console.log(`Fetching events for cell: ${cellName}`);
+    
       
       const response = await getCellEvents(cellName);
-      console.log('Cell events response:', response);
+      
       
       setCellEvents(response.events || []);
     } catch (error) {

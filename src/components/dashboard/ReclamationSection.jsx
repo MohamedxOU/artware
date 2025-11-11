@@ -17,7 +17,7 @@ export default function ReclamationSection({ user }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission
-    console.log('Reclamation submitted:', formData);
+  
   };
 
   return (
