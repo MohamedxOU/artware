@@ -136,17 +136,22 @@ export default function AppDownloadSection() {
 
 // Small client-side QR image with fallback from svg -> png
 function QrImageFallback({ className }) {
-  const [src, setSrc] = useState('/qr-code.svg');
+  // Try multiple variants to avoid filename mismatch between local and deployed builds
+  // order: hyphenated svg, underscored svg, hyphen png, underscored png
+  const sources = ['/qr-code.svg', '/qr_code.svg', '/qr-code.png', '/qr_code.png'];
+  const [index, setIndex] = useState(0);
+  const src = sources[index];
 
   return (
     <Image
       src={src}
-      alt="QR Code pour télécharger l'application"
+      alt="QR Code to download the app"
       width={120}
       height={120}
       className={className}
       onError={() => {
-        if (src.endsWith('.svg')) setSrc('/qr-code.png');
+        // advance to next candidate if available
+        if (index < sources.length - 1) setIndex((i) => i + 1);
       }}
     />
   );
