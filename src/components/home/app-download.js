@@ -1,6 +1,7 @@
 "use client";
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { useState } from 'react';
 
 export default function AppDownloadSection() {
   // Animation variants pour Framer Motion
@@ -100,13 +101,8 @@ export default function AppDownloadSection() {
             <div className="flex items-center gap-6 pt-6 border-t border-base-content">
               <div className="flex-shrink-0">
                 <div className="bg-base-200 p-3 rounded-2xl shadow-lg">
-                  <Image
-                    src="/qr-code.svg"
-                    alt="QR Code pour télécharger l'application"
-                    width={120}
-                    height={120}
-                    className="w-24 h-24 md:w-28 md:h-28"
-                  />
+                  {/* Try svg first, fall back to png if svg missing */}
+                  <QrImageFallback className="w-24 h-24 md:w-28 md:h-28" />
                 </div>
               </div>
               <div className="space-y-1">
@@ -135,5 +131,23 @@ export default function AppDownloadSection() {
         </div>
       </div>
     </section>
+  );
+}
+
+// Small client-side QR image with fallback from svg -> png
+function QrImageFallback({ className }) {
+  const [src, setSrc] = useState('/qr-code.svg');
+
+  return (
+    <Image
+      src={src}
+      alt="QR Code pour télécharger l'application"
+      width={120}
+      height={120}
+      className={className}
+      onError={() => {
+        if (src.endsWith('.svg')) setSrc('/qr-code.png');
+      }}
+    />
   );
 }
