@@ -101,7 +101,7 @@ export default function AppDownloadSection() {
               <div className="flex-shrink-0">
                 <div className="bg-base-200 p-3 rounded-2xl shadow-lg">
                   <Image
-                    src="/qr-code.png"
+                    src="/qr-code.svg"
                     alt="QR Code pour télécharger l'application"
                     width={120}
                     height={120}

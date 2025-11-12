@@ -43,7 +43,8 @@ export default function Gallery() {
     );
   };
 
-  // Generate items from gallery folder (use fileList from API when available, otherwise fallback to numbered list)
+  // Generate items from gallery folder (use fileList from API when available)
+  // If fileList is empty, show an empty state instead of attempting to load numbered files that may not exist.
   const allItems = (fileList && fileList.length > 0)
     ? fileList.map((filename, index) => {
         const heights = [300, 350, 400, 450, 500, 550, 600];
@@ -60,23 +61,7 @@ export default function Gallery() {
           category: getImageCategory(index + 1)
         };
       })
-    : Array.from({ length: 40 }, (_, index) => {
-        const imageNumber = index + 1;
-        // Generate random heights between 300-600 for masonry layout
-        const heights = [300, 350, 400, 450, 500, 550, 600];
-        const randomHeight = heights[index % heights.length];
-        
-        return {
-          id: imageNumber.toString(),
-          img: `/gallery/${imageNumber}.jpg`, // default (kept for backward compatibility)
-          imgJpg: `/gallery/${imageNumber}.jpg`,
-          imgJpeg: `/gallery/${imageNumber}.jpeg`,
-          url: `/gallery/${imageNumber}.jpg`, // legacy link
-          height: randomHeight,
-          title: `Gallery Image ${imageNumber}`,
-          category: getImageCategory(imageNumber)
-        };
-      });
+    : [];
 
   // Items to display based on showMore state
   const items = showMore ? allItems : allItems.slice(0, initialCount);
