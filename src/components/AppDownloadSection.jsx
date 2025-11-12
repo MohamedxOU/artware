@@ -23,7 +23,7 @@ export default function AppDownloadSection() {
   };
 
   return (
-    <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-linear-to-br from-base-100 to-base-200 overflow-hidden">
+    <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-base-100 to-base-200 overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl"></div>
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/10 rounded-full blur-3xl"></div>
@@ -41,7 +41,7 @@ export default function AppDownloadSection() {
           >
             <div className="relative w-64 sm:w-72 md:w-80 lg:w-96">
               {/* Glowing effect behind phone */}
-              <div className="absolute inset-0 bg-gradient-to-br from-primary to-secondary rounded-[3rem] blur-2xl scale-95"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-secondary/30 rounded-[3rem] blur-2xl scale-95"></div>
               
               {/* Phone image container */}
               <div className="relative bg-base-100 rounded-[3rem] p-3 sm:p-4 shadow-2xl">
@@ -71,7 +71,7 @@ export default function AppDownloadSection() {
                 Discover our
                 <span className="block text-primary mt-2">mobile application</span>
               </h2>
-              <p className="text-lg md:text-xl text-base-content leading-relaxed">
+              <p className="text-lg md:text-xl text-base-content/70 leading-relaxed">
                 Access all your events, cells and documents directly from your smartphone. 
                 A smooth and optimized experience to accompany you everywhere.
               </p>
@@ -81,25 +81,25 @@ export default function AppDownloadSection() {
             <div className="flex flex-col sm:flex-row gap-4">
               {/* Android APK Download Button */}
               <a
-                href="https://expo.dev/artifacts/eas/9yzvCHDLpBape6kGofmqR5.apk"
+                href="https://expo.dev/artifacts/eas/ppg3DGH8aTqoxZfPWGbspX.apk"
                 download
-                className="group flex items-center justify-center gap-3 bg-primary hover:bg-primary-focus text-primary-content px-6 sm:px-8 py-3 sm:py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                className="group flex items-end justify-center gap-3 bg-primary hover:bg-primary-focus text-primary-content px-6 sm:px-8 py-3 sm:py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
               >
-                {/* Download Icon */}
-                <svg className="w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0 group-hover:animate-bounce" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
+                {/* Android Download Icon */}
+                <svg className="w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,8L16,12H13V16H11V12H8L12,8Z" />
                 </svg>
                 <div className="text-left">
-                  <div className="text-xs font-normal opacity-90">Download our</div>
-                  <div className="text-base sm:text-lg font-bold">Mobile App</div>
+                  <div className="text-xs font-normal opacity-90">Download</div>
+                  <div className="text-base sm:text-lg font-bold">Mobile Application</div>
                 </div>
               </a>
             </div>
 
             {/* QR Code Section */}
-            <div className="flex items-center gap-6 pt-6 border-t border-base-content">
+            <div className="flex items-center gap-6 pt-6 border-t border-base-content/10">
               <div className="flex-shrink-0">
-                <div className="bg-base-200 p-3 rounded-2xl shadow-lg">
+                <div className="bg-white p-3 rounded-2xl shadow-lg">
                   <Image
                     src="/qr-code.png"
                     alt="QR Code pour télécharger l'application"
@@ -113,7 +113,7 @@ export default function AppDownloadSection() {
                 <p className="text-sm font-semibold text-base-content">
                   Scan to download
                 </p>
-                <p className="text-xs text-base-content">
+                <p className="text-xs text-base-content/60">
                   Quick access from your mobile
                 </p>
               </div>
