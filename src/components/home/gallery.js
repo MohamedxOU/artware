@@ -7,6 +7,7 @@ export default function Gallery() {
   const [isVisible, setIsVisible] = useState(false);
   const [showMore, setShowMore] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [fileList, setFileList] = useState([]);
   const router = useRouter();
 
   // Initial number of images to show (responsive)
@@ -42,24 +43,40 @@ export default function Gallery() {
     );
   };
 
-  // Generate items from gallery folder (images 1-40)
-  const allItems = Array.from({ length: 40 }, (_, index) => {
-    const imageNumber = index + 1;
-    // Generate random heights between 300-600 for masonry layout
-    const heights = [300, 350, 400, 450, 500, 550, 600];
-    const randomHeight = heights[index % heights.length];
-    
-    return {
-      id: imageNumber.toString(),
-      img: `/gallery/${imageNumber}.jpg`, // default (kept for backward compatibility)
-      imgJpg: `/gallery/${imageNumber}.jpg`,
-      imgJpeg: `/gallery/${imageNumber}.jpeg`,
-      url: `/gallery/${imageNumber}.jpg`, // legacy link
-      height: randomHeight,
-      title: `Gallery Image ${imageNumber}`,
-      category: getImageCategory(imageNumber)
-    };
-  });
+  // Generate items from gallery folder (use fileList from API when available, otherwise fallback to numbered list)
+  const allItems = (fileList && fileList.length > 0)
+    ? fileList.map((filename, index) => {
+        const heights = [300, 350, 400, 450, 500, 550, 600];
+        const randomHeight = heights[index % heights.length];
+        const id = String(index + 1);
+        return {
+          id,
+          img: `/gallery/${filename}`,
+          imgJpg: `/gallery/${filename}`,
+          imgJpeg: filename.replace(/\.jpg$/i, '.jpeg'),
+          url: `/gallery/${filename}`,
+          height: randomHeight,
+          title: filename.replace(/[-_]/g, ' ').replace(/\.(jpe?g|png|webp|avif|gif|svg)$/i, ''),
+          category: getImageCategory(index + 1)
+        };
+      })
+    : Array.from({ length: 40 }, (_, index) => {
+        const imageNumber = index + 1;
+        // Generate random heights between 300-600 for masonry layout
+        const heights = [300, 350, 400, 450, 500, 550, 600];
+        const randomHeight = heights[index % heights.length];
+        
+        return {
+          id: imageNumber.toString(),
+          img: `/gallery/${imageNumber}.jpg`, // default (kept for backward compatibility)
+          imgJpg: `/gallery/${imageNumber}.jpg`,
+          imgJpeg: `/gallery/${imageNumber}.jpeg`,
+          url: `/gallery/${imageNumber}.jpg`, // legacy link
+          height: randomHeight,
+          title: `Gallery Image ${imageNumber}`,
+          category: getImageCategory(imageNumber)
+        };
+      });
 
   // Items to display based on showMore state
   const items = showMore ? allItems : allItems.slice(0, initialCount);
@@ -74,6 +91,21 @@ export default function Gallery() {
   }
 
   useEffect(() => {
+    // fetch gallery file list from API (if exists) and set fileList
+    const fetchFiles = async () => {
+      try {
+        const res = await fetch('/api/gallery');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && Array.isArray(data.files) && data.files.length > 0) {
+            setFileList(data.files);
+          }
+        }
+      } catch (err) {
+        // ignore - fall back to numbered images
+      }
+    };
+    fetchFiles();
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
