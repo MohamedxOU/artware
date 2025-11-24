@@ -57,10 +57,17 @@ function LoginContent() {
        
       }
       
-      // Redirect to dashboard or intended page
-      const intendedRoute = sessionStorage.getItem('intendedRoute') || '/dashboard';
+      // Check for redirect URL from event page or use intended route
+      const redirectAfterLogin = sessionStorage.getItem('redirectAfterLogin');
+      const intendedRoute = sessionStorage.getItem('intendedRoute');
+      
+      // Clear both items
+      sessionStorage.removeItem('redirectAfterLogin');
       sessionStorage.removeItem('intendedRoute');
-      router.push(intendedRoute);
+      
+      // Redirect to event page if coming from there, otherwise use intended route or dashboard
+      const redirectTo = redirectAfterLogin || intendedRoute || '/dashboard';
+      router.push(redirectTo);
     }
     // Error handling is already done in the authStore
   };

@@ -19,6 +19,16 @@ export default function EventDetailPage() {
   const [loadingDocs, setLoadingDocs] = useState(false);
 
   useEffect(() => {
+    // Check if user is logged in, if not redirect to login
+    if (!user) {
+      // Save current URL to redirect back after login
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
+        router.push('/login');
+      }
+      return;
+    }
+
     const fetchEventDetails = async () => {
       try {
         setIsLoading(true);
@@ -49,7 +59,7 @@ export default function EventDetailPage() {
     if (params.id) {
       fetchEventDetails();
     }
-  }, [params.id]);
+  }, [params.id, user, router]);
 
   const showNotification = (type, title, message) => {
     setNotification({ show: true, type, title, message });
@@ -60,7 +70,11 @@ export default function EventDetailPage() {
 
   const handleRegister = async () => {
     if (!user?.user_id) {
-      showNotification('error', 'Error', 'You must be logged in to register');
+      // Save current URL and redirect to login
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
+        router.push('/login');
+      }
       return;
     }
 
@@ -153,7 +167,7 @@ export default function EventDetailPage() {
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Error</h2>
             <p className="text-gray-600 dark:text-gray-400 mb-6">{error || 'Event not found'}</p>
             <button
-              onClick={() => window.close()}
+              onClick={() => router.push('/dashboard')}
               className="px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors"
             >
               Close
@@ -170,7 +184,7 @@ export default function EventDetailPage() {
       <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <button
-            onClick={() => window.close()}
+            onClick={() => router.push('/dashboard')}
             className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
