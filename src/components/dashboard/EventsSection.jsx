@@ -34,8 +34,11 @@ export default function EventsSection() {
   // Transform event data helper function
   const transformEvent = (event, isRegistered = false) => {
     const eventDate = new Date(event.date);
+    // Set to start of day for proper comparison
+    eventDate.setHours(0, 0, 0, 0);
     const currentDate = new Date();
-    const isUpcoming = eventDate > currentDate;
+    currentDate.setHours(0, 0, 0, 0);
+    const isUpcoming = eventDate >= currentDate;
     
     // Format date for display
     const formattedDate = eventDate.toLocaleDateString('fr-FR', {
@@ -80,22 +83,9 @@ export default function EventsSection() {
         
         // Fetch registered events if user is logged in
         if (user?.user_id) {
-         
-          try {
-            const registeredResponse = await getUserRegistredEvents(user.user_id);
-            
-            const registered = registeredResponse.user.map(event => transformEvent(event, true));
-            
-            setRegisteredEvents(registered);
-            
-            // Get IDs of registered events to filter them out from upcoming
-            registeredEventIds = registered.map(e => e.id);
-          } catch (err) {
-            console.error('Failed to fetch registered events:', err);
-            setRegisteredEvents([]);
-          }
-
-          // Fetch attended events
+          let attendedEventIds = [];
+          
+          // Fetch attended events first to filter them out from registered events
           try {
             const attendedResponse = await getUserAttendedEvents(user.user_id);
             
@@ -120,9 +110,30 @@ export default function EventsSection() {
             const attended = attendedEventsData.filter(event => event !== null);
             
             setAttendedEvents(attended);
+            
+            // Get IDs of attended events to filter them out from registered events
+            attendedEventIds = attended.map(e => e.id);
           } catch (err) {
             console.error('Failed to fetch attended events:', err);
             setAttendedEvents([]);
+          }
+
+          // Fetch registered events and filter out attended ones
+          try {
+            const registeredResponse = await getUserRegistredEvents(user.user_id);
+            
+            // Filter out events that are already attended
+            const registered = registeredResponse.user
+              .filter(event => !attendedEventIds.includes(event.id))
+              .map(event => transformEvent(event, true));
+            
+            setRegisteredEvents(registered);
+            
+            // Get IDs of registered events to filter them out from upcoming
+            registeredEventIds = registered.map(e => e.id);
+          } catch (err) {
+            console.error('Failed to fetch registered events:', err);
+            setRegisteredEvents([]);
           }
         } else {
           
@@ -131,7 +142,11 @@ export default function EventsSection() {
         // Filter upcoming events to exclude registered events
         const upcoming = allEventsResponse.event
           .filter(event => {
-            const isUpcoming = new Date(event.date) > currentDate;
+            const eventDate = new Date(event.date);
+            eventDate.setHours(0, 0, 0, 0);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const isUpcoming = eventDate >= today;
             const isNotRegistered = !registeredEventIds.includes(event.id);
             return isUpcoming && isNotRegistered;
           })
@@ -296,9 +311,12 @@ export default function EventsSection() {
       // Refresh events after registration and filter out registered ones
       const allEventsResponse = await getAllEvents();
       const currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0);
       const upcoming = allEventsResponse.event
         .filter(event => {
-          const isUpcoming = new Date(event.date) > currentDate;
+          const eventDate = new Date(event.date);
+          eventDate.setHours(0, 0, 0, 0);
+          const isUpcoming = eventDate >= currentDate;
           const isNotRegistered = !registeredEventIds.includes(event.id);
           return isUpcoming && isNotRegistered;
         })
@@ -338,9 +356,12 @@ export default function EventsSection() {
           // Refresh upcoming events and filter out registered ones
           const allEventsResponse = await getAllEvents();
           const currentDate = new Date();
+          currentDate.setHours(0, 0, 0, 0);
           const upcoming = allEventsResponse.event
             .filter(event => {
-              const isUpcoming = new Date(event.date) > currentDate;
+              const eventDate = new Date(event.date);
+              eventDate.setHours(0, 0, 0, 0);
+              const isUpcoming = eventDate >= currentDate;
               const isNotRegistered = !registeredEventIds.includes(event.id);
               return isUpcoming && isNotRegistered;
             })
@@ -648,7 +669,13 @@ export default function EventsSection() {
                         {activeTab === 'registered' && (
                           <>
                             {/* Only show cancel button if event date hasn't passed */}
-                            {new Date(event.rawDate) > new Date() && (
+                            {(() => {
+                              const eventDate = new Date(event.rawDate);
+                              eventDate.setHours(0, 0, 0, 0);
+                              const today = new Date();
+                              today.setHours(0, 0, 0, 0);
+                              return eventDate >= today;
+                            })() && (
                               <button 
                                 onClick={(e) => {
                                   e.stopPropagation();

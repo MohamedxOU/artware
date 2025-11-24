@@ -112,13 +112,15 @@ export default function DashboardHome({ user, stats = {}, recentActivities = [] 
         setIsLoadingEvents(true);
         const response = await getAllEvents();
         
-        // Filter events with dates yet to come
+        // Filter events with dates yet to come (including today)
         const now = new Date();
+        now.setHours(0, 0, 0, 0);
         const futureEvents = (response.event || [])
           .filter(event => {
             if (!event.date) return false;
             const eventDate = new Date(event.date);
-            return eventDate > now;
+            eventDate.setHours(0, 0, 0, 0);
+            return eventDate >= now;
           })
           .sort((a, b) => new Date(a.date) - new Date(b.date))
           .slice(0, 3) // Take only first 3 upcoming events
