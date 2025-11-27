@@ -98,10 +98,9 @@ export default function AppDownloadSection() {
             </div>
 
             {/* QR Code Section */}
-            <div className="flex items-center gap-6 pt-6 border-t border-base-content">
+            <div className="flex items-center gap-6 pt-6 border-t border-base-content/20">
               <div className="flex-shrink-0">
-                <div className="bg-base-200 p-3 rounded-2xl shadow-lg">
-                  {/* Try svg first, fall back to png if svg missing */}
+                <div className="bg-white p-3 rounded-2xl shadow-lg">
                   <QrImageFallback className="w-24 h-24 md:w-28 md:h-28" />
                 </div>
               </div>
@@ -109,7 +108,7 @@ export default function AppDownloadSection() {
                 <p className="text-sm font-semibold text-base-content">
                   Scan to download
                 </p>
-                <p className="text-xs text-base-content">
+                <p className="text-xs text-base-content/70">
                   Quick access from your mobile
                 </p>
               </div>
@@ -134,11 +133,10 @@ export default function AppDownloadSection() {
   );
 }
 
-// Small client-side QR image with fallback from svg -> png
+// Component with robust fallback for QR code image
 function QrImageFallback({ className }) {
-  // Try multiple variants to avoid filename mismatch between local and deployed builds
-  // order: hyphenated svg, underscored svg, hyphen png, underscored png
-  const sources = ['/qr-code.svg', '/qr_code.svg', '/qr-code.png', '/qr_code.png'];
+  // Try multiple filename variants to work in both local and deployed environments
+  const sources = ['/qr_code.svg', '/qr-code.svg', '/qr_code.png', '/qr-code.png'];
   const [index, setIndex] = useState(0);
   const src = sources[index];
 
@@ -150,8 +148,10 @@ function QrImageFallback({ className }) {
       height={120}
       className={className}
       onError={() => {
-        // advance to next candidate if available
-        if (index < sources.length - 1) setIndex((i) => i + 1);
+        // Try next source if current one fails
+        if (index < sources.length - 1) {
+          setIndex((i) => i + 1);
+        }
       }}
     />
   );
