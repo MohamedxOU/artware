@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { getEventById, registerForEvent, unregisterFromEvent, getEventDocs } from '@/api/events';
+import { getEventById, registerForEvent, unregisterFromEvent, getEventDocs, getUserAttendedEvents } from '@/api/events';
 import { useAuthStore } from '@/stores';
 
 export default function EventDetailPage() {
@@ -11,23 +11,23 @@ export default function EventDetailPage() {
   const { user } = useAuthStore();
   const [event, setEvent] = useState(null);
   const [isRegistered, setIsRegistered] = useState(false);
+  const [isAttended, setIsAttended] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isHydrated, setIsHydrated] = useState(false);
   const [error, setError] = useState(null);
   const [actionLoading, setActionLoading] = useState(false);
   const [notification, setNotification] = useState({ show: false, type: '', message: '', title: '' });
   const [documents, setDocuments] = useState([]);
   const [loadingDocs, setLoadingDocs] = useState(false);
 
+  // Wait for Zustand persist to hydrate
   useEffect(() => {
-    // Check if user is logged in, if not redirect to login
-    if (!user) {
-      // Save current URL to redirect back after login
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
-        router.push('/login');
-      }
-      return;
-    }
+    setIsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    // Wait for hydration before fetching
+    if (!isHydrated) return;
 
     const fetchEventDetails = async () => {
       try {
@@ -35,6 +35,19 @@ export default function EventDetailPage() {
         const response = await getEventById(params.id);
         setEvent(response.event);
         setIsRegistered(response.is_registered);
+        
+        // Check if user has attended this event
+        if (user?.user_id) {
+          try {
+            const attendedResponse = await getUserAttendedEvents(user.user_id);
+            const hasAttended = attendedResponse.userAttendance?.some(
+              attendance => attendance.event_id === parseInt(params.id)
+            );
+            setIsAttended(hasAttended);
+          } catch (attendError) {
+            console.error('Error checking attendance:', attendError);
+          }
+        }
         
         // Also fetch documents
         try {
@@ -59,7 +72,7 @@ export default function EventDetailPage() {
     if (params.id) {
       fetchEventDetails();
     }
-  }, [params.id, user, router]);
+  }, [params.id, isHydrated, user?.user_id]);
 
   const showNotification = (type, title, message) => {
     setNotification({ show: true, type, title, message });
@@ -156,7 +169,7 @@ export default function EventDetailPage() {
 
   if (error || !event) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 max-w-md w-full mx-4">
           <div className="text-center">
             <div className="w-16 h-16 bg-red-100 dark:bg-red-900   rounded-full flex items-center justify-center mx-auto mb-4">
@@ -201,7 +214,7 @@ export default function EventDetailPage() {
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden mb-8">
           <div className="grid grid-cols-1 lg:grid-cols-2">
             {/* Event Image */}
-            <div className="relative h-64 lg:h-full min-h-[400px]">
+            <div className="relative aspect-video lg:aspect-auto lg:h-full lg:min-h-[400px]">
               {event.image_url ? (
                 <Image
                   src={event.image_url}
@@ -218,15 +231,24 @@ export default function EventDetailPage() {
                 </div>
               )}
               {/* Event Type Badge */}
-              <div className="absolute top-4 left-4">
+              {/* <div className="absolute top-4 left-4">
                 <span className="px-4 py-2 bg-white  dark:bg-gray-800  backdrop-blur-sm rounded-full text-sm font-semibold text-gray-900 dark:text-white">
                   {getEventTypeLabel(event.type)}
                 </span>
-              </div>
-              {/* Registration Status Badge */}
-              {isRegistered && (
+              </div> */}
+              {/* Registration/Attendance Status Badge */}
+              {isAttended ? (
                 <div className="absolute top-4 right-4">
-                  <span className="px-4 py-2 bg-green-500 rounded-full text-sm font-semibold text-white flex items-center gap-2">
+                  <span className="px-4 py-2 bg-blue-500 rounded-full text-sm text-white font-semibold flex items-center gap-2">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Attended
+                  </span>
+                </div>
+              ) : isRegistered && (
+                <div className="absolute top-4 right-4">
+                  <span className="px-4 py-2 rounded-full text-sm text-green-500 font-semibold flex items-center gap-2">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
@@ -312,7 +334,14 @@ export default function EventDetailPage() {
 
               {/* Action Buttons */}
               <div className="space-y-3">
-                {isRegistered ? (
+                {isAttended ? (
+                  <div className="w-full py-3.5 bg-blue-500 text-white rounded-lg font-semibold flex items-center justify-center gap-2">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    You Attended This Event
+                  </div>
+                ) : isRegistered ? (
                   <button
                     onClick={handleUnregister}
                     disabled={actionLoading}

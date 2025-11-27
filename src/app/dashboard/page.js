@@ -13,7 +13,6 @@ import DocumentsSection from '@/components/dashboard/DocumentsSection';
 import NotificationsSection from '@/components/dashboard/NotificationsSection';
 import ProfileSection from '@/components/dashboard/ProfileSection';
 import ReclamationSection from '@/components/dashboard/ReclamationSection';
-import TargetCursor from '@/components/TargetCursor.jsx';
 
 function DashboardContent() {
   const router = useRouter();
@@ -104,10 +103,7 @@ function DashboardContent() {
         <div className="absolute top-1/2 right-0 w-50 h-50 bg-primary  rounded-full blur-3xl"></div>
       </div>
 
-      <TargetCursor 
-        spinDuration={2}
-        hideDefaultCursor={true}
-      />
+     
       
       {/* Dashboard Layout with Sidebar + App Bar */}
       <div className="relative z-10">

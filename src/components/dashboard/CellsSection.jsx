@@ -454,10 +454,10 @@ export default function CellsSection({ user }) {
             <div className="bg-primary  border-b border-base-300   p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-2xl font-bold text-base-content mb-1">
+                  <h2 className="text-2xl font-bold text-white mb-1">
                     Events - {selectedCell}
                   </h2>
-                  <p className="text-base-content  text-sm">
+                  <p className="text-white/80 text-sm">
                     {cellEvents.length} event{cellEvents.length !== 1 ? 's' : ''} found
                   </p>
                 </div>
@@ -497,99 +497,120 @@ export default function CellsSection({ user }) {
                     <div
                       key={event.id || index}
                       onClick={() => event.id && window.open(`/event/${event.id}`, '_blank')}
-                      className="border border-base-300  rounded-xl p-5 hover:shadow-lg transition-shadow duration-200 bg-base-100 cursor-pointer hover:border-primary "
+                      className="border border-base-300 rounded-xl overflow-hidden hover:shadow-lg transition-shadow duration-200 bg-base-100 cursor-pointer hover:border-primary flex flex-col"
                     >
-                      <div className="flex items-start gap-4">
-                        {/* Event Icon/Image */}
-                        {event.image_url ? (
-                          <div className="shrink-0 w-20 h-20 rounded-lg overflow-hidden">
-                            <img 
-                              src={event.image_url} 
-                              alt={event.title}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                        ) : (
-                          <div className="shrink-0 w-12 h-12 bg-primary  rounded-lg flex items-center justify-center">
-                            <svg className="w-6 h-6 text-primary-content" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                          </div>
-                        )}
-
-                        {/* Event Details */}
-                        <div className="flex-1">
-                          <div className="flex items-start justify-between gap-2 mb-2">
-                            <h3 className="text-lg font-bold text-base-content">
-                              {event.title || 'Untitled'}
-                            </h3>
-                            {/* Type Badge */}
-                            {event.type && (
-                              <span className="px-2.5 py-1 bg-primary  text-primary-content rounded-md text-xs font-medium capitalize">
+                      {/* Event Image - Full width on top for mobile */}
+                      {event.image_url ? (
+                        <div className="w-full mb-3 aspect-video relative">
+                          <img 
+                            src={event.image_url} 
+                            alt={event.title}
+                            className="w-full h-full object-cover"
+                          />
+                          {/* Type Badge overlayed on image */}
+                          {event.type && (
+                            <div className="absolute top-3 right-3">
+                              <span className="px-3 py-1.5 bg-primary backdrop-blur-sm text-primary-content rounded-lg text-xs font-semibold capitalize shadow-lg">
                                 {event.type === 'training' ? 'Training' : 
                                  event.type === 'workshop' ? 'Workshop' : 
                                  event.type === 'competition' ? 'Competition' : 
                                  event.type}
                               </span>
-                            )}
-                          </div>
-                          
-                          {event.description && (
-                            <p className="text-base-content  text-sm mb-3">
-                              {event.description}
-                            </p>
+                            </div>
                           )}
+                        </div>
+                      ) : (
+                        <div className="w-full aspect-video bg-linear-to-br from-primary to-secondary flex items-center justify-center">
+                          <svg className="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                        </div>
+                      )}
 
-                          {/* Responsable */}
-                          {event.responsable && (
-                            <div className="flex items-center gap-1.5 text-base-content  text-sm mb-2">
+                      {/* Event Details - Below image */}
+                      <div className="p-4 sm:p-5">
+                        <div className="mb-3">
+                          <h3 className="text-lg sm:text-xl font-bold text-base-content mb-1">
+                            {event.title || 'Untitled'}
+                          </h3>
+                          {/* Type Badge for events without image */}
+                          {!event.image_url && event.type && (
+                            <span className="inline-block px-2.5 py-1 bg-primary text-primary-content rounded-md text-xs font-medium capitalize">
+                              {event.type === 'training' ? 'Training' : 
+                               event.type === 'workshop' ? 'Workshop' : 
+                               event.type === 'competition' ? 'Competition' : 
+                               event.type}
+                            </span>
+                          )}
+                        </div>
+                        
+                        {event.description && (
+                          <p className="text-base-content text-sm mb-4 line-clamp-2">
+                            {event.description}
+                          </p>
+                        )}
+
+                        {/* Responsable */}
+                        {event.responsable && (
+                          <div className="flex items-center gap-2 text-base-content text-sm mb-3 pb-3 border-b border-base-300">
+                            <div className="w-8 h-8 bg-base-300 rounded-full flex items-center justify-center shrink-0">
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                               </svg>
-                              <span>Organizer: {event.responsable}</span>
                             </div>
-                          )}
+                            <span className="font-medium">{event.responsable}</span>
+                          </div>
+                        )}
 
-                          <div className="flex flex-wrap gap-3 text-sm">
-                            {/* Date */}
-                            {event.date && (
-                              <div className="flex items-center gap-1.5 text-base-content ">
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="space-y-2.5">
+                          {/* Date */}
+                          {event.date && (
+                            <div className="flex items-center gap-2.5">
+                              <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center shrink-0">
+                                <svg className="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
-                                <span>{new Date(event.date).toLocaleDateString('fr-FR', { 
+                              </div>
+                              <span className="text-sm text-base-content font-medium">
+                                {new Date(event.date).toLocaleDateString('fr-FR', { 
                                   day: 'numeric', 
                                   month: 'long', 
                                   year: 'numeric' 
-                                })}</span>
-                              </div>
-                            )}
+                                })}
+                              </span>
+                            </div>
+                          )}
 
-                            {/* Time */}
-                            {(event.time_start || event.time_end) && (
-                              <div className="flex items-center gap-1.5 text-base-content ">
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          {/* Time */}
+                          {(event.time_start || event.time_end) && (
+                            <div className="flex items-center gap-2.5">
+                              <div className="w-8 h-8 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center shrink-0">
+                                <svg className="w-4 h-4 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <span>
-                                  {event.time_start && event.time_start.substring(0, 5)}
-                                  {event.time_start && event.time_end && ' - '}
-                                  {event.time_end && event.time_end.substring(0, 5)}
-                                </span>
                               </div>
-                            )}
+                              <span className="text-sm text-base-content font-medium">
+                                {event.time_start && event.time_start.substring(0, 5)}
+                                {event.time_start && event.time_end && ' - '}
+                                {event.time_end && event.time_end.substring(0, 5)}
+                              </span>
+                            </div>
+                          )}
 
-                            {/* Location */}
-                            {event.location && (
-                              <div className="flex items-center gap-1.5 text-base-content ">
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          {/* Location */}
+                          {event.location && (
+                            <div className="flex items-center gap-2.5">
+                              <div className="w-8 h-8 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center shrink-0">
+                                <svg className="w-4 h-4 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
-                                <span>{event.location}</span>
                               </div>
-                            )}
-                          </div>
+                              <span className="text-sm text-base-content font-medium">
+                                {event.location}
+                              </span>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>

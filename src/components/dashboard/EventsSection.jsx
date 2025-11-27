@@ -462,9 +462,9 @@ export default function EventsSection() {
           </div>
         </div>
 
-        <div className="backdrop-blur-sm bg-warning  rounded-2xl p-3 sm:p-4 lg:p-6 border border-warning   shadow-lg">
+        <div className="backdrop-blur-sm bg-error  rounded-2xl p-3 sm:p-4 lg:p-6 border border-error   shadow-lg">
           <div className="flex items-center justify-between mb-2 lg:mb-4">
-            <div className="w-10 h-10 lg:w-12 lg:h-12 bg-warning rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 lg:w-12 lg:h-12 bg-error rounded-xl flex items-center justify-center">
               <svg className="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
